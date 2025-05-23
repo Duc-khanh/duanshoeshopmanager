@@ -1,0 +1,26 @@
+package com.codegym.shoeshopmanager.model;
+import org.hibernate.annotations.CreationTimestamp;
+
+import javax.persistence.*;
+import java.security.Timestamp;
+
+@Entity
+@Table(name = "Orders")
+public class Order {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Integer orderID;
+
+    @ManyToOne
+    @JoinColumn(name = "userID")
+    private User user;
+
+    @CreationTimestamp
+    private Timestamp orderDate;
+
+    private Double totalAmount;
+
+
+    // Getters and Setters
+}
+

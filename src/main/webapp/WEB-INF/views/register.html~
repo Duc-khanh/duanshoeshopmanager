@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html>
+<head><title>Đăng ký</title></head>
+<body>
+<h2>Đăng ký</h2>
+<form method="post" action="/register">
+    <label>Tên đăng nhập:</label>
+    <input type="text" name="username" required><br>
+    <label>Mật khẩu:</label>
+    <input type="password" name="password" required><br>
+    <label>Email:</label>
+    <input type="email" name="email"><br>
+    <button type="submit">Đăng ký</button>
+</form>
+<p th:text="${error}"></p>
+<p>Đã có tài khoản? <a href="/login">Đăng nhập</a></p>
+</body>
+</html>

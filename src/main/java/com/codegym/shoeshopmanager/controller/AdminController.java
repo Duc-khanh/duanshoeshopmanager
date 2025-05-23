@@ -1,0 +1,26 @@
+package com.codegym.shoeshopmanager.controller;
+
+import com.codegym.shoeshopmanager.model.User;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+
+import javax.servlet.http.HttpSession;
+
+@Controller
+@RequestMapping("/admin")
+public class AdminController {
+
+    @GetMapping("/dashboard")
+    public String dashboard(HttpSession session, Model model) {
+        User currentUser = (User) session.getAttribute("currentUser");
+        if (currentUser == null || !currentUser.getRole().getRoleName().equals("ADMIN")) {
+            return "redirect:/login";
+        }
+        model.addAttribute("admin", currentUser);
+        return "admin/dashboard";
+    }
+
+
+}
