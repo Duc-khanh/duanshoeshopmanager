@@ -2,7 +2,7 @@ package com.codegym.shoeshopmanager.model;
 import org.hibernate.annotations.CreationTimestamp;
 
 import javax.persistence.*;
-import java.security.Timestamp;
+
 
 @Entity
 @Table(name = "Users")
@@ -23,27 +23,24 @@ public class User {
     @JoinColumn(name = "roleID")
     private Role role;
 
-    @CreationTimestamp
-    private Timestamp createdAt;
+
 
     public User() {
     }
 
-    public User(String username, String password, String email, Role role, Timestamp createdAt) {
-        this.username = username;
-        this.password = password;
-        this.email = email;
-        this.role = role;
-        this.createdAt = createdAt;
-    }
-
-    public User(Integer userID, String username, String password, String email, Role role, Timestamp createdAt) {
+    public User(Integer userID, String username, String password, String email, Role role) {
         this.userID = userID;
         this.username = username;
         this.password = password;
         this.email = email;
         this.role = role;
-        this.createdAt = createdAt;
+    }
+
+    public User(String username, String password, String email, Role role) {
+        this.username = username;
+        this.password = password;
+        this.email = email;
+        this.role = role;
     }
 
     public Integer getUserID() {
@@ -84,13 +81,5 @@ public class User {
 
     public void setRole(Role role) {
         this.role = role;
-    }
-
-    public Timestamp getCreatedAt() {
-        return createdAt;
-    }
-
-    public void setCreatedAt(Timestamp createdAt) {
-        this.createdAt = createdAt;
     }
 }

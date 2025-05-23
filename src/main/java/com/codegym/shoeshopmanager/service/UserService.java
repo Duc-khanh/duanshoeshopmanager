@@ -9,8 +9,10 @@ import org.springframework.stereotype.Service;
 
 import java.util.Optional;
 
+
+
 @Service
-public class UserService {
+public class UserService implements IUserService {
 
     @Autowired
     private UserRepository userRepository;
@@ -18,23 +20,26 @@ public class UserService {
     @Autowired
     private RoleRepository roleRepository;
 
+    @Override
     public boolean isUsernameTaken(String username) {
         return userRepository.existsByUsername(username);
     }
 
+    @Override
     public User registerUser(String username, String password, String email) {
         Role userRole = roleRepository.findByRoleName("USER")
                 .orElseThrow(() -> new RuntimeException("Role USER not found"));
 
         User newUser = new User();
         newUser.setUsername(username);
-        newUser.setPassword(password); // NÊN mã hoá với BCrypt!
+        newUser.setPassword(password);
         newUser.setEmail(email);
         newUser.setRole(userRole);
 
         return userRepository.save(newUser);
     }
 
+    @Override
     public User login(String username, String password) {
         Optional<User> user = userRepository.findByUsername(username);
         if (user.isPresent() && user.get().getPassword().equals(password)) {
@@ -43,12 +48,20 @@ public class UserService {
         return null;
     }
 
+    @Override
+    public User findByUsername(String username) {
+        return userRepository.findByUsername(username).orElse(null);
+    }
+
+    @Override
     public boolean existsByUsername(String username) {
         return userRepository.existsByUsername(username);
     }
 
+    @Override
     public void save(User user) {
         userRepository.save(user);
     }
 }
+
 

@@ -1,10 +1,29 @@
 <!DOCTYPE html>
-<html lang="en">
+<html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <title>Admin Dashboard</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}" />
 </head>
 <body>
+<h1>Chào mừng Admin!</h1>
+
+<nav>
+    <ul>
+        <li><a th:href="@{/admin/products}">Quản lý sản phẩm</a></li>
+        <li><a th:href="@{/admin/users}">Quản lý người dùng</a></li>
+        <li><a th:href="@{/logout}">Đăng xuất</a></li>
+    </ul>
+</nav>
+
+<div>
+    <h2>Trang quản trị</h2>
+    <p>Chức năng chính:</p>
+    <ul>
+        <li>Thêm/Sửa/Xoá/Tìm kiếm sản phẩm</li>
+        <li>Quản lý người dùng</li>
+    </ul>
+</div>
 
 </body>
 </html>

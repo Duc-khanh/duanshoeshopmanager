@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Trang người dùng</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}" />
+</head>
+<body>
+<h1>Chào mừng bạn đến với Shop Quần Áo!</h1>
+
+<nav>
+    <ul>
+        <li><a th:href="@{/products}">Xem sản phẩm</a></li>
+        <li><a th:href="@{/cart}">Giỏ hàng</a></li>
+        <li><a th:href="@{/logout}">Đăng xuất</a></li>
+    </ul>
+</nav>
+
+<section>
+    <h2>Sản phẩm nổi bật</h2>
+    <p>Chúng tôi mang đến cho bạn những sản phẩm thời trang chất lượng nhất!</p>
+</section>
+
+</body>
+</html>

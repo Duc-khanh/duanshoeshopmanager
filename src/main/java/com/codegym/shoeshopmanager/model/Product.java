@@ -2,7 +2,7 @@ package com.codegym.shoeshopmanager.model;
 import org.hibernate.annotations.CreationTimestamp;
 
 import javax.persistence.*;
-import java.security.Timestamp;
+
 
 @Entity
 @Table(name = "Products")
@@ -21,23 +21,10 @@ public class Product {
     @JoinColumn(name = "categoryID")
     private Category category;
 
-    @CreationTimestamp
-    private Timestamp createdAt;
-
     public Product() {
     }
 
-    public Product(String productName, String description, Double price, String image, Integer stock, Category category, Timestamp createdAt) {
-        this.productName = productName;
-        this.description = description;
-        this.price = price;
-        this.image = image;
-        this.stock = stock;
-        this.category = category;
-        this.createdAt = createdAt;
-    }
-
-    public Product(Integer productID, String productName, String description, Double price, String image, Integer stock, Category category, Timestamp createdAt) {
+    public Product(Integer productID, String productName, String description, Double price, String image, Integer stock, Category category) {
         this.productID = productID;
         this.productName = productName;
         this.description = description;
@@ -45,7 +32,15 @@ public class Product {
         this.image = image;
         this.stock = stock;
         this.category = category;
-        this.createdAt = createdAt;
+    }
+
+    public Product(String productName, String description, Double price, String image, Integer stock, Category category) {
+        this.productName = productName;
+        this.description = description;
+        this.price = price;
+        this.image = image;
+        this.stock = stock;
+        this.category = category;
     }
 
     public Integer getProductID() {
@@ -102,13 +97,5 @@ public class Product {
 
     public void setCategory(Category category) {
         this.category = category;
-    }
-
-    public Timestamp getCreatedAt() {
-        return createdAt;
-    }
-
-    public void setCreatedAt(Timestamp createdAt) {
-        this.createdAt = createdAt;
     }
 }

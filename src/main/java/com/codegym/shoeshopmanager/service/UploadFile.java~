@@ -1,0 +1,11 @@
+package com.codegym.shoeshopmanager.service;
+
+import org.springframework.util.FileCopyUtils;
+
+import java.io.File;
+
+public class UploadFile {
+    String folderUpload = "D:\\IdeaProjects\\shoeShopManager\\src\\main\\webapp\\upload_File";
+    String fileName = "file.getOriginalFilename()";
+    FileCopyUtils.copy(file.getBytes(), new File(folderUpload + fileName));
+}

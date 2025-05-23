@@ -38,6 +38,7 @@ dependencies {
     implementation group: 'org.hibernate', name: 'hibernate-core', version: '5.6.10.Final'
 
     implementation group: 'org.springframework.data', name: 'spring-data-jpa', version: '2.7.0'
+    implementation group: 'commons-fileupload', name: 'commons-fileupload', version: '1.4'
 }
 
 test {
