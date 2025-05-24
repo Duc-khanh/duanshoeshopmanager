@@ -1,0 +1,21 @@
+<h2>Danh sách danh mục</h2>
+<a href="/admin/categories/create">Thêm danh mục mới</a>
+<table>
+    <thead>
+    <tr>
+        <th>ID</th>
+        <th>Tên danh mục</th>
+        <th>Hành động</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="category : ${categories}">
+        <td th:text="${category.categoryID}"></td>
+        <td th:text="${category.categoryName}"></td>
+        <td>
+            <a th:href="@{'/admin/categories/delete/' + ${category.categoryID}}"
+               onclick="return confirm('Bạn có chắc muốn xóa danh mục này?')">Xóa</a>
+        </td>
+    </tr>
+    </tbody>
+</table>

@@ -126,11 +126,14 @@ public class AppConfiguration implements WebMvcConfigurer, ApplicationContextAwa
                 .addResourceLocations("file:" + upload);
     }
 
+
     @Bean(name = "multipartResolver")
     public CommonsMultipartResolver getResolver() {
         CommonsMultipartResolver resolver = new CommonsMultipartResolver();
         resolver.setMaxUploadSizePerFile(52428800);
         return resolver;
     }
+
+
 
 }

@@ -55,19 +55,20 @@
 <h1>Danh sách sản phẩm</h1>
 
 <div class="top-bar">
-    <form th:action="@{/admin/products}" method="get">
+    <form th:action="@{/managerProduct/products}" method="get">
         <input type="text" name="keyword" th:value="${keyword}" placeholder="Tìm kiếm sản phẩm..."/>
         <button type="submit">Tìm</button>
     </form>
-    <a th:href="@{/admin/products/create}">
-        <button>Thêm sản phẩm</button>
+    <a th:href="@{/managerProduct/products/create}">
+        <button type="submit">Thêm sản phẩm</button>
     </a>
+
 </div>
 
 <table>
     <thead>
     <tr>
-        <th>ID</th>
+        <th>#</th>
         <th>Ảnh</th>
         <th>Tên sản phẩm</th>
         <th>Giá</th>
@@ -78,19 +79,22 @@
     </tr>
     </thead>
     <tbody>
-    <tr th:each="product : ${products}">
-        <td th:text="${product.productID}"></td>
+    <tr th:each="product, stat : ${products}">
+        <td th:text="${stat.count}"></td>
+
         <td>
-            <img th:src="@{'/images/' + ${product.image}}" alt="No image"/>
+            <img th:src="${product.image}" alt="Ảnh sản phẩm"/>
         </td>
+
+
         <td th:text="${product.productName}"></td>
         <td th:text="${product.price}"></td>
         <td th:text="${product.stock}"></td>
         <td th:text="${product.category.categoryName}"></td>
         <td th:text="${product.description}"></td>
         <td class="action-buttons">
-            <a th:href="@{'/admin/products/edit/' + ${product.productID}}">Sửa</a>
-            <a th:href="@{'/admin/products/delete/' + ${product.productID}}" class="delete"
+            <a th:href="@{'/managerProduct/products/edit/' + ${product.productID}}">Sửa</a>
+            <a th:href="@{'/managerProduct/products/delete/' + ${product.productID}}" class="delete"
                onclick="return confirm('Bạn có chắc muốn xóa sản phẩm này?')">Xóa</a>
         </td>
     </tr>

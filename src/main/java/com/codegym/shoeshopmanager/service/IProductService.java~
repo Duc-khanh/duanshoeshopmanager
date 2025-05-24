@@ -1,11 +1,13 @@
 package com.codegym.shoeshopmanager.service;
 
+import com.codegym.shoeshopmanager.model.Product;
+
 import java.util.List;
 
-public interface IProductService<T> {
-    List<T> findAll();
-    T findById(Integer id);
-    void save(T t);
+public interface IProductService {
+    List<Product> findAll();
+    Product findById(Integer id);
+    void save(Product product);
     void delete(Integer id);
-    List<T> searchByName(String productName);
+    List<Product> searchByName(String productName);
 }

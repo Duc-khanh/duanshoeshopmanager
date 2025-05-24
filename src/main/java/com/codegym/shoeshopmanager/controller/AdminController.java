@@ -1,21 +1,17 @@
 package com.codegym.shoeshopmanager.controller;
 
+import com.codegym.shoeshopmanager.model.Category;
 import com.codegym.shoeshopmanager.model.Product;
 import com.codegym.shoeshopmanager.model.User;
 import com.codegym.shoeshopmanager.service.CategoryService;
 import com.codegym.shoeshopmanager.service.IProductService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpSession;
-import java.io.File;
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.List;
 
 @Controller
@@ -25,7 +21,8 @@ public class AdminController {
     private IProductService productService;
     @Autowired
     private CategoryService categoryService;
-
+    @Value("${file-upload}")
+    private String uploadDir;
     @GetMapping("/dashboard")
     public String dashboard(HttpSession session, Model model) {
         User currentUser = (User) session.getAttribute("currentUser");
@@ -42,46 +39,36 @@ public class AdminController {
                 : productService.findAll();
         model.addAttribute("products", products);
         model.addAttribute("keyword", keyword);
-        return "admin/product_list";
+        return "admin/manageProduct/product_list";
     }
-    @GetMapping("products/create")
-    public String showAddForm(Model model) {
-        model.addAttribute("product", new Product());
+
+
+
+    // danh muc
+    @GetMapping("/categories")
+    public String listCategories(Model model) {
         model.addAttribute("categories", categoryService.findAll());
-        return "admin/add_product";
+        return "admin/manageCategory/category_list";
     }
 
-    @PostMapping("/products/save")
-    public String saveProduct(@ModelAttribute Product product,
-                              @RequestParam("imageFile") MultipartFile imageFile) throws IOException {
-        if (imageFile != null && !imageFile.isEmpty()) {
-            // Lấy tên file gốc
-            String fileName = imageFile.getOriginalFilename();
+    @GetMapping("/categories/create")
+    public String showCreateCategoryForm(Model model) {
+        model.addAttribute("category", new Category());
+        return "admin/manageCategory/add_category";
+    }
 
-            // Đảm bảo thư mục tồn tại
-            String uploadDir = "src/main/resources/static/images/";
-            File uploadPath = new File(uploadDir);
-            if (!uploadPath.exists()) {
-                uploadPath.mkdirs();
-            }
-
-            // Tạo đường dẫn đến file đích
-            Path filePath = Paths.get(uploadDir, fileName);
-
-            // Ghi file
-            Files.write(filePath, imageFile.getBytes());
-
-            // Gán tên file vào trường image của Product
-            product.setImage(fileName);
-        }
-
-        // Lưu sản phẩm
-        productService.save(product);
-
-        return "redirect:/admin/products";
+    @PostMapping("/categories/save")
+    public String saveCategory(@ModelAttribute Category category) {
+        categoryService.save(category);
+        return "redirect:/admin/categories";
     }
 
 
+    @GetMapping("/categories/delete/{id}")
+    public String deleteCategory(@PathVariable int id) {
+        categoryService.delete(id);
+        return "redirect:/admin/categories";
+    }
 
 
 }

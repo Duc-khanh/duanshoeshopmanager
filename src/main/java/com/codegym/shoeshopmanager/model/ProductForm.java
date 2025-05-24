@@ -6,16 +6,16 @@ public class ProductForm {
     private int id;
     private String name;
     private String description;
-    private MultipartFile image;
+    private MultipartFile imageFile;
 
     public ProductForm() {
     }
 
-    public ProductForm(int id, String name, String description, MultipartFile image) {
+    public ProductForm(int id, String name, String description, MultipartFile imageFile) {
         this.id = id;
         this.name = name;
         this.description = description;
-        this.image = image;
+        this.imageFile = imageFile;
     }
 
     public int getId() {
@@ -42,12 +42,12 @@ public class ProductForm {
         this.description = description;
     }
 
-    public MultipartFile getImage() {
-        return image;
+    public MultipartFile getImageFile() {
+        return imageFile;
     }
 
-    public void setImage(MultipartFile image) {
-        this.image = image;
+    public void setImage(MultipartFile imageFile) {
+        this.imageFile = imageFile;
     }
 }
 

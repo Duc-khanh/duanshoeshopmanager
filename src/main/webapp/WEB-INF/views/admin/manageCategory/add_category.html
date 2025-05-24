@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<h2>Thêm danh mục mới</h2>
+<form action="#" th:action="@{/admin/categories/save}" th:object="${category}" method="post">
+    <label for="name">Tên danh mục:</label>
+    <input type="text" id="name" th:field="*{categoryName}" required/>
+    <button type="submit">Lưu</button>
+</form>
+<a href="/admin/categories">Quay lại danh sách</a>
+
+</body>
+</html>

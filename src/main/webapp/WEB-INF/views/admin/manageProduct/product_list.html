@@ -1,0 +1,132 @@
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Quản lý sản phẩm</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link
+            href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap"
+            rel="stylesheet"
+    />
+    <link
+            rel="stylesheet"
+            href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css"
+    />
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+        /* For table scroll on small screens */
+        .table-container {
+            overflow-x: auto;
+        }
+        /* Icon button styles */
+        .icon-btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 32px;
+            height: 32px;
+            border-radius: 6px;
+            transition: background-color 0.3s ease;
+            cursor: pointer;
+            color: white;
+        }
+        .icon-btn:hover {
+            opacity: 0.85;
+        }
+    </style>
+</head>
+<body class="bg-gray-100 min-h-screen p-6">
+<div class="max-w-7xl mx-auto bg-white rounded-lg shadow p-6">
+    <h1 class="text-3xl font-semibold text-gray-800 mb-6">Danh sách sản phẩm</h1>
+
+    <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-6 space-y-4 sm:space-y-0">
+        <form th:action="@{/managerProduct/products}" method="get" class="flex w-full sm:w-auto">
+            <input
+                    type="text"
+                    name="keyword"
+                    th:value="${keyword}"
+                    placeholder="Tìm kiếm sản phẩm..."
+                    class="w-full sm:w-72 px-4 py-2 border border-gray-300 rounded-l-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+            />
+            <button
+                    type="submit"
+                    class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-r-md font-semibold transition-colors duration-300"
+            >
+                Tìm
+            </button>
+        </form>
+        <a th:href="@{/managerProduct/products/create}">
+            <button
+                    type="button"
+                    class="bg-green-600 hover:bg-green-700 text-white px-5 py-2 rounded-md font-semibold transition-colors duration-300"
+            >
+                Thêm sản phẩm
+            </button>
+        </a>
+    </div>
+
+    <div class="table-container">
+        <table class="min-w-full border border-gray-300 rounded-md overflow-hidden">
+            <thead class="bg-gray-50">
+            <tr>
+                <th class="text-center px-4 py-3 border-b border-gray-300 text-gray-700 font-semibold">#</th>
+                <th class="text-center px-4 py-3 border-b border-gray-300 text-gray-700 font-semibold">Ảnh</th>
+                <th class="text-left px-4 py-3 border-b border-gray-300 text-gray-700 font-semibold">Tên sản phẩm</th>
+                <th class="text-right px-4 py-3 border-b border-gray-300 text-gray-700 font-semibold">Giá</th>
+                <th class="text-center px-4 py-3 border-b border-gray-300 text-gray-700 font-semibold">Số lượng</th>
+                <th class="text-left px-4 py-3 border-b border-gray-300 text-gray-700 font-semibold">Danh mục</th>
+                <th class="text-left px-4 py-3 border-b border-gray-300 text-gray-700 font-semibold">Mô tả</th>
+                <th class="text-center px-4 py-3 border-b border-gray-300 text-gray-700 font-semibold">Hành động</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr
+                    th:each="product, stat : ${products}"
+                    class="even:bg-gray-50 hover:bg-gray-100 transition-colors duration-200"
+            >
+                <td class="text-center px-4 py-3 border-b border-gray-300" th:text="${stat.count}"></td>
+                <td class="text-center px-4 py-3 border-b border-gray-300">
+                    <img
+                            th:src="${product.image}"
+                            alt="Ảnh sản phẩm"
+                            class="mx-auto h-20 w-20 object-contain rounded-md border border-gray-200"
+                    />
+                </td>
+                <td class="text-left px-4 py-3 border-b border-gray-300" th:text="${product.productName}"></td>
+                <td class="text-right px-4 py-3 border-b border-gray-300" th:text="${#numbers.formatDecimal(product.price, 0, 'COMMA', 2, 'POINT')} + ' đ'"></td>
+                <td class="text-center px-4 py-3 border-b border-gray-300" th:text="${product.stock}"></td>
+                <td class="text-left px-4 py-3 border-b border-gray-300" th:text="${product.category.categoryName}"></td>
+                <td class="text-left px-4 py-3 border-b border-gray-300 truncate max-w-xs" th:text="${product.description}"></td>
+                <td class="text-center px-4 py-3 border-b border-gray-300 space-x-1 whitespace-nowrap">
+                    <a
+                            th:href="@{'/managerProduct/products/view/' + ${product.productID}}"
+                            title="Xem chi tiết"
+                            class="icon-btn bg-indigo-600 hover:bg-indigo-700"
+                    >
+                        <i class="fas fa-eye"></i>
+                    </a>
+                    <a
+                            th:href="@{'/managerProduct/products/edit/' + ${product.productID}}"
+                            title="Sửa"
+                            class="icon-btn bg-blue-600 hover:bg-blue-700"
+                    >
+                        <i class="fas fa-edit"></i>
+                    </a>
+                    <a
+                            th:href="@{'/managerProduct/products/delete/' + ${product.productID}}"
+                            title="Xóa"
+                            class="icon-btn bg-red-600 hover:bg-red-700"
+                            onclick="return confirm('Bạn có chắc muốn xóa sản phẩm này?')"
+                    >
+                        <i class="fas fa-trash-alt"></i>
+                    </a>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+</body>
+</html>
