@@ -1,4 +1,5 @@
 package com.codegym.shoeshopmanager.model;
+
 import org.hibernate.annotations.CreationTimestamp;
 
 import javax.persistence.*;
@@ -22,10 +23,20 @@ public class User {
     @ManyToOne
     @JoinColumn(name = "roleID")
     private Role role;
-
+    @Column(nullable = false)
+    private boolean enabled = true;
 
 
     public User() {
+    }
+
+    public User(Integer userID, String username, String password, String email, Role role, boolean enabled) {
+        this.userID = userID;
+        this.username = username;
+        this.password = password;
+        this.email = email;
+        this.role = role;
+        this.enabled = enabled;
     }
 
     public User(Integer userID, String username, String password, String email, Role role) {
@@ -41,6 +52,14 @@ public class User {
         this.password = password;
         this.email = email;
         this.role = role;
+    }
+
+    public boolean isEnabled() {
+        return enabled;
+    }
+
+    public void setEnabled(boolean enabled) {
+        this.enabled = enabled;
     }
 
     public Integer getUserID() {

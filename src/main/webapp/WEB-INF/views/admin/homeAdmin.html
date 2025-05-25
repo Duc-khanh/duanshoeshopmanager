@@ -39,11 +39,11 @@
             <a class="hover:text-blue-600 transition" th:href="@{/admin/products}">
                 Sản phẩm
             </a>
-            <a class="hover:text-blue-600 transition" href="#">
-                Users
+            <a class="hover:text-blue-600 transition" th:href="@{/admin/user}">
+                Quản lý người dùng
             </a>
-            <a class="hover:text-blue-600 transition" href="#">
-                Categories
+            <a class="hover:text-blue-600 transition" th:href="@{/admin/categories}">
+                Danh mục
             </a>
             <a class="hover:text-blue-600 transition" href="#">
                 Orders
@@ -70,14 +70,14 @@
         Quản lý sản phẩm
        </span>
                 </a>
-                <a class="flex items-center space-x-3 text-gray-700 hover:text-blue-600 font-semibold px-3 py-2 rounded-md transition" href="/admin/users">
+                <a class="flex items-center space-x-3 text-gray-700 hover:text-blue-600 font-semibold px-3 py-2 rounded-md transition" th:href="@{/admin/user}">
                     <i class="fas fa-users fa-lg">
                     </i>
                     <span>
         Quản lý người dùng
        </span>
                 </a>
-                <a class="flex items-center space-x-3 text-gray-700 hover:text-blue-600 font-semibold px-3 py-2 rounded-md transition" href="/admin/categories">
+                <a class="flex items-center space-x-3 text-gray-700 hover:text-blue-600 font-semibold px-3 py-2 rounded-md transition" th:href="@{/admin/categories}">
                     <i class="fas fa-tags fa-lg">
                     </i>
                     <span>
@@ -119,16 +119,16 @@
             </div>
             <div class="bg-white rounded-lg shadow p-6 flex flex-col items-center">
                 <img alt="Icon representing user management, group of people with a shield" class="mb-4" height="100" src="https://storage.googleapis.com/a1aa/image/ccd7a934-cccc-465c-0398-7970f04ba63a.jpg" width="100"/>
-                <h3 class="text-xl font-semibold text-gray-800 mb-2">
+                <a th:href="@{/admin/user}" class="text-xl font-semibold text-gray-800 mb-2">
                     Quản lý người dùng
-                </h3>
+                </a>
 
             </div>
             <div class="bg-white rounded-lg shadow p-6 flex flex-col items-center">
                 <img alt="Icon representing category management, tags and folders" class="mb-4" height="100" src="https://storage.googleapis.com/a1aa/image/f9d4d478-78c1-4c5a-639c-8b1814f9a0fd.jpg" width="100"/>
-                <h3 class="text-xl font-semibold text-gray-800 mb-2">
+                <a th:href="@{/admin/categories}" class="text-xl font-semibold text-gray-800 mb-2">
                     Quản lý danh mục
-                </h3>
+                </a>
 
             </div>
             <div class="bg-white rounded-lg shadow p-6 flex flex-col items-center">

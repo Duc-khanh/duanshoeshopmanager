@@ -93,8 +93,8 @@ public class UserService implements IUserService {
     }
 
     @Override
-    public List<User> searchByName(String username) {
-        return userRepository.searchByName(username);
+    public List<User> searchByName(String keyword) {
+        return userRepository.searchByName(keyword);
     }
 
 }

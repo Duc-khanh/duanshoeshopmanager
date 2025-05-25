@@ -1,8 +1,9 @@
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Quản lý sản phẩm</title>
+    <title>Quản lý người dùng</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link
             href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap"
@@ -38,39 +39,24 @@
         .icon-btn:hover {
             opacity: 0.85;
         }
-        /* Truncate multiline description with ellipsis */
-        .truncate-multiline {
-            display: -webkit-box;
-            -webkit-line-clamp: 3;
-            -webkit-box-orient: vertical;
-            overflow: hidden;
-            text-overflow: ellipsis;
-            max-width: 24rem;
-            word-break: break-word;
-        }
         /* Center all table cells vertically and horizontally */
         table th,
         table td {
-            vertical-align: middle !important;
-        }
-        /* Align description text left and vertically centered */
-        .desc-cell {
-            text-align: left;
             vertical-align: middle !important;
         }
     </style>
 </head>
 <body class="bg-gray-100 min-h-screen p-6">
 <div class="max-w-7xl mx-auto bg-white rounded-lg shadow p-6">
-    <h1 class="text-3xl font-semibold text-gray-800 mb-6 text-center">Danh sách sản phẩm</h1>
+    <h1 class="text-3xl font-semibold text-gray-800 mb-6 text-center">Quản lý người dùng</h1>
 
     <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-6 space-y-4 sm:space-y-0">
-        <form th:action="@{/managerProduct/search}" method="get" class="flex w-full sm:w-auto">
+        <form th:action="@{/users/search}" method="get" class="flex w-full sm:w-auto">
             <input
                     type="text"
-                    name="keyword"
+                    name="username"
                     th:value="${keyword}"
-                    placeholder="Tìm kiếm sản phẩm..."
+                    placeholder="Tìm kiếm người dùng..."
                     class="w-full sm:w-72 px-4 py-2 border border-gray-300 rounded-l-md focus:outline-none focus:ring-2 focus:ring-blue-500"
             />
             <button
@@ -80,12 +66,12 @@
                 Tìm
             </button>
         </form>
-        <a th:href="@{/managerProduct/create}">
+        <a th:href="@{/users/create}">
             <button
                     type="button"
                     class="bg-green-600 hover:bg-green-700 text-white px-6 py-2 rounded-md font-semibold transition-colors duration-300"
             >
-                Thêm sản phẩm
+                Thêm người dùng
             </button>
         </a>
     </div>
@@ -95,53 +81,38 @@
             <thead class="bg-gray-50">
             <tr>
                 <th class="px-5 py-4 border-b border-gray-300 text-gray-700 font-semibold select-none">#</th>
-                <th class="px-5 py-4 border-b border-gray-300 text-gray-700 font-semibold select-none">Ảnh</th>
-                <th class="px-5 py-4 border-b border-gray-300 text-gray-700 font-semibold select-none">Tên sản phẩm</th>
-                <th class="px-5 py-4 border-b border-gray-300 text-gray-700 font-semibold select-none">Giá</th>
-                <th class="px-5 py-4 border-b border-gray-300 text-gray-700 font-semibold select-none">Số lượng</th>
-                <th class="px-5 py-4 border-b border-gray-300 text-gray-700 font-semibold select-none">Danh mục</th>
-                <th class="px-5 py-4 border-b border-gray-300 text-gray-700 font-semibold select-none max-w-xs">Mô tả</th>
+                <th class="px-5 py-4 border-b border-gray-300 text-gray-700 font-semibold select-none">Tên đăng nhập</th>
+                <th class="px-5 py-4 border-b border-gray-300 text-gray-700 font-semibold select-none">Email</th>
+                <th class="px-5 py-4 border-b border-gray-300 text-gray-700 font-semibold select-none">Vai trò</th>
                 <th class="px-5 py-4 border-b border-gray-300 text-gray-700 font-semibold select-none">Hành động</th>
             </tr>
             </thead>
             <tbody>
-            <tr
-                    th:each="product, stat : ${products}"
-                    class="even:bg-gray-50 hover:bg-gray-100 transition-colors duration-200"
-            >
+            <tr th:each="user, stat : ${users}" class="even:bg-gray-50 hover:bg-gray-100 transition-colors duration-200">
                 <td class="px-5 py-3 border-b border-gray-300" th:text="${stat.count}"></td>
-                <td class="px-5 py-3 border-b border-gray-300">
-                    <img
-                            th:src="${product.image}"
-                            alt="Ảnh sản phẩm"
-                            class="mx-auto h-20 w-20 object-contain rounded-md border border-gray-200"
-                    />
-                </td>
-                <td class="px-5 py-3 border-b border-gray-300 font-medium text-gray-800" th:text="${product.productName}"></td>
-                <td class="px-5 py-3 border-b border-gray-300 font-semibold text-green-600" th:text="${#numbers.formatDecimal(product.price, 0, 'COMMA', 3, 'POINT')} + ' đ'"></td>
-                <td class="px-5 py-3 border-b border-gray-300" th:text="${product.stock}"></td>
-                <td class="px-5 py-3 border-b border-gray-300" th:text="${product.category.categoryName}"></td>
-                <td class="px-5 py-3 border-b border-gray-300" th:text="${product.description}"></td>
+                <td class="px-5 py-3 border-b border-gray-300 font-medium text-gray-800" th:text="${user.username}"></td>
+                <td class="px-5 py-3 border-b border-gray-300" th:text="${user.email}"></td>
+                <td class="px-5 py-3 border-b border-gray-300" th:text="${user.role != null ? user.role.roleName : 'N/A'}"></td>
                 <td class="px-5 py-3 border-b border-gray-300 space-x-2 whitespace-nowrap">
                     <a
-                            th:href="@{/managerProduct/view/{productID}(productID = ${product.productID})}"
+                            th:href="@{/users/view/{userID}(userID=${user.userID})}"
                             title="Xem chi tiết"
                             class="icon-btn bg-indigo-600 hover:bg-indigo-700"
                     >
                         <i class="fas fa-eye"></i>
                     </a>
                     <a
-                            th:href="@{/managerProduct/edit/{productID}(productID = ${product.productID})}"
+                            th:href="@{/users/edit/{userID}(userID=${user.userID})}"
                             title="Sửa"
                             class="icon-btn bg-blue-600 hover:bg-blue-700"
                     >
                         <i class="fas fa-edit"></i>
                     </a>
                     <a
-                            th:href="@{/managerProduct/delete/{productID}(productID = ${product.productID})}"
+                            th:href="@{/users/delete/{userID}(userID=${user.userID})}"
                             title="Xóa"
                             class="icon-btn bg-red-600 hover:bg-red-700"
-                            onclick="return confirm('Bạn có chắc muốn xóa sản phẩm này?')"
+                            onclick="return confirm('Bạn có chắc muốn xóa người dùng này?')"
                     >
                         <i class="fas fa-trash-alt"></i>
                     </a>
@@ -149,7 +120,7 @@
             </tr>
             </tbody>
         </table>
-        <div th:if="${#lists.isEmpty(products)}" class="text-center text-gray-700 font-semibold py-6">Không tìm thấy sản phẩm</div>
+        <div th:if="${#lists.isEmpty(users)}" class="text-center text-gray-700 font-semibold py-6">Không tìm thấy người dùng</div>
     </div>
 </div>
 </body>

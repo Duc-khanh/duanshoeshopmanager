@@ -3,7 +3,7 @@ package com.codegym.shoeshopmanager.controller;
 import com.codegym.shoeshopmanager.model.Role;
 import com.codegym.shoeshopmanager.model.User;
 import com.codegym.shoeshopmanager.repository.RoleRepository;
-import com.codegym.shoeshopmanager.service.UserService;
+import com.codegym.shoeshopmanager.service.IUserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -17,14 +17,14 @@ import javax.servlet.http.HttpSession;
 public class AuthController {
 
     @Autowired
-    private UserService userService;
+    private IUserService userService;
 
     @Autowired
     private RoleRepository roleRepository;
 
     @GetMapping("/login")
     public String loginForm() {
-        return "login";
+        return "auth/login";
     }
 
     @PostMapping("/login")
@@ -33,27 +33,35 @@ public class AuthController {
                         HttpSession session,
                         Model model) {
         User user = userService.login(username, password);
+
         if (user != null) {
+            // Kiểm tra tài khoản đã bị chặn
+            if (!user.isEnabled()) {
+                model.addAttribute("error", "Tài khoản của bạn đã bị chặn!");
+                return "auth/login";
+            }
+
+            // Nếu tài khoản hợp lệ và chưa bị chặn
             session.setAttribute("currentUser", user);
             String role = user.getRole().getRoleName();
-            return role.equals("ADMIN") ? "redirect:/admin/dashboard" : "redirect:/homeUser";
+            return role.equals("ADMIN") ? "redirect:/admin/dashboard" : "redirect:/users/homeUser";
         } else {
             model.addAttribute("error", "Sai tên đăng nhập hoặc mật khẩu!");
-            return "login";
+            return "auth/login";
         }
     }
 
     @GetMapping("/register")
     public String registerForm(Model model) {
         model.addAttribute("user", new User());
-        return "register";
+        return "auth/register";
     }
 
     @PostMapping("/register")
     public String register(@ModelAttribute("user") User user, Model model) {
         if (userService.existsByUsername(user.getUsername())) {
             model.addAttribute("error", "Tên đăng nhập đã tồn tại!");
-            return "register";
+            return "auth/register";
         }
 
         Role userRole = roleRepository.findByRoleName("USER")

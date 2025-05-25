@@ -98,7 +98,7 @@
             id="image"
             name="imageFile"
             accept="image/*"
-            th:value="${product.imageFile}"
+            th:value="${product.ima}"
             class="w-full text-gray-700"
             onchange="previewImage(event)"
     />

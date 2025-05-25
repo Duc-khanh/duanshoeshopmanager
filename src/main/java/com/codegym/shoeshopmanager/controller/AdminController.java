@@ -1,10 +1,10 @@
 package com.codegym.shoeshopmanager.controller;
 
-import com.codegym.shoeshopmanager.model.Category;
 import com.codegym.shoeshopmanager.model.Product;
 import com.codegym.shoeshopmanager.model.User;
 import com.codegym.shoeshopmanager.service.CategoryService;
 import com.codegym.shoeshopmanager.service.IProductService;
+import com.codegym.shoeshopmanager.service.IUserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
@@ -21,8 +21,11 @@ public class AdminController {
     private IProductService productService;
     @Autowired
     private CategoryService categoryService;
+    @Autowired
+    private IUserService userService;
     @Value("${file-upload}")
     private String uploadDir;
+
     @GetMapping("/dashboard")
     public String dashboard(HttpSession session, Model model) {
         User currentUser = (User) session.getAttribute("currentUser");
@@ -30,8 +33,9 @@ public class AdminController {
             return "redirect:/login";
         }
         model.addAttribute("admin", currentUser);
-        return "admin/dashboard";
+        return "admin/homeAdmin";
     }
+
     @GetMapping("/products")
     public String listProducts(Model model, @RequestParam(required = false) String keyword) {
         List<Product> products = (keyword != null)
@@ -42,32 +46,17 @@ public class AdminController {
         return "admin/manageProduct/product_list";
     }
 
+    @GetMapping("/user")
+    public String homeUser(Model model) {
+        List<User> users = userService.findAll();
+        model.addAttribute("users", users);
+        return "admin/manageUser/user_list";
+    }
 
-
-    // danh muc
     @GetMapping("/categories")
     public String listCategories(Model model) {
         model.addAttribute("categories", categoryService.findAll());
         return "admin/manageCategory/category_list";
-    }
-
-    @GetMapping("/categories/create")
-    public String showCreateCategoryForm(Model model) {
-        model.addAttribute("category", new Category());
-        return "admin/manageCategory/add_category";
-    }
-
-    @PostMapping("/categories/save")
-    public String saveCategory(@ModelAttribute Category category) {
-        categoryService.save(category);
-        return "redirect:/admin/categories";
-    }
-
-
-    @GetMapping("/categories/delete/{id}")
-    public String deleteCategory(@PathVariable int id) {
-        categoryService.delete(id);
-        return "redirect:/admin/categories";
     }
 
 
