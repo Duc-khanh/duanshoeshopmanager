@@ -36,7 +36,7 @@ public class AuthController {
         if (user != null) {
             session.setAttribute("currentUser", user);
             String role = user.getRole().getRoleName();
-            return role.equals("ADMIN") ? "redirect:/admin/dashboard" : "redirect:/users/homeUser";
+            return role.equals("ADMIN") ? "redirect:/admin/dashboard" : "redirect:/users";
         } else {
             model.addAttribute("error", "Sai tên đăng nhập hoặc mật khẩu!");
             return "auth/login";

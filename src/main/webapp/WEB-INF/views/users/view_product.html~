@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title th:text="'Chi tiết sản phẩm - ' + ${product.productName}">Chi tiết sản phẩm</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet" />
+</head>
+<body class="bg-gray-50">
+<header class="bg-white shadow-md sticky top-0 z-50">
+    <div class="max-w-7xl mx-auto px-6 py-4 flex justify-between items-center">
+        <a href="/" class="text-3xl font-extrabold text-blue-700 tracking-wide">Cửa Hàng Giày</a>
+        <nav>
+            <ul class="flex space-x-6 font-semibold text-gray-700">
+                <li><a href="/products" class="hover:text-blue-600 transition">Xem sản phẩm</a></li>
+                <li><a href="/cart" class="hover:text-blue-600 transition flex items-center"><i class="fas fa-shopping-cart mr-1"></i>Giỏ hàng</a></li>
+                <li><a href="/logout" class="hover:text-blue-600 transition">Đăng xuất</a></li>
+            </ul>
+        </nav>
+    </div>
+</header>
+
+<div class="bg-white shadow-lg rounded-lg max-w-lg w-full p-8 mx-auto mt-10">
+    <h2 class="text-2xl font-semibold text-gray-800 mb-6 text-center">
+        Chi Tiết Sản Phẩm
+    </h2>
+    <div class="flex flex-col space-y-6" align="center">
+        <div class="flex justify-center">
+            <img alt="Hình ảnh sản phẩm chi tiết, góc chụp rõ nét, màu sắc trung thực, nền trắng"
+                 class="rounded-md border border-gray-300 max-h-48 object-contain" height="300"
+                 th:src="${product.image}" width="400"/>
+        </div>
+        <div>
+            <p class="text-gray-700 font-medium">
+                Tên sản phẩm:
+                <span class="text-xl font-semibold text-gray-800 mb-2" th:text="${product.productName}">
+                Tên sản phẩm
+            </span>
+            </p>
+            <p class="text-gray-700 font-medium">
+                Mô tả:
+                <span class="text-gray-700 whitespace-pre-line" th:text="${product.description}">
+                Mô tả chi tiết sản phẩm sẽ được hiển thị ở đây. Nội dung có thể dài và nhiều dòng.
+            </span>
+            </p>
+        </div>
+        <div>
+            <p class="text-gray-700 font-medium">
+                Số lượng còn lại:
+                <span th:text="${product.stock}">
+                    0
+                </span>
+            </p>
+        </div>
+        <div>
+            <p class="text-gray-700 font-medium">
+                Giá:
+                <span class="text-green-600 font-bold"
+                      th:text="${#numbers.formatDecimal(product.price, 0, 'COMMA', 3, 'POINT')} + ' đ'">
+                    ₫0
+                </span>
+            </p>
+        </div>
+        <!-- Nút thêm vào giỏ hàng -->
+        <div class="flex justify-center">
+            <button
+                    class="bg-blue-600 hover:bg-blue-700 text-white py-2 px-4 rounded-md font-semibold transition flex items-center"
+                    type="button"
+                    onclick="alert('Thêm sản phẩm vào giỏ hàng')"
+            >
+                <i class="fas fa-shopping-cart mr-2"></i>Thêm vào giỏ hàng
+            </button>
+        </div>
+    </div>
+</div>
+
+<footer class="bg-blue-900 text-gray-300 mt-16 py-10">
+    <div class="max-w-7xl mx-auto px-6 grid grid-cols-1 md:grid-cols-3 gap-8">
+        <div>
+            <h4 class="text-white font-bold text-lg mb-4">Cửa Hàng Giày</h4>
+            <p>Địa chỉ: 123 Đường Hồ Tùng Mậu, Quận Nam Từ Liêm, TP. Hà Nội</p>
+            <p>Điện thoại: 0856 123 456</p>
+            <p>Email: Duckhanh@gmail.vn</p>
+        </div>
+        <div>
+            <h4 class="text-white font-bold text-lg mb-4">Liên Kết</h4>
+            <ul class="space-y-2">
+                <li><a href="/products" class="hover:text-white transition">Xem sản phẩm</a></li>
+                <li><a href="/cart" class="hover:text-white transition">Giỏ hàng</a></li>
+                <li><a href="/logout" class="hover:text-white transition">Đăng xuất</a></li>
+            </ul>
+        </div>
+        <div>
+            <h4 class="text-white font-bold text-lg mb-4">Theo Dõi Chúng Tôi</h4>
+            <div class="flex space-x-6 text-2xl">
+                <a aria-label="Facebook" class="hover:text-white transition" href="#"><i class="fab fa-facebook-square"></i></a>
+                <a aria-label="Instagram" class="hover:text-white transition" href="#"><i class="fab fa-instagram"></i></a>
+                <a aria-label="Twitter" class="hover:text-white transition" href="#"><i class="fab fa-twitter-square"></i></a>
+                <a aria-label="YouTube" class="hover:text-white transition" href="#"><i class="fab fa-youtube"></i></a>
+            </div>
+        </div>
+    </div>
+    <div class="border-t border-blue-800 mt-8 py-4 text-center text-sm text-blue-300">
+        © 2023 Cửa Hàng Giày. Tất cả quyền được bảo lưu.
+    </div>
+</footer>
+
+</body>
+</html>

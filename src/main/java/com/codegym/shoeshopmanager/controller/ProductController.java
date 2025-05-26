@@ -30,7 +30,6 @@ public class ProductController {
     private String uploadDir;
 
 
-
     @GetMapping("/create")
     public String showAddForm(Model model) {
         model.addAttribute("product", new Product());
@@ -39,7 +38,7 @@ public class ProductController {
     }
 
     @GetMapping("/edit/{productID}")
-    public String showEditForm(@PathVariable Integer productID , Model model) {
+    public String showEditForm(@PathVariable Integer productID, Model model) {
 
         Product product = productService.findById(productID);
         System.out.println(product);
@@ -49,10 +48,14 @@ public class ProductController {
     }
 
     @PostMapping("/products/save")
-    public String saveProduct(@ModelAttribute Product product) throws IOException {
-        MultipartFile imageFile = product.getImageFile();
+    public String saveProduct(
+            @ModelAttribute Product product,
+            @RequestParam("imageFile") MultipartFile imageFile,
+            @RequestParam(value = "oldImagePath", required = false) String oldImagePath
+    ) throws IOException {
 
         if (imageFile != null && !imageFile.isEmpty()) {
+
             String fileName = StringUtils.cleanPath(imageFile.getOriginalFilename());
 
             File uploadPath = new File(uploadDir);
@@ -64,28 +67,35 @@ public class ProductController {
             Files.copy(imageFile.getInputStream(), filePath, StandardCopyOption.REPLACE_EXISTING);
 
             product.setImage("/image/" + fileName);
+        } else {
+
+            product.setImage(oldImagePath);
         }
 
         productService.save(product);
         return "redirect:/admin/products";
     }
+
     @GetMapping("/delete/{productID}")
     public String deleteProduct(@PathVariable Integer productID) {
         productService.delete(productID);
         return "redirect:/admin/products";
     }
+
     @GetMapping("/view/{productID}")
-    public String showViewForm(@PathVariable Integer productID , Model model) {
+    public String showViewForm(@PathVariable Integer productID, Model model) {
         Product product = productService.findById(productID);
         model.addAttribute("product", product);
         return "admin/manageProduct/view_product";
     }
+
     @GetMapping("/search")
-    public String searchProducts(@RequestParam("keyword") String keyword, Model model) {
+    public String search(@RequestParam("keyword") String keyword, Model model) {
         List<Product> products = productService.searchByName(keyword);
         model.addAttribute("products", products);
         model.addAttribute("keyword", keyword);
         return "admin/manageProduct/product_list";
     }
+
 
 }

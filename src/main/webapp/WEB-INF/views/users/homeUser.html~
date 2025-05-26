@@ -46,7 +46,7 @@
                     </a>
                 </li>
                 <li>
-                    <a class="hover:text-blue-600 transition flex items-center" th:href="@{/cart/view}">
+                    <a class="hover:text-blue-600 transition flex items-center" th:href="@{/cart}">
                         <i class="fas fa-shopping-cart mr-1"></i>
                         Giỏ hàng
                     </a>
