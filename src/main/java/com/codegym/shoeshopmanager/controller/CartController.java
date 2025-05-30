@@ -34,24 +34,33 @@ public class CartController {
                 .orElseThrow(() -> new RuntimeException("Product not found"));
 
         cartService.addToCart(user, product, quantity);
-        return "redirect:/cart/view";
+        int cartItemCount = cartService.getCartItems(user).size();
+        session.setAttribute("cartItemCount", cartItemCount);
+        return "redirect:/users";
     }
 
-    @GetMapping("/view")
+    @GetMapping("")
     public String viewCart(HttpSession session, Model model) {
         User user = (User) session.getAttribute("currentUser");
         if (user == null) return "redirect:/login";
 
         List<CartItem> items = cartService.getCartItems(user);
         model.addAttribute("cartItems", items);
+        session.setAttribute("cartItemCount", items.size());
         return "users/cart/cart_view";
     }
 
     @GetMapping("/remove/{cartItemId}")
-    public String removeItem(@PathVariable Integer cartItemId) {
+    public String removeItem(@PathVariable Integer cartItemId, HttpSession session) {
         cartService.removeItem(cartItemId);
-        return "redirect:/cart/view";
+        User user = (User) session.getAttribute("currentUser");
+        if (user != null) {
+            int cartItemCount = cartService.getCartItemCount(user);
+            session.setAttribute("cartItemCount", cartItemCount);
+        }
+        return "redirect:/cart";
     }
+
 
 }
 

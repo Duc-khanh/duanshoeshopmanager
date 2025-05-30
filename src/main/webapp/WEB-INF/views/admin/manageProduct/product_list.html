@@ -1,7 +1,7 @@
 <html lang="en">
 <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1"/>
     <title>Quản lý sản phẩm</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link
@@ -16,12 +16,14 @@
         body {
             font-family: 'Inter', sans-serif;
         }
+
         /* For table scroll on small screens */
         .table-container {
             overflow-x: auto;
             border-radius: 0.5rem;
             box-shadow: 0 0 10px rgb(0 0 0 / 0.05);
         }
+
         /* Icon button styles */
         .icon-btn {
             display: inline-flex;
@@ -35,9 +37,11 @@
             color: white;
             font-size: 1rem;
         }
+
         .icon-btn:hover {
             opacity: 0.85;
         }
+
         /* Truncate multiline description with ellipsis */
         .truncate-multiline {
             display: -webkit-box;
@@ -48,11 +52,13 @@
             max-width: 24rem;
             word-break: break-word;
         }
+
         /* Center all table cells vertically and horizontally */
         table th,
         table td {
             vertical-align: middle !important;
         }
+
         /* Align description text left and vertically centered */
         .desc-cell {
             text-align: left;
@@ -60,8 +66,11 @@
         }
     </style>
 </head>
-<body class="bg-gray-100 min-h-screen p-6">
-<div class="max-w-7xl mx-auto bg-white rounded-lg shadow p-6">
+<body class="bg-gray-100 min-h-screen pt-24">
+
+<div th:replace="/admin/layout :: header"></div>
+<div th:replace="/admin/layout :: sidebar"></div>
+<div class="max-w-[93rem] mx-auto bg-white rounded-lg shadow p-6 flex-1 ml-[22rem]">
     <h1 class="text-3xl font-semibold text-gray-800 mb-6 text-center">Danh sách sản phẩm</h1>
 
     <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-6 space-y-4 sm:space-y-0">
@@ -97,12 +106,12 @@
                 <th class="px-5 py-4 border-b border-gray-300 text-gray-700 font-semibold select-none">#</th>
                 <th class="px-5 py-4 border-b border-gray-300 text-gray-700 font-semibold select-none">Ảnh</th>
                 <th class="px-5 py-4 border-b border-gray-300 text-gray-700 font-semibold select-none">Tên sản phẩm</th>
-                <th class="px-5 py-4 border-b border-gray-300 text-gray-700 font-semibold select-none">Giá</th>
+                <th class="px-5 py-4 border-b border-gray-300 text-gray-700 font-semibold select-none w-[12rem]">Giá</th> <!-- Tăng độ rộng -->
                 <th class="px-5 py-4 border-b border-gray-300 text-gray-700 font-semibold select-none">Số lượng</th>
                 <th class="px-5 py-4 border-b border-gray-300 text-gray-700 font-semibold select-none">Danh mục</th>
-                <th class="px-5 py-4 border-b border-gray-300 text-gray-700 font-semibold select-none max-w-xs">Mô tả</th>
                 <th class="px-5 py-4 border-b border-gray-300 text-gray-700 font-semibold select-none">Hành động</th>
             </tr>
+
             </thead>
             <tbody>
             <tr
@@ -114,14 +123,15 @@
                     <img
                             th:src="${product.image}"
                             alt="Ảnh sản phẩm"
-                            class="mx-auto h-20 w-20 object-contain rounded-md border border-gray-200"
+                            class="mx-auto h-[180px] w-[180px] object-contain rounded-md border border-gray-200"
                     />
                 </td>
-                <td class="px-5 py-3 border-b border-gray-300 font-medium text-gray-800" th:text="${product.productName}"></td>
-                <td class="px-5 py-3 border-b border-gray-300 font-semibold text-green-600" th:text="${#numbers.formatDecimal(product.price, 0, 'COMMA', 3, 'POINT')} + ' đ'"></td>
+                <td class="px-5 py-3 border-b border-gray-300 font-medium text-gray-800"
+                    th:text="${product.productName}"></td>
+                <td class="px-5 py-3 border-b border-gray-300 font-semibold text-green-600"
+                    th:text="${#numbers.formatDecimal(product.price, 0, 'COMMA', 3, 'POINT')} + ' đ'"></td>
                 <td class="px-5 py-3 border-b border-gray-300" th:text="${product.stock}"></td>
                 <td class="px-5 py-3 border-b border-gray-300" th:text="${product.category.categoryName}"></td>
-                <td class="px-5 py-3 border-b border-gray-300" th:text="${product.description}"></td>
                 <td class="px-5 py-3 border-b border-gray-300 space-x-2 whitespace-nowrap">
                     <a
                             th:href="@{/managerProduct/view/{productID}(productID = ${product.productID})}"
@@ -149,7 +159,9 @@
             </tr>
             </tbody>
         </table>
-        <div th:if="${#lists.isEmpty(products)}" class="text-center text-gray-700 font-semibold py-6">Không tìm thấy sản phẩm</div>
+        <div th:if="${#lists.isEmpty(products)}" class="text-center text-gray-700 font-semibold py-6">Không tìm thấy sản
+            phẩm
+        </div>
     </div>
 </div>
 </body>

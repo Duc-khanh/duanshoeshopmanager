@@ -1,0 +1,71 @@
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Sản Phẩm Nổi Bật</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet"/>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet"/>
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+    </style>
+</head>
+<body class="bg-gray-50 min-h-screen flex flex-col">
+
+<div th:replace="/users/layout :: header"></div>
+<div align="center" th:if="${#lists.isEmpty(productList)}" class="py-8 text-gray-700 font-semibold text-lg bg-blue-100">
+    <p>Không tìm thấy sản phẩm phù hợp.</p>
+</div>
+
+<main class="max-w-[110rem] mx-auto px-4 py-12 flex-grow">
+    <h2 class="text-4xl font-extrabold text-gray-900 mb-12 text-center tracking-tight">
+        Sản Phẩm Nổi Bật
+    </h2>
+
+    <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-4 gap-6">
+        <div th:each="product : ${productList}" th:if="${product.stock > 0}"
+             class="bg-white rounded-3xl shadow-xl hover:shadow-2xl min-h-[560px] flex flex-col">
+            <div class="relative w-full h-64 rounded-t-3xl overflow-hidden bg-gray-50 flex items-center justify-center p-6">
+                <img th:src="${product.image}" alt="Hình ảnh sản phẩm ${product.productName}" class="object-contain max-h-full max-w-full hover:scale-105 transition-transform duration-300 ease-in-out"/>
+            </div>
+            <div class="p-5 flex flex-col flex-grow">
+                <h3 class="text-2xl font-semibold text-gray-900 truncate mb-2" th:text="${product.productName}">Tên SP</h3>
+                <p class="text-gray-700 text-base mb-2 leading-relaxed  text-sm mb-3 line-clamp-2"
+                   th:text="${product.description}">
+                    Mô tả...
+                </p>
+
+                <div class="mb-2 text-sm font-semibold">
+                    <div class="flex justify-between text-lg font-bold text-red-600">
+                        <span>Giá</span>
+                        <span th:text="${#numbers.formatDecimal(product.price, 0, 'COMMA', 3, 'POINT')} + ' đ'">0 đ</span>
+                    </div>
+                </div>
+
+                <div class="flex justify-center gap-6 mt-auto">
+                    <a th:href="@{/cart/add/{productID}(productID=${product.productID})}"
+                       class="bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-xl shadow-lg font-semibold flex items-center justify-center space-x-2 transition-colors duration-300">
+                        <i class="fas fa-shopping-cart text-lg"></i>
+                        <span>Đặt hàng</span>
+                    </a>
+                    <a th:href="@{/managerUser/view/{productID}(productID=${product.productID})}"
+                       class="bg-blue-100 hover:bg-blue-200 text-blue-700 px-6 py-3 rounded-xl shadow-lg font-semibold flex items-center justify-center space-x-2 transition-colors duration-300">
+                        <i class="fas fa-eye text-lg"></i>
+                        <span>Chi tiết</span>
+                    </a>
+                </div>
+            </div>
+
+        </div>
+
+
+    </div>
+
+</main>
+
+<div th:replace="/users/layout :: footer"></div>
+
+</body>
+</html>

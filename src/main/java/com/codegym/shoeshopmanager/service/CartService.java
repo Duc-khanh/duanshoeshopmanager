@@ -51,5 +51,20 @@ public class CartService implements ICartService {
     public void removeItem(Integer id) {
         cartItemRepository.deleteById(id);
     }
-}
 
+    public int getCartItemCount(User user) {
+        List<CartItem> items = getCartItems(user);
+        return items.stream().mapToInt(CartItem::getQuantity).sum();
+    }
+
+    @Override
+    public void clearCart(User user) {
+        List<CartItem> items = getCartItems(user);
+        cartItemRepository.deleteAll(items);
+    }
+
+    public void removeCartItemsByIds(User user, List<Integer> itemIds) {
+        cartItemRepository.deleteAllByItemIDIn(itemIds);
+    }
+
+}

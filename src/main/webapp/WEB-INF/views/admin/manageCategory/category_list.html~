@@ -46,14 +46,10 @@
         }
     </style>
 </head>
-<body class="bg-gray-100 min-h-screen pt-24">
-<!-- Header -->
+<body class="bg-gray-100 min-h-screen p-6">
 <div th:replace="/admin/layout :: header"></div>
-<!-- Sidebar -->
 <div th:replace="/admin/layout :: sidebar"></div>
-
-<!-- Nội dung chính -->
-<div class="max-w-4xl mx-auto bg-white rounded-lg shadow p-6 mt-6">
+<div class="max-w-4xl mx-auto bg-white rounded-lg shadow p-6 flex-1 p-6">
     <h2 class="text-2xl font-semibold text-gray-800 mb-6 text-center">Danh sách danh mục</h2>
     <div class="mb-6 text-center">
         <a href="/categories/create" class="button">Thêm danh mục mới</a>
@@ -81,10 +77,10 @@
                     </a>
                 </td>
             </tr>
+
             </tbody>
         </table>
     </div>
 </div>
 </body>
-
 </html>

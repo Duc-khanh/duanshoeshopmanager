@@ -28,6 +28,6 @@ public class UserController {
     public String showViewForm(@PathVariable Integer productID , Model model) {
         Product product = productService.findById(productID);
         model.addAttribute("product", product);
-        return "users/homeUser/view_product";
+        return "users/cart/view_product";
     }
 }

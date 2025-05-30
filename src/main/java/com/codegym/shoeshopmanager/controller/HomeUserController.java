@@ -34,7 +34,7 @@ public class HomeUserController {
             model.addAttribute("user", currentUser);
         }
 
-        return "users/homeUser";
+        return "users/homeUser/home";
     }
 
     @GetMapping("/create")

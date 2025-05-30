@@ -4,78 +4,89 @@
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>Giỏ hàng</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link
-            rel="stylesheet"
-            href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css"
-    />
-    <link
-            href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap"
-            rel="stylesheet"
-    />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" />
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet" />
 </head>
-<body class="bg-gray-50 font-['Roboto'] min-h-screen flex flex-col items-center p-4">
-<h2 class="text-3xl font-bold mb-8 text-gray-800">Giỏ hàng của bạn</h2>
+<!--<body class="bg-gray-50 font-['Roboto'] min-h-screen flex flex-col items-center p-4">-->
+<div th:replace="/users/layout :: header"></div>
 
-<div class="w-full max-w-5xl bg-white rounded-lg shadow-md overflow-x-auto">
-    <table class="min-w-full divide-y divide-gray-200">
-        <thead class="bg-gray-100">
-        <tr>
-            <th
-                    scope="col"
-                    class="px-6 py-3 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider"
-            >
-                Tên SP
-            </th>
-            <th
-                    scope="col"
-                    class="px-6 py-3 text-right text-xs font-semibold text-gray-600 uppercase tracking-wider"
-            >
-                Giá
-            </th>
-            <th
-                    scope="col"
-                    class="px-6 py-3 text-center text-xs font-semibold text-gray-600 uppercase tracking-wider"
-            >
-                Số lượng
-            </th>
-            <th
-                    scope="col"
-                    class="px-6 py-3 text-right text-xs font-semibold text-gray-600 uppercase tracking-wider"
-            >
-                Thành tiền
-            </th>
-            <th
-                    scope="col"
-                    class="px-6 py-3 text-center text-xs font-semibold text-gray-600 uppercase tracking-wider"
-            >
-                Hành động
-            </th>
-        </tr>
-        </thead>
-        <tbody class="bg-white divide-y divide-gray-200" th:each="item : ${cartItems}">
-        <tr>
-            <td class="px-6 py-4 whitespace-nowrap text-gray-900 font-medium" th:text="${item.product.productName}">Tên sản phẩm</td>
-            <td class="px-6 py-4 whitespace-nowrap text-right text-gray-700" th:text="${#numbers.formatDecimal(item.product.price, 0, 'COMMA', 2, 'POINT')} + '₫'">100,000₫</td>
-            <td class="px-6 py-4 whitespace-nowrap text-center text-gray-700" th:text="${item.quantity}">1</td>
-            <td class="px-6 py-4 whitespace-nowrap text-right text-gray-900 font-semibold" th:text="${#numbers.formatDecimal(item.product.price * item.quantity, 0, 'COMMA', 2, 'POINT')} + '₫'">100,000₫</td>
-            <td class="px-6 py-4 whitespace-nowrap text-center">
-                <a
-                        th:href="@{/cart/remove/{cartItemId}(cartItemId=${item.cartItemId})}"
-                        class="inline-flex items-center px-3 py-1 text-sm font-medium text-red-600 hover:text-white hover:bg-red-600 rounded-md border border-red-600 transition"
-                ><i class="fas fa-trash-alt mr-1"></i> Xóa</a
-                >
-            </td>
-        </tr>
-        </tbody>
-    </table>
-</div>
+<!--<body >-->
+<body class="bg-gray-50 font-['Roboto'] min-h-screen flex flex-col  p-4">
+<main class="mx-auto text-center mt-8" style="min-width: 1000px">
+    <h2 class="text-3xl font-bold mb-8 text-gray-800">Giỏ hàng của bạn</h2>
 
-<div class="w-full max-w-5xl mt-6 flex justify-end">
-    <a
-            href="/checkout"
-            class="inline-block bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 px-8 rounded-lg shadow-md transition"
-    >Tiến hành thanh toán <i class="fas fa-arrow-right ml-2"></i
-    ></a>
-</div>
+    <div th:if="${#lists.isEmpty(cartItems)}" class="text-red-600 text-lg font-semibold">
+        Giỏ hàng của bạn hiện đang trống.
+    </div>
+
+    <form th:if="${!#lists.isEmpty(cartItems)}" th:action="@{/order}" method="post" class="w-full max-w-5xl">
+        <div class="bg-white rounded-lg shadow-md overflow-x-auto">
+            <table class="min-w-full divide-y divide-gray-200">
+                <thead class="bg-gray-100">
+                <tr>
+                    <th class="px-4 py-3 text-center">
+                        <input type="checkbox" id="selectAll" onclick="toggleAllCheckboxes(this)" />
+                    </th>
+                    <th class="px-6 py-3 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
+                        Tên SP
+                    </th>
+                    <th class="px-6 py-3 text-right text-xs font-semibold text-gray-600 uppercase tracking-wider">
+                        Giá
+                    </th>
+                    <th class="px-6 py-3 text-center text-xs font-semibold text-gray-600 uppercase tracking-wider">
+                        Số lượng
+                    </th>
+                    <th class="px-6 py-3 text-right text-xs font-semibold text-gray-600 uppercase tracking-wider">
+                        Thành tiền
+                    </th>
+                    <th class="px-6 py-3 text-center text-xs font-semibold text-gray-600 uppercase tracking-wider">
+                        Hành động
+                    </th>
+                </tr>
+                </thead>
+                <tbody class="bg-white divide-y divide-gray-200" th:each="item : ${cartItems}">
+                <tr>
+                    <td class="px-4 py-4 text-center">
+                        <input type="checkbox" name="selectedItems" th:value="${item.itemID}" class="item-checkbox" />
+                    </td>
+                    <td class="px-6 py-4 whitespace-nowrap text-gray-900 font-medium" th:text="${item.product.productName}">Tên sản phẩm</td>
+                    <td class="px-6 py-4 whitespace-nowrap text-right text-gray-700" th:text="${#numbers.formatDecimal(item.product.price, 0, 'COMMA', 3, 'POINT')} + '₫'">100,000₫</td>
+                    <td class="px-6 py-4 whitespace-nowrap text-center text-gray-700" th:text="${item.quantity}">1</td>
+                    <td class="px-6 py-4 whitespace-nowrap text-right text-red-900 font-semibold" th:text="${#numbers.formatDecimal(item.product.price * item.quantity, 0, 'COMMA', 2, 'POINT')} + '₫'">100,000₫</td>
+                    <td class="px-6 py-4 whitespace-nowrap text-center">
+                        <a th:href="@{/cart/remove/{cartItemId}(cartItemId=${item.itemID})}"
+                           class="inline-flex items-center px-3 py-1 text-sm font-medium text-red-600 hover:text-white hover:bg-red-600 rounded-md border border-red-600 transition">
+                            <i class="fas fa-trash-alt mr-1"></i> Xóa
+                        </a>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div class="w-full max-w-5xl mt-6 flex justify-end">
+            <button
+                    type="submit"
+                    class="inline-block bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 px-8 rounded-lg shadow-md transition"
+            >
+                Tiến hành thanh toán <i class="fas fa-arrow-right ml-2"></i>
+            </button>
+
+        </div>
+    </form>
+</main>
+
+
+<div th:replace="/users/layout :: footer"></div>
+
+<script>
+    function toggleAllCheckboxes(source) {
+        const checkboxes = document.querySelectorAll('.item-checkbox');
+        checkboxes.forEach(checkbox => {
+            checkbox.checked = source.checked;
+        });
+    }
+</script>
+
 </body>
 </html>

@@ -25,7 +25,7 @@
     <div class="flex-1 flex flex-col p-6 ">
         <div th:replace="/admin/layout :: header"></div>
 
-        <div class="flex flex-col items-center justify-center mt-[5rem] ml-72">
+        <div class="flex flex-col items-center justify-center mt-10 ml-72">
             <form
                     th:action="@{/managerProduct/products/save}"
                     th:object="${product}"

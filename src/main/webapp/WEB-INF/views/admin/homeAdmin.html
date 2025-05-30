@@ -1,159 +1,74 @@
-<html lang="vi"  xmlns:th="http://www.thymeleaf.org">
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="utf-8"/>
     <meta content="width=device-width, initial-scale=1" name="viewport"/>
-    <title>
-        Admin Dashboard
-    </title>
-    <script src="https://cdn.tailwindcss.com">
-    </script>
+    <title>Admin Dashboard</title>
+    <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet"/>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&amp;display=swap" rel="stylesheet"/>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet"/>
     <style>
         body {
             font-family: 'Inter', sans-serif;
         }
-        /* Scrollbar for sidebar */
+
         ::-webkit-scrollbar {
             width: 6px;
         }
+
         ::-webkit-scrollbar-thumb {
             background-color: #4B5563;
             border-radius: 3px;
         }
     </style>
 </head>
+
 <body class="bg-gray-100 min-h-screen flex flex-col">
-<header class="bg-white shadow-md sticky top-0 z-30">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-between h-16">
-        <div class="flex items-center space-x-3">
-            <img alt="Admin Dashboard Logo, stylized letters AD in blue and white" class="w-10 h-10 rounded-md" height="40" src="https://storage.googleapis.com/a1aa/image/3549126f-7fe8-4e1a-fd55-c4cbb679fdb5.jpg" width="40"/>
-            <h1 class="text-xl font-semibold text-gray-800">
-                Admin Dashboard
-            </h1>
+
+<!-- Header -->
+<div th:replace="/admin/layout :: header"></div>
+
+
+<div th:replace="/admin/layout :: sidebar"></div>
+
+
+<div id="overlay" class="fixed inset-0 bg-black bg-opacity-30 hidden z-30 md:hidden"></div>
+
+<!-- Main content -->
+<main class="flex-1 ml-0 md:ml-64 p-6 overflow-auto">
+    <h2 class="text-3xl font-semibold text-gray-800 mb-6">Trang quản trị</h2>
+    <section class="mt-2 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 max-w-7xl">
+        <div class="bg-white rounded-lg shadow p-6 flex flex-col items-center">
+            <img src="https://storage.googleapis.com/a1aa/image/d67d3db2-9cdc-43d7-77fa-00179b74b301.jpg"
+                 alt="Product icon" class="mb-4" width="100" height="100"/>
+            <a th:href="@{/admin/products}" class="text-xl font-semibold text-gray-800 mb-2">Quản lý sản phẩm</a>
         </div>
-        <nav class="hidden md:flex space-x-6 text-gray-600 font-medium">
-            <a class="hover:text-blue-600 transition" href="#">
-                Dashboard
-            </a>
-            <a class="hover:text-blue-600 transition" th:href="@{/admin/products}">
-                Sản phẩm
-            </a>
-            <a class="hover:text-blue-600 transition" th:href="@{/admin/user}">
-                Quản lý người dùng
-            </a>
-            <a class="hover:text-blue-600 transition" th:href="@{/admin/categories}">
-                Danh mục
-            </a>
-            <a class="hover:text-blue-600 transition" href="#">
-                Orders
-            </a>
-        </nav>
-        <button class="md:hidden text-gray-600 hover:text-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-600 rounded" id="mobile-menu-button">
-            <i class="fas fa-bars fa-lg">
-            </i>
-        </button>
-    </div>
-</header>
-<div class="flex flex-1 overflow-hidden">
-    <!-- Sidebar -->
-    <aside class="fixed inset-y-0 left-0 w-64 bg-white shadow-lg transform -translate-x-full md:translate-x-0 transition-transform duration-300 ease-in-out overflow-y-auto z-40" id="sidebar">
-        <div class="p-6">
-            <h2 class="text-2xl font-semibold text-gray-800 mb-8">
-                Chào mừng Admin!
-            </h2>
-            <nav class="space-y-4">
-                <a class="flex items-center space-x-3 text-gray-700 hover:text-blue-600 font-semibold px-3 py-2 rounded-md transition" th:href="@{/admin/products}">
-                    <i class="fas fa-box-open fa-lg">
-                    </i>
-                    <span>
-        Quản lý sản phẩm
-       </span>
-                </a>
-                <a class="flex items-center space-x-3 text-gray-700 hover:text-blue-600 font-semibold px-3 py-2 rounded-md transition" th:href="@{/admin/user}">
-                    <i class="fas fa-users fa-lg">
-                    </i>
-                    <span>
-        Quản lý người dùng
-       </span>
-                </a>
-                <a class="flex items-center space-x-3 text-gray-700 hover:text-blue-600 font-semibold px-3 py-2 rounded-md transition" th:href="@{/admin/categories}">
-                    <i class="fas fa-tags fa-lg">
-                    </i>
-                    <span>
-        Quản lý danh mục
-       </span>
-                </a>
-                <a class="flex items-center space-x-3 text-gray-700 hover:text-blue-600 font-semibold px-3 py-2 rounded-md transition" href="/admin/orders">
-                    <i class="fas fa-shopping-cart fa-lg">
-                    </i>
-                    <span>
-        Quản lý đơn hàng
-       </span>
-                </a>
-                <a class="flex items-center space-x-3 text-red-600 hover:text-red-800 font-semibold px-3 py-2 rounded-md transition mt-8 border border-red-600 hover:border-red-800" href="/logout">
-                    <i class="fas fa-sign-out-alt fa-lg">
-                    </i>
-                    <span>
-        Đăng xuất
-       </span>
-                </a>
-            </nav>
+        <div class="bg-white rounded-lg shadow p-6 flex flex-col items-center">
+            <img src="https://storage.googleapis.com/a1aa/image/ccd7a934-cccc-465c-0398-7970f04ba63a.jpg"
+                 alt="User icon" class="mb-4" width="100" height="100"/>
+            <a th:href="@{/admin/user}" class="text-xl font-semibold text-gray-800 mb-2">Quản lý người dùng</a>
         </div>
-    </aside>
-    <!-- Overlay for mobile sidebar -->
-    <div class="fixed inset-0 bg-black bg-opacity-30 hidden z-30 md:hidden" id="overlay">
-    </div>
-    <!-- Main content -->
-    <main class="flex-1 ml-0 md:ml-64 p-6 overflow-auto">
-        <h2 class="text-3xl font-semibold text-gray-800 mb-6">
-            Trang quản trị
-        </h2>
-        <section class="mt-2 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 max-w-7xl">
-            <div class="bg-white rounded-lg shadow p-6 flex flex-col items-center">
-                <img alt="Icon representing product management, a box with a gear" class="mb-4" height="100" src="https://storage.googleapis.com/a1aa/image/d67d3db2-9cdc-43d7-77fa-00179b74b301.jpg" width="100"/>
-                <a  th:href="@{/admin/products}" class="text-xl font-semibold text-gray-800 mb-2">
-                    Quản lý sản phẩm
-                </a>
+        <div class="bg-white rounded-lg shadow p-6 flex flex-col items-center">
+            <img src="https://storage.googleapis.com/a1aa/image/f9d4d478-78c1-4c5a-639c-8b1814f9a0fd.jpg"
+                 alt="Category icon" class="mb-4" width="100" height="100"/>
+            <a th:href="@{/admin/categories}" class="text-xl font-semibold text-gray-800 mb-2">Quản lý danh mục</a>
+        </div>
+        <div class="bg-white rounded-lg shadow p-6 flex flex-col items-center">
+            <img src="https://storage.googleapis.com/a1aa/image/f5fd8867-fba7-4d46-38cd-425db156526c.jpg"
+                 alt="Order icon" class="mb-4" width="100" height="100"/>
+            <a th:href="@{/admin/orders}" class="text-xl font-semibold text-gray-800 mb-2">Quản lý đơn hàng</a>
+        </div>
+    </section>
+</main>
 
-            </div>
-            <div class="bg-white rounded-lg shadow p-6 flex flex-col items-center">
-                <img alt="Icon representing user management, group of people with a shield" class="mb-4" height="100" src="https://storage.googleapis.com/a1aa/image/ccd7a934-cccc-465c-0398-7970f04ba63a.jpg" width="100"/>
-                <a th:href="@{/admin/user}" class="text-xl font-semibold text-gray-800 mb-2">
-                    Quản lý người dùng
-                </a>
-
-            </div>
-            <div class="bg-white rounded-lg shadow p-6 flex flex-col items-center">
-                <img alt="Icon representing category management, tags and folders" class="mb-4" height="100" src="https://storage.googleapis.com/a1aa/image/f9d4d478-78c1-4c5a-639c-8b1814f9a0fd.jpg" width="100"/>
-                <a th:href="@{/admin/categories}" class="text-xl font-semibold text-gray-800 mb-2">
-                    Quản lý danh mục
-                </a>
-
-            </div>
-            <div class="bg-white rounded-lg shadow p-6 flex flex-col items-center">
-                <img alt="Icon representing order management, shopping cart with checkmark" class="mb-4" height="100" src="https://storage.googleapis.com/a1aa/image/f5fd8867-fba7-4d46-38cd-425db156526c.jpg" width="100"/>
-                <h3 class="text-xl font-semibold text-gray-800 mb-2">
-                    Quản lý đơn hàng
-                </h3>
-
-            </div>
-        </section>
-    </main>
-</div>
 <script>
     const sidebar = document.getElementById('sidebar');
     const overlay = document.getElementById('overlay');
     const mobileMenuButton = document.getElementById('mobile-menu-button');
 
     mobileMenuButton.addEventListener('click', () => {
-        if (sidebar.classList.contains('-translate-x-full')) {
-            sidebar.classList.remove('-translate-x-full');
-            overlay.classList.remove('hidden');
-        } else {
-            sidebar.classList.add('-translate-x-full');
-            overlay.classList.add('hidden');
-        }
+        sidebar.classList.toggle('-translate-x-full');
+        overlay.classList.toggle('hidden');
     });
 
     overlay.addEventListener('click', () => {
@@ -161,5 +76,6 @@
         overlay.classList.add('hidden');
     });
 </script>
+
 </body>
 </html>

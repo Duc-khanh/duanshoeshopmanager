@@ -11,4 +11,7 @@ public interface ICartService {
     List<CartItem> getCartItems(User user);
     void removeItem(Integer id);
 
+    void clearCart(User user);
+    void removeCartItemsByIds(User user, List<Integer> itemIds);
+
 }

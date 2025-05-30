@@ -10,5 +10,6 @@ public interface ICartService {
     void addToCart(User user, Product product, int quantity);
     List<CartItem> getCartItems(User user);
     void removeItem(Integer id);
-    
+
+    void clearCart(User user);
 }
