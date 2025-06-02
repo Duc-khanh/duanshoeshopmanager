@@ -79,22 +79,22 @@ public class HomeUserController {
         model.addAttribute("keyword", keyword);
         return "admin/manageUser/user_list";
     }
-//    @GetMapping("/products1")
-//    public String viewProductsByCategory(@RequestParam(value = "category", required = false) String category,
-//                                         Model model) {
-//        List<Product> productList;
-//        if (category != null && !category.isEmpty()) {
-//            productList = productService.findByCategory(category); // Viết hàm này trong ProductService
-//        } else {
-//            productList = productService.findAll(); // Hoặc chỉ trả về mặc định danh mục đầu tiên
-//        }
-//
-//        model.addAttribute("productList", productList);
-//        model.addAttribute("selectedCategory", category);
-//        return "users/homeUser/home";
-//    }
+    @GetMapping("/products1")
+    public String viewProductsByCategory(@RequestParam(value = "category", required = false) String category,
+                                         Model model) {
+        List<Product> productList;
+        if (category != null && !category.isEmpty()) {
+            productList = productService.findByCategory(category); // Viết hàm này trong ProductService
+        } else {
+            productList = productService.findAll(); // Hoặc chỉ trả về mặc định danh mục đầu tiên
+        }
 
+        model.addAttribute("productList", productList);
+        model.addAttribute("selectedCategory", category);
+        return "users/homeUser/home";
+    }
 
+    
 
 
 }

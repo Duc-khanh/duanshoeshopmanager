@@ -66,9 +66,5 @@ public class CartService implements ICartService {
     public void removeCartItemsByIds(User user, List<Integer> itemIds) {
         cartItemRepository.deleteAllByItemIDIn(itemIds);
     }
-    public void deleteAll(List<CartItem> items) {
-        cartItemRepository.deleteAll(items);
-    }
-
 
 }

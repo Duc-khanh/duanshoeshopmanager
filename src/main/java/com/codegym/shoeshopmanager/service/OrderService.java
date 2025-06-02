@@ -8,7 +8,9 @@ import com.codegym.shoeshopmanager.model.User;
 import java.util.List;
 
 public interface OrderService {
-    Order placeOrder(User user, List<CartItem> cartItems);
+
+
+    void placeOrder(User user, List<CartItem> items);
 
     List<Order> getOrdersByUser(User user);
 

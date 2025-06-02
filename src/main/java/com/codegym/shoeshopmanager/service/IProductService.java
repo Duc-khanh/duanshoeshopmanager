@@ -14,4 +14,5 @@ public interface IProductService {
     List<Product> searchByName(String productName);
     String uploadImage(MultipartFile file) throws IOException;
 
+//    List<Product> findByCategory(String category);
 }

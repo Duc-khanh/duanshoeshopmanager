@@ -55,8 +55,8 @@ public class ProductService implements IProductService {
         }
         return null;
     }
-//    public List<Product> findByCategory(String category) {
-//        return productRepository.findByCategoryContainingIgnoreCase(category);
-//    }
+    public List<Product> findByCategory(String category) {
+        return productRepository.findByCategoryContainingIgnoreCase(category);
+    }
 
 }

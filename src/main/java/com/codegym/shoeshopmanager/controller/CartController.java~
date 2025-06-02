@@ -51,6 +51,7 @@ public class CartController {
 
         session.setAttribute("cart", cart);
         session.setAttribute("cartItemCount", getTotalQuantity(cart));
+//        session.setAttribute("cartItemCount", cart.size());
         return "redirect:/users";
     }
 
@@ -63,6 +64,7 @@ public class CartController {
 
         model.addAttribute("cartItems", cart);
         session.setAttribute("cartItemCount", getTotalQuantity(cart));
+//        session.setAttribute("cartItemCount", cart.size());
         return "users/cart/cart_view";
     }
 
@@ -73,6 +75,7 @@ public class CartController {
             cart.removeIf(item -> item.getProduct().getProductID().equals(productId));
             session.setAttribute("cart", cart);
             session.setAttribute("cartItemCount", getTotalQuantity(cart));
+//            session.setAttribute("cartItemCount", cart.size());
         }
         return "redirect:/cart";
     }

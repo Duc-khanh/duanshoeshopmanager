@@ -52,26 +52,26 @@
     </div>
 </section>
 
-<!--<div class="flex justify-center mb-8 space-x-4">-->
-<!--    <a th:href="@{/products(category='Giày thể thao')}"-->
-<!--       class="px-6 py-2 rounded-full font-semibold shadow-->
-<!--              hover:bg-blue-600 hover:text-white"-->
-<!--       th:classappend="${selectedCategory} == 'Giày thể thao' ? 'bg-blue-600 text-white' : 'bg-gray-200 text-gray-800'">-->
-<!--        Giày thể thao-->
-<!--    </a>-->
-<!--    <a th:href="@{/products(category='Giày công sở')}"-->
-<!--       class="px-6 py-2 rounded-full font-semibold shadow-->
-<!--              hover:bg-blue-600 hover:text-white"-->
-<!--       th:classappend="${selectedCategory} == 'Giày công sở' ? 'bg-blue-600 text-white' : 'bg-gray-200 text-gray-800'">-->
-<!--        Giày công sở-->
-<!--    </a>-->
-<!--    <a th:href="@{/products(category='Khuyến mãi')}"-->
-<!--       class="px-6 py-2 rounded-full font-semibold shadow-->
-<!--              hover:bg-blue-600 hover:text-white"-->
-<!--       th:classappend="${selectedCategory} == 'Khuyến mãi' ? 'bg-blue-600 text-white' : 'bg-gray-200 text-gray-800'">-->
-<!--        Khuyến mãi/Giảm giá-->
-<!--    </a>-->
-<!--</div>-->
+<div class="flex justify-center mb-8 space-x-4">
+    <a th:href="@{/products(category='Giày thể thao')}"
+       class="px-6 py-2 rounded-full font-semibold shadow
+              hover:bg-blue-600 hover:text-white"
+       th:classappend="${selectedCategory} == 'Giày thể thao' ? 'bg-blue-600 text-white' : 'bg-gray-200 text-gray-800'">
+        Giày thể thao
+    </a>
+    <a th:href="@{/products(category='Giày công sở')}"
+       class="px-6 py-2 rounded-full font-semibold shadow
+              hover:bg-blue-600 hover:text-white"
+       th:classappend="${selectedCategory} == 'Giày công sở' ? 'bg-blue-600 text-white' : 'bg-gray-200 text-gray-800'">
+        Giày công sở
+    </a>
+    <a th:href="@{/products(category='Khuyến mãi')}"
+       class="px-6 py-2 rounded-full font-semibold shadow
+              hover:bg-blue-600 hover:text-white"
+       th:classappend="${selectedCategory} == 'Khuyến mãi' ? 'bg-blue-600 text-white' : 'bg-gray-200 text-gray-800'">
+        Khuyến mãi/Giảm giá
+    </a>
+</div>
 
 
 <main class="max-w-[110rem] mx-auto px-4 py-12 flex-grow">
