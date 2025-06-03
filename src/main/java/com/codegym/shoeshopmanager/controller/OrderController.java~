@@ -65,6 +65,7 @@ public class OrderController {
             session.setAttribute("cartItemCount", getTotalQuantity(cart));
 
 
+
             redirectAttributes.addFlashAttribute("success", "Thanh toán thành công!");
         } catch (Exception e) {
             redirectAttributes.addFlashAttribute("error", "Lỗi thanh toán: " + e.getMessage());

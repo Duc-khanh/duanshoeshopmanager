@@ -24,12 +24,12 @@
                  class="object-contain max-h-[360px] w-full max-w-[400px]"
                  th:src="${product.image}" />
             <!-- Left/Right arrows -->
-<!--            <button aria-label="Previous" class="absolute left-4 top-1/2 -translate-y-1/2 text-gray-600 hover:text-gray-900 z-10">-->
-<!--                <i class="fas fa-chevron-left text-2xl"></i>-->
-<!--            </button>-->
-<!--            <button aria-label="Next" class="absolute right-4 top-1/2 -translate-y-1/2 text-gray-600 hover:text-gray-900 z-10">-->
-<!--                <i class="fas fa-chevron-right text-2xl"></i>-->
-<!--            </button>-->
+            <button aria-label="Previous" class="absolute left-4 top-1/2 -translate-y-1/2 text-gray-600 hover:text-gray-900 z-10">
+                <i class="fas fa-chevron-left text-2xl"></i>
+            </button>
+            <button aria-label="Next" class="absolute right-4 top-1/2 -translate-y-1/2 text-gray-600 hover:text-gray-900 z-10">
+                <i class="fas fa-chevron-right text-2xl"></i>
+            </button>
             <!-- Dots -->
 <!--            <div class="absolute bottom-6 left-1/2 -translate-x-1/2 flex space-x-3 text-gray-400 text-lg select-none">-->
 <!--                <span class="cursor-pointer">●</span>-->

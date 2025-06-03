@@ -43,25 +43,25 @@ public class OrderServiceImpl implements OrderService {
         double totalAmount = 0;
 
         for (CartItem item : cartItems) {
+            Product product = item.getProduct();
+
+            if (product == null || product.getProductID() == null) {
+                throw new IllegalArgumentException("Sản phẩm không hợp lệ: " + product);
+            }
+
             OrderDetail detail = new OrderDetail();
             detail.setOrder(order);
-            detail.setProduct(item.getProduct());
+            detail.setProduct(product);
             detail.setQuantity(item.getQuantity());
-            detail.setPrice(item.getProduct().getPrice());
+            detail.setPrice(product.getPrice());
 
             orderDetailRepository.save(detail);
-
-            totalAmount += item.getQuantity() * item.getProduct().getPrice();
+            totalAmount += item.getQuantity() * product.getPrice();
         }
+
 
         order.setTotalAmount(totalAmount);
         orderRepository.save(order);
-
-
-        List<Integer> ids = cartItems.stream()
-                .map(CartItem::getItemID)
-                .collect(Collectors.toList());
-        cartItemRepository.deleteAllById(ids);
     }
 
 

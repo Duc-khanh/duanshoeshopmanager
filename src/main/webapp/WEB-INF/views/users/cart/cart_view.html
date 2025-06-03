@@ -93,13 +93,23 @@
 <div th:replace="/users/layout :: footer"></div>
 
 <script>
-    function toggleAllCheckboxes(source) {
-        const checkboxes = document.querySelectorAll('.item-checkbox');
-        checkboxes.forEach(checkbox => {
-            checkbox.checked = source.checked;
+    document.addEventListener("DOMContentLoaded", function () {
+        const selectAllCheckbox = document.getElementById("selectAll");
+        const itemCheckboxes = document.querySelectorAll(".item-checkbox");
+
+        selectAllCheckbox.addEventListener("change", function () {
+            itemCheckboxes.forEach(cb => cb.checked = selectAllCheckbox.checked);
         });
-    }
+
+        itemCheckboxes.forEach(cb => {
+            cb.addEventListener("change", function () {
+                const allChecked = Array.from(itemCheckboxes).every(cb => cb.checked);
+                selectAllCheckbox.checked = allChecked;
+            });
+        });
+    });
 </script>
+
 
 </body>
 </html>

@@ -59,6 +59,7 @@ public class CartController {
         List<CartItem> cart = (List<CartItem>) session.getAttribute("cart");
         if (cart == null) {
             cart = new ArrayList<>();
+            session.setAttribute("cartItemCount", 0);
         }
 
         model.addAttribute("cartItems", cart);

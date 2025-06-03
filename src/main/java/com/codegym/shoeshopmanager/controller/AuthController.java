@@ -43,6 +43,8 @@ public class AuthController {
             String role = user.getRole().getRoleName();
             List<CartItem> items = cartService.getCartItems(user);
             session.setAttribute("cartItemCount", items.size());
+            session.removeAttribute("cart");
+            session.setAttribute("cartItemCount", 0);
             return role.equals("ADMIN") ? "redirect:/admin/dashboard" : "redirect:/users";
         } else {
             model.addAttribute("error", "Sai tên đăng nhập hoặc mật khẩu!");

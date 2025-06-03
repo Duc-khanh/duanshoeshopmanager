@@ -164,6 +164,70 @@
         </div>
     </header>
 </div>
+
+<!-- Navigation black bar -->
+<nav class="bg-black text-white text-xs max-w-7xl mx-auto px-4">
+    <ul class="flex flex-wrap items-center justify-center gap-3 py-2 font-semibold select-none">
+        <li class="flex items-center space-x-1 cursor-pointer">
+            <img src="https://storage.googleapis.com/a1aa/image/376c8dbd-c992-42c4-b075-5b314b74e7aa.jpg"
+                 alt="Nike logo white on black background" class="w-5 h-5" width="20" height="20"/>
+            <span>GIÀY NIKE</span>
+        </li>
+        <li class="flex items-center space-x-1 cursor-pointer">
+            <img src="https://storage.googleapis.com/a1aa/image/ea53750d-70ce-43bc-5702-40b06b5f1381.jpg"
+                 alt="Xvessel logo white on black background" class="w-5 h-5" width="20" height="20"/>
+            <span>XVESSEL</span>
+        </li>
+        <li class="flex items-center space-x-1 cursor-pointer">
+            <img src="https://storage.googleapis.com/a1aa/image/199071a5-2e8d-493e-a780-921e64a83a0a.jpg"
+                 alt="MLB logo white on black background" class="w-5 h-5" width="20" height="20"/>
+            <span>GIÀY MLB</span>
+        </li>
+        <li class="flex items-center space-x-1 cursor-pointer">
+            <img src="https://storage.googleapis.com/a1aa/image/a98ee995-4da4-485c-6d94-01476612029a.jpg"
+                 alt="Balenciaga logo white on black background" class="w-5 h-5" width="20" height="20"/>
+            <span>BALENCIAGA</span>
+        </li>
+        <li class="flex items-center space-x-1 cursor-pointer">
+            <img src="https://storage.googleapis.com/a1aa/image/48db2ab9-127f-4322-ba0a-f2f63fb2b8b3.jpg"
+                 alt="Adidas logo white on black background" class="w-5 h-5" width="20" height="20"/>
+            <span>ADIDAS</span>
+        </li>
+        <li class="flex items-center space-x-1 cursor-pointer">
+            <img src="https://storage.googleapis.com/a1aa/image/2b8ebaba-f7b4-4132-95d2-b559c427b4ff.jpg"
+                 alt="Converse logo white on black background" class="w-5 h-5" width="20" height="20"/>
+            <span>GIÀY CONVERSE</span>
+        </li>
+        <li class="flex items-center space-x-1 cursor-pointer">
+            <img src="https://storage.googleapis.com/a1aa/image/fe184414-85f5-4dda-00cd-4ff8054b7b93.jpg"
+                 alt="Vans logo white on black background" class="w-5 h-5" width="20" height="20"/>
+            <span>VANS</span>
+        </li>
+        <li class="flex items-center space-x-1 cursor-pointer">
+            <img src="https://storage.googleapis.com/a1aa/image/4903383b-a047-4a94-3972-ade83a6ab956.jpg"
+                 alt="Sneaker icon white on black background" class="w-5 h-5" width="20" height="20"/>
+            <span>GIÀY SNEAKER</span>
+        </li>
+        <li class="flex items-center space-x-1 cursor-pointer">
+            <img src="https://storage.googleapis.com/a1aa/image/1baafd04-df48-4d81-fb2f-3a8cfca00c7b.jpg"
+                 alt="Sports icon white on black background" class="w-5 h-5" width="20" height="20"/>
+            <span>GIÀY THỂ THAO</span>
+        </li>
+        <li class="flex items-center space-x-1 cursor-pointer">
+            <img src="https://storage.googleapis.com/a1aa/image/8a9c4f40-7302-4796-09eb-83320a49f8f3.jpg"
+                 alt="Gucci logo white on black background" class="w-5 h-5" width="20" height="20"/>
+            <span>GUCCI</span>
+        </li>
+        <li>
+            <button type="button"
+                    class="border border-white rounded px-3 py-1 text-xs font-semibold hover:bg-white hover:text-black transition">
+                CHỌN SIZE
+            </button>
+        </li>
+    </ul>
+</nav>
+
+<!-- Main content placeholder -->
 <main class="flex-grow" th:fragment="content">
     <p>Nội dung</p>
 </main>

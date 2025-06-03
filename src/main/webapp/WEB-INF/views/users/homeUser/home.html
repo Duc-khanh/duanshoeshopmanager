@@ -15,108 +15,123 @@
 <body class="bg-gray-50 min-h-screen flex flex-col">
 
 <div th:replace="/users/layout :: header"></div>
+
 <div align="center" th:if="${#lists.isEmpty(productList)}" class="py-8 text-gray-700 font-semibold text-lg bg-blue-100">
     <p>Không tìm thấy sản phẩm phù hợp.</p>
 </div>
-<section class="bg-white rounded-lg shadow p-8 mb-12 w-full max-w-full mx-auto">
-    <div class="max-w-[90rem] mx-auto">
-        <h2 class="text-3xl font-bold text-gray-800 mb-6 text-center">
-            Giới Thiệu Về Cửa Hàng
-        </h2>
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-8 items-start">
-            <div>
-                <p class="text-gray-700 leading-relaxed mb-4">
-                    Cửa Hàng Giày tự hào là địa chỉ tin cậy cung cấp các sản phẩm giày dép chất lượng cao, đa dạng mẫu mã và phong cách phù hợp với mọi đối tượng khách hàng.
-                </p>
-                <p class="text-gray-700 leading-relaxed mb-6">
-                    Hãy đến với chúng tôi để trải nghiệm mua sắm tuyệt vời và phong cách thời trang đẳng cấp!
-                </p>
-                <div class="space-y-3 text-gray-700 text-lg">
-                    <p><i class="fas fa-map-marker-alt mr-2 text-blue-600"></i>Địa chỉ: 123 Đường Hồ Tùng Mậu, Quận Nam Từ Liêm, TP. Hà Nội</p>
-                    <p><i class="fas fa-phone-alt mr-2 text-blue-600"></i>Điện thoại: 0856 123 456</p>
-                    <p><i class="fas fa-envelope mr-2 text-blue-600"></i>Email: Duckhanh@gmail.vn</p>
-                    <p><i class="fas fa-clock mr-2 text-blue-600"></i>Giờ mở cửa: 8:00 - 21:00 (Thứ 2 - Chủ Nhật)</p>
-                </div>
-            </div>
-            <div>
-                <img
-                        alt="Storefront of a modern shoe shop with large glass windows and stylish signage"
-                        class="rounded-lg shadow-md w-full object-cover max-h-96"
-                        height="650"
-                        src="https://storage.googleapis.com/a1aa/image/e12e58d0-87a3-49d6-06fc-485c5459c916.jpg"
-                        width="300"
-                />
-            </div>
 
-        </div>
-    </div>
-</section>
-
-<!--<div class="flex justify-center mb-8 space-x-4">-->
-<!--    <a th:href="@{/products(category='Giày thể thao')}"-->
-<!--       class="px-6 py-2 rounded-full font-semibold shadow-->
-<!--              hover:bg-blue-600 hover:text-white"-->
-<!--       th:classappend="${selectedCategory} == 'Giày thể thao' ? 'bg-blue-600 text-white' : 'bg-gray-200 text-gray-800'">-->
-<!--        Giày thể thao-->
-<!--    </a>-->
-<!--    <a th:href="@{/products(category='Giày công sở')}"-->
-<!--       class="px-6 py-2 rounded-full font-semibold shadow-->
-<!--              hover:bg-blue-600 hover:text-white"-->
-<!--       th:classappend="${selectedCategory} == 'Giày công sở' ? 'bg-blue-600 text-white' : 'bg-gray-200 text-gray-800'">-->
-<!--        Giày công sở-->
-<!--    </a>-->
-<!--    <a th:href="@{/products(category='Khuyến mãi')}"-->
-<!--       class="px-6 py-2 rounded-full font-semibold shadow-->
-<!--              hover:bg-blue-600 hover:text-white"-->
-<!--       th:classappend="${selectedCategory} == 'Khuyến mãi' ? 'bg-blue-600 text-white' : 'bg-gray-200 text-gray-800'">-->
-<!--        Khuyến mãi/Giảm giá-->
-<!--    </a>-->
-<!--</div>-->
+<!-- Updated banner section with 3 images horizontally aligned and right side 2 stacked images -->
+<!--<main class="max-w-7xl mx-auto px-4 py-6 grid grid-cols-1 md:grid-cols-3 gap-6">-->
+<!--    <div class="md:col-span-2 relative border border-gray-200 max-h-[400px] w-full md:w-[55%]">-->
+<!--        <img alt="Jordan Dunk Nike Air Force 1 sneaker blue shoes on light wooden background with text overlay" class="w-full h-full object-cover" height="400" src="https://storage.googleapis.com/a1aa/image/7d32a739-4e4c-4ec0-47cd-5f77e96d39f6.jpg" width="600"/>-->
+<!--        <div aria-hidden="true" class="absolute top-0 left-0 w-full h-full pointer-events-none">-->
+<!--        </div>-->
+<!--    </div>-->
+<!--    <div class="flex flex-col gap-6 justify-between w-full md:w-[45%] max-h-[400px]">-->
+<!--        <img alt="Basketball player wearing black sneakers on court with basketball" class="w-full h-[49%] object-cover" height="196" src="https://storage.googleapis.com/a1aa/image/e24390a3-fb6b-4133-9a3f-211be438f9fc.jpg" width="300"/>-->
+<!--        <img alt="White sneakers with red and black socks on white background" class="w-full h-[49%] object-cover" height="196" src="https://storage.googleapis.com/a1aa/image/0fc22abd-adcd-4410-df1d-554d3fe37b18.jpg" width="300"/>-->
+<!--    </div>-->
+<!--</main>-->
 
 
+<!-- Product section -->
 <main class="max-w-[110rem] mx-auto px-4 py-12 flex-grow">
     <h2 class="text-4xl font-extrabold text-gray-900 mb-12 text-center tracking-tight">
         Sản Phẩm Của Cửa Hàng
     </h2>
 
-    <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-4 gap-6">
-        <div th:each="product : ${productList}" th:if="${product.stock > 0}"
-             class="bg-white rounded-3xl shadow-xl hover:shadow-2xl min-h-[560px] flex flex-col">
-            <div class="relative w-full h-64 rounded-t-3xl overflow-hidden bg-gray-50 flex items-center justify-center p-6">
-                <img th:src="${product.image}" alt="Hình ảnh sản phẩm ${product.productName}" class="object-contain max-h-full max-w-full hover:scale-105 transition-transform duration-300 ease-in-out"/>
+    <div
+            class="max-w-7xl mx-auto mt-6 px-4 grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-6 pb-10"
+    >
+        <div
+                th:each="product : ${productList}"
+                th:if="${product.stock > 0}"
+                class="border border-white p-4 flex flex-col"
+        >
+            <div class="relative w-full h-44 rounded overflow-hidden bg-gray-50 flex items-center justify-center p-2">
+                <img
+                        th:src="${product.image}"
+                        th:alt="'Hình ảnh sản phẩm ' + ${product.productName}"
+                        class="object-contain max-h-full max-w-full hover:scale-105 transition-transform duration-300 ease-in-out"
+                        width="180"
+                        height="180"
+                />
             </div>
-            <div class="p-5 flex flex-col flex-grow">
-                <h3 class="text-2xl font-semibold text-gray-900 truncate mb-2" th:text="${product.productName}">Tên SP</h3>
-                <p class="text-gray-700 text-base mb-2 leading-relaxed  text-sm mb-3 line-clamp-2"
-                   th:text="${product.description}">
-                    Mô tả...
-                </p>
-
-                <div class="mb-2 text-sm font-semibold">
-                    <div class="flex justify-between text-lg font-bold text-red-600">
-                        <span>Giá</span>
-                        <span th:text="${#numbers.formatDecimal(product.price, 0, 'COMMA', 3, 'POINT')} + ' đ'">0 đ</span>
-                    </div>
-                </div>
-
-                <div class="flex justify-center gap-6 mt-auto">
-                    <a th:href="@{/cart/add/{productID}(productID=${product.productID})}"
-                       class="bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-xl shadow-lg font-semibold flex items-center justify-center space-x-2 transition-colors duration-300">
-                        <i class="fas fa-shopping-cart text-lg"></i>
-                        <span>Đặt hàng</span>
-                    </a>
-                    <a th:href="@{/managerUser/view/{productID}(productID=${product.productID})}"
-                       class="bg-blue-100 hover:bg-blue-200 text-blue-700 px-6 py-3 rounded-xl shadow-lg font-semibold flex items-center justify-center space-x-2 transition-colors duration-300">
-                        <i class="fas fa-eye text-lg"></i>
-                        <span>Chi tiết</span>
-                    </a>
-                </div>
+            <p
+                    class="text-center text-xs mt-2 flex-grow"
+                    th:text="${product.productName}"
+            >
+                Tên sản phẩm
+            </p>
+            <div class="flex justify-center mt-1 text-yellow-500 text-xs space-x-0.5">
+                <i class="fas fa-star"></i>
+                <i class="fas fa-star"></i>
+                <i class="fas fa-star"></i>
+                <i class="fas fa-star"></i>
+                <i class="fas fa-star"></i>
             </div>
-
+            <p
+                    class="text-center text-xs font-semibold text-orange-600 mt-1"
+                    th:text="${#numbers.formatDecimal(product.price, 0, 'COMMA', 3, 'POINT')} + ' đ'"
+            >
+                0 đ
+            </p>
+            <div class="flex justify-center gap-6 mt-auto">
+                <a th:href="@{/cart/add/{productID}(productID=${product.productID})}"
+                   class="bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-xl shadow-lg font-semibold flex items-center justify-center space-x-2 transition-colors duration-300">
+                    <i class="fas fa-shopping-cart text-lg"></i>
+<!--                    <span>Đặt hàng</span>-->
+                </a>
+                <a th:href="@{/managerUser/view/{productID}(productID=${product.productID})}"
+                   class="bg-blue-100 hover:bg-blue-200 text-blue-700 px-6 py-3 rounded-xl shadow-lg font-semibold flex items-center justify-center space-x-2 transition-colors duration-300">
+                    <i class="fas fa-eye text-lg"></i>
+<!--                    <span>Chi tiết</span>-->
+                </a>
+            </div>
         </div>
 
-
     </div>
+
+<!--    <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-4 gap-6">-->
+<!--        <div th:each="product : ${productList}" th:if="${product.stock > 0}"-->
+<!--             class="bg-white rounded-3xl shadow-xl hover:shadow-2xl min-h-[560px] flex flex-col">-->
+<!--            <div class="relative w-full h-64 rounded-t-3xl overflow-hidden bg-gray-50 flex items-center justify-center p-6">-->
+<!--                <img th:src="${product.image}" alt="Hình ảnh sản phẩm ${product.productName}" class="object-contain max-h-full max-w-full hover:scale-105 transition-transform duration-300 ease-in-out"/>-->
+<!--            </div>-->
+<!--            <div class="p-5 flex flex-col flex-grow">-->
+<!--                <h3 class="text-2xl font-semibold text-gray-900 truncate mb-2" th:text="${product.productName}">Tên SP</h3>-->
+<!--                <p class="text-gray-700 text-base mb-2 leading-relaxed  text-sm mb-3 line-clamp-2"-->
+<!--                   th:text="${product.description}">-->
+<!--                    Mô tả...-->
+<!--                </p>-->
+
+<!--                <div class="mb-2 text-sm font-semibold">-->
+<!--                    <div class="flex justify-between text-lg font-bold text-red-600">-->
+<!--                        <span>Giá</span>-->
+<!--                        <span th:text="${#numbers.formatDecimal(product.price, 0, 'COMMA', 3, 'POINT')} + ' đ'">0 đ</span>-->
+<!--                    </div>-->
+<!--                </div>-->
+
+<!--                <div class="flex justify-center gap-6 mt-auto">-->
+<!--                    <a th:href="@{/cart/add/{productID}(productID=${product.productID})}"-->
+<!--                       class="bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-xl shadow-lg font-semibold flex items-center justify-center space-x-2 transition-colors duration-300">-->
+<!--                        <i class="fas fa-shopping-cart text-lg"></i>-->
+<!--                        <span>Đặt hàng</span>-->
+<!--                    </a>-->
+<!--                    <a th:href="@{/managerUser/view/{productID}(productID=${product.productID})}"-->
+<!--                       class="bg-blue-100 hover:bg-blue-200 text-blue-700 px-6 py-3 rounded-xl shadow-lg font-semibold flex items-center justify-center space-x-2 transition-colors duration-300">-->
+<!--                        <i class="fas fa-eye text-lg"></i>-->
+<!--                        <span>Chi tiết</span>-->
+<!--                    </a>-->
+<!--                </div>-->
+<!--            </div>-->
+
+<!--        </div>-->
+<!--    </div>-->
+
+    <h2 class="text-4xl font-extrabold text-gray-900 mb-12 mt-20 text-center tracking-tight">
+        Sản Phẩm Khuyến Mãi Giảm Giá
+    </h2>
 
 </main>
 
