@@ -5,8 +5,13 @@ import com.codegym.shoeshopmanager.model.User;
 import com.codegym.shoeshopmanager.repository.RoleRepository;
 import com.codegym.shoeshopmanager.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
 
@@ -19,6 +24,9 @@ public class UserService implements IUserService {
 
     @Autowired
     private RoleRepository roleRepository;
+    @Value("${file-upload}")
+    private String uploadPath;
+
 
     @Override
     public boolean isUsernameTaken(String username) {
@@ -95,6 +103,17 @@ public class UserService implements IUserService {
     @Override
     public List<User> searchByName(String username) {
         return userRepository.searchByName(username);
+    }
+
+    @Override
+    public String uploadImage(MultipartFile file) throws IOException {
+        if (file != null && !file.isEmpty()) {
+            String fileName = StringUtils.cleanPath(file.getOriginalFilename());
+            File dest = new File(uploadPath, fileName);
+            file.transferTo(dest);
+            return "/image/" + fileName;
+        }
+        return null;
     }
 
 }

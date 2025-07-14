@@ -5,10 +5,9 @@
     <title>
         Admin Dashboard
     </title>
-    <script src="https://cdn.tailwindcss.com">
-    </script>
+    <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet"/>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&amp;display=swap" rel="stylesheet"/>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet"/>
     <style>
         body {
             font-family: 'Inter', sans-serif;
@@ -29,74 +28,80 @@
 
 <body class="bg-gray-100 min-h-screen flex flex-col">
 
-
 <div class="flex flex-1 overflow-hidden">
+    <div th:fragment="header">
+        <header class="fixed top-0 left-0 right-0 bg-white shadow-md z-50 h-16 flex items-center px-6 md:pl-80">
+            <div class="flex-1 flex items-center">
+                <button class="md:hidden text-gray-600 hover:text-blue-600 focus:outline-none mr-4" id="mobile-menu-button">
+                    <i class="fas fa-bars fa-lg">
+                    </i>
+                </button>
+            </div>
+            <div class="flex items-center space-x-4">
+                <button class="text-gray-600 hover:text-blue-600 focus:outline-none">
+                    <i class="fas fa-bell fa-lg">
+                    </i>
+                </button>
+                <button class="text-gray-600 hover:text-blue-600 focus:outline-none">
+                    <i class="fas fa-cog fa-lg">
+                    </i>
+                </button>
+                <div class="flex items-center space-x-2 cursor-pointer">
+                    <img alt="User avatar, a young Vietnamese admin with short hair and glasses" class="w-8 h-8 rounded-full" height="32" src="https://storage.googleapis.com/a1aa/image/e19001d9-317a-4eb2-1450-2219756ede27.jpg" width="32"/>
+                    <span class="text-gray-700 font-medium select-none">
+      Admin
+     </span>
+                </div>
+            </div>
+        </header>
+    </div>
     <div th:fragment="sidebar">
-
-        <!-- Sidebar -->
         <aside class="fixed inset-y-0 left-0 w-72 bg-white shadow-lg transform -translate-x-full md:translate-x-0 transition-transform duration-300 ease-in-out overflow-y-auto z-40"
                id="sidebar">
-            <div class="flex-1 p-6 pt-24">
-                <nav class="space-y-4">
-                    <div class="flex items-center space-x-3">
-                        <img alt="Admin Dashboard Logo, stylized letters AD in blue and white"
-                             class="w-10 h-10 rounded-md" height="40"
-                             src="https://storage.googleapis.com/a1aa/image/3549126f-7fe8-4e1a-fd55-c4cbb679fdb5.jpg"
-                             width="40"/>
-                        <h1 class="text-xl font-semibold text-gray-800">
-                            Admin Dashboard
-                        </h1>
-                    </div>
-                    <a class="flex items-center space-x-3 text-gray-700 hover:text-blue-600 font-semibold px-3 py-2 rounded-md transition"
+            <div class="flex flex-col items-center pt-10 pb-6 border-b border-gray-200 flex items-center mb-6 mt-8">
+                <img alt="Admin Dashboard Logo, stylized letters AD in blue and white, large size"
+                     th:href="@{/admin/dashboard}"
+                     class="w-20 h-20 rounded-md"
+                     height="80"
+                     src="https://storage.googleapis.com/a1aa/image/87e3fa51-f86f-465d-a4de-9c2158252302.jpg"
+                     width="80"/>
+                <span class="mt-3 text-lg font-bold tracking-tight select-none text-gray-900">YOUNG FASHION STYLE</span>
+            </div>
+            <div class="flex-1 p-4">
+                <nav class="space-y-3">
+                    <a class="flex items-center space-x-4 text-gray-700 hover:text-blue-600 font-semibold px-4 py-3 rounded-lg transition shadow-sm hover:shadow-md"
                        th:href="@{/admin/products}">
-                        <i class="fas fa-box-open fa-lg">
-                        </i>
-                        <span>
-        Quản lý sản phẩm
-       </span>
+                        <i class="fas fa-box-open fa-lg w-6 text-center"></i>
+                        <span class="text-base">Quản lý sản phẩm</span>
                     </a>
-                    <a class="flex items-center space-x-3 text-gray-700 hover:text-blue-600 font-semibold px-3 py-2 rounded-md transition"
+                    <a class="flex items-center space-x-4 text-gray-700 hover:text-blue-600 font-semibold px-4 py-3 rounded-lg transition shadow-sm hover:shadow-md"
                        th:href="@{/admin/user}">
-                        <i class="fas fa-users fa-lg">
-                        </i>
-                        <span>
-        Quản lý người dùng
-       </span>
+                        <i class="fas fa-users fa-lg w-6 text-center"></i>
+                        <span class="text-base">Quản lý người dùng</span>
                     </a>
-                    <a class="flex items-center space-x-3 text-gray-700 hover:text-blue-600 font-semibold px-3 py-2 rounded-md transition"
+                    <a class="flex items-center space-x-4 text-gray-700 hover:text-blue-600 font-semibold px-4 py-3 rounded-lg transition shadow-sm hover:shadow-md"
                        th:href="@{/admin/categories}">
-                        <i class="fas fa-tags fa-lg">
-                        </i>
-                        <span>
-        Quản lý danh mục
-       </span>
+                        <i class="fas fa-tags fa-lg w-6 text-center"></i>
+                        <span class="text-base">Quản lý danh mục</span>
                     </a>
-                    <a class="flex items-center space-x-3 text-gray-700 hover:text-blue-600 font-semibold px-3 py-2 rounded-md transition"
-                       href="/admin/orders">
-                        <i class="fas fa-shopping-cart fa-lg">
-                        </i>
-                        <span>
-        Quản lý đơn hàng
-       </span>
+                    <a class="flex items-center space-x-4 text-gray-700 hover:text-blue-600 font-semibold px-4 py-3 rounded-lg transition shadow-sm hover:shadow-md"
+                       href="/orders">
+                        <i class="fas fa-shopping-cart fa-lg w-6 text-center"></i>
+                        <span class="text-base">Quản lý đơn hàng</span>
                     </a>
-                    <a class="flex items-center space-x-3 text-red-600 hover:text-red-800 font-semibold px-3 py-2 rounded-md transition mt-8 border border-red-600 hover:border-red-800"
+                    <a class="flex items-center space-x-4 text-red-600 hover:text-red-800 font-semibold px-4 py-3 rounded-lg transition border border-red-600 hover:border-red-800 mt-8 shadow-sm hover:shadow-md"
                        href="/logout">
-                        <i class="fas fa-sign-out-alt fa-lg">
-                        </i>
-                        <span>
-        Đăng xuất
-       </span>
+                        <i class="fas fa-sign-out-alt fa-lg w-6 text-center"></i>
+                        <span class="text-base">Đăng xuất</span>
                     </a>
                 </nav>
             </div>
 
         </aside>
     </div>
-    <!-- Overlay for mobile sidebar -->
     <div class="fixed inset-0 bg-black bg-opacity-30 hidden z-30 md:hidden" id="overlay">
     </div>
-    <!-- Main content -->
-    <main class="flex-1 ml-0 md:ml-64 p-6 overflow-auto pt-16">
+    <main class="flex-1 ml-0 md:ml-[20rem] p-6 overflow-auto pt-16">
 
         <h2 class="text-3xl font-semibold text-gray-800 mb-6">
             Trang quản trị
@@ -152,15 +157,17 @@
     const overlay = document.getElementById('overlay');
     const mobileMenuButton = document.getElementById('mobile-menu-button');
 
-    mobileMenuButton.addEventListener('click', () => {
-        if (sidebar.classList.contains('-translate-x-full')) {
-            sidebar.classList.remove('-translate-x-full');
-            overlay.classList.remove('hidden');
-        } else {
-            sidebar.classList.add('-translate-x-full');
-            overlay.classList.add('hidden');
-        }
-    });
+    if(mobileMenuButton) {
+        mobileMenuButton.addEventListener('click', () => {
+            if (sidebar.classList.contains('-translate-x-full')) {
+                sidebar.classList.remove('-translate-x-full');
+                overlay.classList.remove('hidden');
+            } else {
+                sidebar.classList.add('-translate-x-full');
+                overlay.classList.add('hidden');
+            }
+        });
+    }
 
     overlay.addEventListener('click', () => {
         sidebar.classList.add('-translate-x-full');

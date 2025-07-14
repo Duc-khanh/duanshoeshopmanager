@@ -6,12 +6,25 @@ import com.codegym.shoeshopmanager.service.IProductService;
 import com.codegym.shoeshopmanager.service.IUserService;
 import com.codegym.shoeshopmanager.service.RoleService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpSession;
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Controller
 @RequestMapping("/users")
@@ -22,12 +35,29 @@ public class HomeUserController {
     private RoleService roleService;
     @Autowired
     private IProductService productService;
+    @Value("${file-upload}")
+    private String uploadDir;
 
 
     @GetMapping("")
     public String dashboard(HttpSession session, Model model) {
-        List<Product> productList = productService.findAll();
-        model.addAttribute("productList", productList);
+        List<Product> allProducts = productService.findAll();
+
+        List<Product> featuredProducts = new ArrayList<>(allProducts);
+        Collections.shuffle(featuredProducts);
+        featuredProducts = featuredProducts.stream()
+                .filter(p -> p.getStock() > 0)
+                .limit(10)
+                .collect(Collectors.toList());
+
+        List<Product> discountedProducts = allProducts.stream()
+                .filter(p -> p.getStock() > 0)
+                .sorted(Comparator.comparingDouble(Product::getPrice))
+                .limit(10)
+                .collect(Collectors.toList());
+
+        model.addAttribute("featuredProducts", featuredProducts);
+        model.addAttribute("discountedProducts", discountedProducts);
 
         User currentUser = (User) session.getAttribute("currentUser");
         if (currentUser != null) {
@@ -37,41 +67,86 @@ public class HomeUserController {
         return "users/homeUser/home";
     }
 
+
     @GetMapping("/create")
-    public String showFormNewUser (Model model) {
+    public String showFormNewUser(Model model) {
         model.addAttribute("user", new User());
         model.addAttribute("roles", roleService.findAll());
         return "admin/manageUser/add_user";
     }
-    @PostMapping("/save")
-    public String saveUser(@ModelAttribute User user) {
-        userService.save(user);
-        return "redirect:/admin/user";
-    }
+
+
     @GetMapping("edit/{id}")
-    public String showEditFormUser(@PathVariable Integer id , Model model) {
+    public String showEditFormUser(@PathVariable Integer id, Model model) {
         User user = userService.findById(id);
         model.addAttribute("user", user);
         model.addAttribute("roles", roleService.findAll());
         return "admin/manageUser/update_user";
     }
-    @PostMapping("/update")
-    public String updateUser(@ModelAttribute User user) {
+
+    @PostMapping("/save")
+    public String saveUser(
+            @ModelAttribute User user,
+            @RequestParam("imageFile") MultipartFile imageFile,
+            @RequestParam(value = "oldImagePath", required = false) String oldImagePath
+    ) throws IOException {
+        User existingUser = userService.findById(user.getUserID());
+        if (user.getPassword() == null || user.getPassword().trim().isEmpty()) {
+            user.setPassword(existingUser.getPassword());
+        }
+        if (imageFile != null && !imageFile.isEmpty()) {
+            String fileName = StringUtils.cleanPath(imageFile.getOriginalFilename());
+            File uploadPath = new File(uploadDir);
+            if (!uploadPath.exists()) {
+                uploadPath.mkdirs();
+            }
+            Path filePath = Paths.get(uploadDir + fileName);
+            Files.copy(imageFile.getInputStream(), filePath, StandardCopyOption.REPLACE_EXISTING);
+            user.setImage("/image/" + fileName);
+        } else {
+            user.setImage(oldImagePath);
+        }
+
         userService.save(user);
         return "redirect:/admin/user";
     }
+
+    @PostMapping("/add")
+    public String createUser(@ModelAttribute("user") User user) {
+        MultipartFile imageFile = user.getImageFile();
+        if (imageFile != null && !imageFile.isEmpty()) {
+            try {
+                String fileName = imageFile.getOriginalFilename();
+                Path uploadPath = Paths.get(uploadDir);
+                if (!Files.exists(uploadPath)) {
+                    Files.createDirectories(uploadPath);
+                }
+                Path filePath = uploadPath.resolve(fileName);
+                imageFile.transferTo(filePath.toFile());
+
+                user.setImage("/image/" + fileName);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+        userService.save(user);
+        return "redirect:/admin/user";
+    }
+
     @GetMapping("view/{id}")
-    public String showViewFormUser(@PathVariable Integer id , Model model) {
+    public String showViewFormUser(@PathVariable Integer id, Model model) {
         User user = userService.findById(id);
         model.addAttribute("user", user);
         model.addAttribute("roles", roleService.findAll());
         return "admin/manageUser/view_user";
     }
+
     @GetMapping("/delete/{id}")
     public String deleteUser(@PathVariable("id") Integer id) {
         userService.delete(id);
         return "redirect:/admin/user";
     }
+
     @GetMapping("search")
     public String searchUsers(@RequestParam("username") String keyword, Model model) {
         List<User> users = userService.searchByName(keyword);
@@ -79,22 +154,6 @@ public class HomeUserController {
         model.addAttribute("keyword", keyword);
         return "admin/manageUser/user_list";
     }
-//    @GetMapping("/products1")
-//    public String viewProductsByCategory(@RequestParam(value = "category", required = false) String category,
-//                                         Model model) {
-//        List<Product> productList;
-//        if (category != null && !category.isEmpty()) {
-//            productList = productService.findByCategory(category); // Viết hàm này trong ProductService
-//        } else {
-//            productList = productService.findAll(); // Hoặc chỉ trả về mặc định danh mục đầu tiên
-//        }
-//
-//        model.addAttribute("productList", productList);
-//        model.addAttribute("selectedCategory", category);
-//        return "users/homeUser/home";
-//    }
-
-
 
 
 }

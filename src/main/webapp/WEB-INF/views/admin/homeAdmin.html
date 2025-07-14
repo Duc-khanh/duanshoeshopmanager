@@ -29,12 +29,13 @@
 
 
 <div th:replace="/admin/layout :: sidebar"></div>
+<div th:replace="/admin/layout :: header"></div>
 
 
 <div id="overlay" class="fixed inset-0 bg-black bg-opacity-30 hidden z-30 md:hidden"></div>
 
 <!-- Main content -->
-<main class="flex-1 ml-0 md:ml-64 p-6 overflow-auto">
+<main class="flex-1 ml-0 md:ml-72 p-6 overflow-auto">
     <h2 class="text-3xl font-semibold text-gray-800 mb-6">Trang quản trị</h2>
     <section class="mt-2 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 max-w-7xl">
         <div class="bg-white rounded-lg shadow p-6 flex flex-col items-center">
@@ -55,13 +56,18 @@
         <div class="bg-white rounded-lg shadow p-6 flex flex-col items-center">
             <img src="https://storage.googleapis.com/a1aa/image/f5fd8867-fba7-4d46-38cd-425db156526c.jpg"
                  alt="Order icon" class="mb-4" width="100" height="100"/>
-            <a th:href="@{/admin/orders}" class="text-xl font-semibold text-gray-800 mb-2">Quản lý đơn hàng</a>
+            <a th:href="@{/orders}" class="text-xl font-semibold text-gray-800 mb-2">Quản lý đơn hàng</a>
         </div>
     </section>
 </main>
 <div th:replace="/admin/layout :: footer"></div>
 
 <script>
+    function toggleDropdown(id) {
+        const element = document.getElementById(id);
+        element.classList.toggle("hidden");
+    }
+
     const sidebar = document.getElementById('sidebar');
     const overlay = document.getElementById('overlay');
     const mobileMenuButton = document.getElementById('mobile-menu-button');

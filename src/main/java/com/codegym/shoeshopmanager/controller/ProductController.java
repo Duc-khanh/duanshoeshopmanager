@@ -41,7 +41,6 @@ public class ProductController {
     public String showEditForm(@PathVariable Integer productID, Model model) {
 
         Product product = productService.findById(productID);
-        System.out.println(product);
         model.addAttribute("product", product);
         model.addAttribute("categories", categoryService.findAll());
         return "admin/manageProduct/update_product";
@@ -53,25 +52,19 @@ public class ProductController {
             @RequestParam("imageFile") MultipartFile imageFile,
             @RequestParam(value = "oldImagePath", required = false) String oldImagePath
     ) throws IOException {
-
         if (imageFile != null && !imageFile.isEmpty()) {
-
             String fileName = StringUtils.cleanPath(imageFile.getOriginalFilename());
-
             File uploadPath = new File(uploadDir);
             if (!uploadPath.exists()) {
                 uploadPath.mkdirs();
             }
-
             Path filePath = Paths.get(uploadDir + fileName);
             Files.copy(imageFile.getInputStream(), filePath, StandardCopyOption.REPLACE_EXISTING);
-
             product.setImage("/image/" + fileName);
         } else {
 
             product.setImage(oldImagePath);
         }
-
         productService.save(product);
         return "redirect:/admin/products";
     }

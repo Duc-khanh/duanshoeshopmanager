@@ -1,5 +1,7 @@
 package com.codegym.shoeshopmanager.service;
 
+import com.codegym.shoeshopmanager.model.Category;
+
 import java.util.List;
 
 public interface ICategoryService<T> {
@@ -7,6 +9,7 @@ public interface ICategoryService<T> {
     T findById(int id);
     void save(T t);
     void delete(int id);
-//    List<T> searchByName(String name);
+
+
 
 }

@@ -1,6 +1,8 @@
 package com.codegym.shoeshopmanager.service;
 
 import com.codegym.shoeshopmanager.model.Product;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
@@ -11,8 +13,12 @@ public interface IProductService {
     Product findById(Integer id);
     void save(Product product);
     void delete(Integer id);
-    List<Product> searchByName(String productName);
+    List<Product> searchByName(String keyword);
     String uploadImage(MultipartFile file) throws IOException;
 
-//    List<Product> findByCategory(String category);
+    Page<Product> findAll(Pageable pageable);
+
+    Page<Product> searchByName(String keyword, Pageable pageable);
+    Object getFeaturedProducts();
+    Object getDiscountedProducts();
 }

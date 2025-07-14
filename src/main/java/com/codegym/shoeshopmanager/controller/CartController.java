@@ -21,9 +21,9 @@ public class CartController {
     @Autowired
     private ProductRepository productRepository;
 
-    @GetMapping("/add/{productId}")
+    @PostMapping("/add/{productId}")
     public String addToCart(@PathVariable Integer productId,
-                            @RequestParam(defaultValue = "1") Integer quantity,
+                            @RequestParam("quantity") Integer quantity,
                             HttpSession session) {
 
         List<CartItem> cart = (List<CartItem>) session.getAttribute("cart");
@@ -54,18 +54,26 @@ public class CartController {
         return "redirect:/users";
     }
 
+
     @GetMapping("")
     public String viewCart(HttpSession session, Model model) {
         List<CartItem> cart = (List<CartItem>) session.getAttribute("cart");
         if (cart == null) {
             cart = new ArrayList<>();
-            session.setAttribute("cartItemCount", 0);
+            session.removeAttribute("cartItemCount");
+        } else {
+            int totalQuantity = getTotalQuantity(cart);
+            if (totalQuantity > 0) {
+                session.setAttribute("cartItemCount", totalQuantity);
+            } else {
+                session.removeAttribute("cartItemCount");
+            }
         }
 
         model.addAttribute("cartItems", cart);
-        session.setAttribute("cartItemCount", getTotalQuantity(cart));
         return "users/cart/cart_view";
     }
+
 
     @GetMapping("/remove/{productId}")
     public String removeItem(@PathVariable Integer productId, HttpSession session) {
@@ -73,10 +81,17 @@ public class CartController {
         if (cart != null) {
             cart.removeIf(item -> item.getProduct().getProductID().equals(productId));
             session.setAttribute("cart", cart);
-            session.setAttribute("cartItemCount", getTotalQuantity(cart));
+
+            int totalQuantity = getTotalQuantity(cart);
+            if (totalQuantity > 0) {
+                session.setAttribute("cartItemCount", totalQuantity);
+            } else {
+                session.removeAttribute("cartItemCount");
+            }
         }
         return "redirect:/cart";
     }
+
     private int getTotalQuantity(List<CartItem> cart) {
         int totalQuantity = 0;
         for (CartItem item : cart) {

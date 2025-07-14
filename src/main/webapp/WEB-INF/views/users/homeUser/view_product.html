@@ -18,29 +18,14 @@
 
 <main class="flex-grow container mx-auto px-4 py-10 max-w-5xl">
     <div class="bg-white rounded-2xl shadow-xl p-8 md:p-12 flex flex-col md:flex-row">
-        <!-- Left: Image -->
-        <div class="md:w-1/2 flex justify-center items-center bg-gray-100 p-8 relative">
+
+        <div class="md:w-1/2 flex justify-center items-center p-8 relative">
             <img alt="Hình ảnh sản phẩm chi tiết, rõ nét, màu sắc trung thực, kích thước vừa phải, nền trắng"
                  class="object-contain max-h-[360px] w-full max-w-[400px]"
                  th:src="${product.image}" />
-            <!-- Left/Right arrows -->
-<!--            <button aria-label="Previous" class="absolute left-4 top-1/2 -translate-y-1/2 text-gray-600 hover:text-gray-900 z-10">-->
-<!--                <i class="fas fa-chevron-left text-2xl"></i>-->
-<!--            </button>-->
-<!--            <button aria-label="Next" class="absolute right-4 top-1/2 -translate-y-1/2 text-gray-600 hover:text-gray-900 z-10">-->
-<!--                <i class="fas fa-chevron-right text-2xl"></i>-->
-<!--            </button>-->
-            <!-- Dots -->
-<!--            <div class="absolute bottom-6 left-1/2 -translate-x-1/2 flex space-x-3 text-gray-400 text-lg select-none">-->
-<!--                <span class="cursor-pointer">●</span>-->
-<!--                <span class="cursor-pointer">●</span>-->
-<!--                <span class="cursor-pointer">●</span>-->
-<!--                <span class="cursor-pointer text-black">●</span>-->
-<!--                <span class="cursor-pointer">●</span>-->
-<!--            </div>-->
+
         </div>
 
-        <!-- Right: Product info -->
         <div class="md:w-1/2 mt-10 md:mt-0 flex flex-col justify-center px-4 md:px-0 text-gray-900">
             <h2 class="font-bold text-xl leading-tight mb-2" th:text="${product.productName}">Tên sản phẩm</h2>
             <div class="w-14 h-0.5 bg-gray-300 mb-4"></div>
@@ -48,7 +33,6 @@
             <p class="text-sm font-semibold mb-1" th:text="${product.description}">Mô tả chi tiết sản phẩm.</p>
             <p class="text-sm font-bold mb-4">Miễn phí đổi size | đổi mẫu trong 1 tuần !!!</p>
 
-            <!-- Size selection -->
             <div class="mb-4">
                 <label class="text-xs font-semibold uppercase tracking-wide text-gray-700 mb-1 block">SIZE</label>
                 <div class="flex flex-wrap gap-2 max-w-md">
@@ -61,18 +45,26 @@
                     <button type="button" class="border border-gray-300 rounded px-3 py-1 text-sm text-gray-700 hover:bg-gray-100">45</button>
                 </div>
             </div>
+            <form th:action="@{/cart/add/{productID}(productID=${product.productID})}" method="post"
+                  class="flex items-center space-x-3 max-w-md mb-6">
+                <button type="button" onclick="decreaseQuantity()"
+                        class="border border-gray-300 rounded px-3 py-1 text-lg font-semibold text-gray-700 select-none">-</button>
 
-            <!-- Quantity and Add to cart -->
-            <div class="flex items-center space-x-3 max-w-md mb-6">
-                <button type="button" aria-label="Decrease quantity" class="border border-gray-300 rounded px-3 py-1 text-lg font-semibold text-gray-700 select-none">-</button>
-                <input type="number" aria-label="Quantity" min="1" value="1" class="w-12 text-center border border-gray-300 rounded py-1 text-sm" />
-                <button type="button" aria-label="Increase quantity" class="border border-gray-300 rounded px-3 py-1 text-lg font-semibold text-gray-700 select-none">+</button>
-                <a th:href="@{/cart/add/{productID}(productID=${product.productID})}"
-                   class="bg-[#f5a07e] text-white font-bold text-sm uppercase px-5 py-2 rounded hover:bg-[#f28f5f] transition flex-shrink-0"
-                   title="Thêm vào giỏ hàng" aria-label="Thêm sản phẩm vào giỏ hàng">
+                <input id="quantity" name="quantity" type="number" aria-label="Quantity" min="1" value="1"
+                       class="w-12 text-center border border-gray-300 rounded py-1 text-sm" />
+                <input type="hidden" id="maxStock" th:value="${product.stock}" />
+
+
+                <button type="button" onclick="increaseQuantity()"
+                        class="border border-gray-300 rounded px-3 py-1 text-lg font-semibold text-gray-700 select-none">+</button>
+
+                <button type="submit"
+
+                        class="bg-[#f5a07e] text-white font-bold text-sm uppercase px-5 py-2 rounded hover:bg-[#f28f5f] transition flex-shrink-0"
+                        title="Thêm vào giỏ hàng" aria-label="Thêm sản phẩm vào giỏ hàng">
                     Thêm vào giỏ hàng
-                </a>
-            </div>
+                </button>
+            </form>
         </div>
     </div>
 </main>
@@ -80,4 +72,23 @@
 <div th:replace="/users/layout :: footer"></div>
 
 </body>
+<script>
+    function increaseQuantity() {
+        const input = document.getElementById('quantity');
+        const max = parseInt(document.getElementById('maxStock').value);
+
+        if (parseInt(input.value) < max) {
+            input.value = parseInt(input.value) + 1;
+        } else {
+            alert("Không thể thêm quá " + max + " sản phẩm còn trong kho.");
+        }
+    }
+    function decreaseQuantity() {
+        const input = document.getElementById('quantity');
+        if (parseInt(input.value) > 1) {
+            input.value = parseInt(input.value) - 1;
+        }
+    }
+</script>
+
 </html>

@@ -1,0 +1,56 @@
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"/>
+    <title>Danh sách đơn hàng</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1"/>
+</head>
+<body class="bg-gray-50 min-h-screen flex flex-col">
+<header class="fixed top-0 left-0 right-0 bg-white shadow-md z-30">
+    <div th:replace="/admin/layout :: header"></div>
+</header>
+
+<div class="flex flex-1 pt-16 min-h-[calc(100vh-4rem)]">
+    <aside class="fixed top-16 left-0 bottom-0 w-64 bg-white border-r border-gray-200 overflow-y-auto z-20">
+        <div th:replace="/admin/layout :: sidebar"></div>
+    </aside>
+
+    <main class="flex-1 ml-64 p-6 overflow-auto">
+        <div class="max-w-6xl mx-auto bg-white rounded-lg shadow-lg p-8">
+            <h2 class="text-3xl font-bold text-gray-800 mb-8 border-b pb-3">Danh sách đơn hàng</h2>
+            <div class="overflow-x-auto">
+                <table class="w-full table-auto border-collapse border border-gray-300">
+                    <thead>
+                    <tr class="bg-gray-100 text-gray-700 uppercase text-sm font-semibold">
+                        <th class="border border-gray-300 px-5 py-3 text-left">#</th>
+                        <th class="border border-gray-300 px-5 py-3 text-left">Khách hàng</th>
+                        <th class="border border-gray-300 px-5 py-3 text-left">Trạng thái</th>
+                        <th class="border border-gray-300 px-5 py-3 text-center">Chi tiết</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr th:each="order , stat : ${orders}"
+                        class="border-b border-gray-200 hover:bg-blue-50 transition-colors duration-200 cursor-pointer">
+                        <td class="border border-gray-300 px-5 py-4 text-gray-700 font-medium" th:text="${stat.index+1}">DH001</td>
+                        <td class="border border-gray-300 px-5 py-4 text-gray-700" th:text="${order.user.username}"></td>
+                        <td class="border border-gray-300 px-5 py-4" th:text="${order.status}">Đang xử lý</td>
+                        <td class="border border-gray-300 px-5 py-4 text-center">
+                            <a th:href="@{/view/{id}(id=${order.orderID})}"
+                               class="inline-flex items-center text-blue-600 hover:text-blue-800 font-semibold">
+                                <i class="fas fa-eye mr-2"></i> Xem
+                            </a>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </main>
+</div>
+
+<footer class="bg-white border-t border-gray-200 p-4 mt-auto">
+    <div th:replace="/admin/layout :: footer"></div>
+</footer>
+</body>
+</html>

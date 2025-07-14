@@ -40,11 +40,8 @@ public class AuthController {
         User user = userService.login(username, password);
         if (user != null) {
             session.setAttribute("currentUser", user);
+
             String role = user.getRole().getRoleName();
-            List<CartItem> items = cartService.getCartItems(user);
-            session.setAttribute("cartItemCount", items.size());
-            session.removeAttribute("cart");
-            session.setAttribute("cartItemCount", 0);
             return role.equals("ADMIN") ? "redirect:/admin/dashboard" : "redirect:/users";
         } else {
             model.addAttribute("error", "Sai tên đăng nhập hoặc mật khẩu!");
@@ -66,7 +63,7 @@ public class AuthController {
         }
 
         Role userRole = roleRepository.findByRoleName("USER")
-                .orElseThrow(() -> new RuntimeException("Role USER không tồn tại"));
+                  .orElseThrow(() -> new RuntimeException("Role USER không tồn tại"));
         user.setRole(userRole);
 
         userService.save(user);

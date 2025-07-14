@@ -1,0 +1,65 @@
+package com.codegym.shoeshopmanager.controller;
+
+import com.codegym.shoeshopmanager.model.Category;
+import com.codegym.shoeshopmanager.repository.CategoryRepository;
+import com.codegym.shoeshopmanager.service.CategoryService;
+import com.codegym.shoeshopmanager.service.IProductService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
+
+@Controller
+@RequestMapping("/categories")
+public class CategoryController {
+    @Autowired
+    private CategoryService categoryService;
+    @GetMapping("/create")
+    public String showCreateCategoryForm(Model model) {
+        model.addAttribute("category", new Category());
+        return "admin/manage-category/add_category";
+    }
+
+    @PostMapping("/save")
+    public String saveCategory(@ModelAttribute Category category) {
+        categoryService.save(category);
+        return "redirect:/admin/categories";
+    }
+
+//    @GetMapping("/create")
+//    public String showCreateCategoryForm(Model model) {
+//        model.addAttribute("category", new Category());
+////        model.addAttribute("parentCategories", categoryService.findAll());
+//        List<Category> parentCategories = categoryRepository.findByParentCategoryIsNull();
+//        System.out.println(parentCategories);
+//        model.addAttribute("parentCategories", parentCategories);
+//        return "admin/manage-category/add_category";
+//    }
+
+//    @PostMapping("/save")
+//    public String saveCategory(@ModelAttribute Category category, @RequestParam(required = false) Integer parentId) {
+//        if (parentId != null) {
+//            Category parent = categoryService.findById(parentId);
+//            category.setParentCategory(parent);
+//        }
+//        categoryService.save(category);
+//        return "redirect:/categories";
+//    }
+
+
+
+    @GetMapping("/edit/{id}")
+    public String showEditCategory(Model model, @PathVariable Integer id) {
+        Category category = categoryService.findById(id);
+        model.addAttribute("category", category);
+        return "admin/manage-category/update_category";
+    }
+    @GetMapping("/delete/{id}")
+    public String deleteCategory( @PathVariable Integer id) {
+        categoryService.delete(id);
+        return "redirect:/admin/categories";
+    }
+}

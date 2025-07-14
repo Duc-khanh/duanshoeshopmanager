@@ -9,7 +9,6 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 public class OrderServiceImpl implements OrderService {
@@ -28,7 +27,7 @@ public class OrderServiceImpl implements OrderService {
 
 
     @Override
-    public void placeOrder(User user, List<CartItem> cartItems) {
+    public Order placeOrder(User user, List<CartItem> cartItems) {
         if (user == null || cartItems == null || cartItems.isEmpty()) {
             throw new IllegalArgumentException("Người dùng hoặc giỏ hàng không hợp lệ.");
         }
@@ -62,6 +61,28 @@ public class OrderServiceImpl implements OrderService {
 
         order.setTotalAmount(totalAmount);
         orderRepository.save(order);
+
+        return order;
+    }
+
+
+    public List<Order> findAll() {
+        return orderRepository.findAll();
+    }
+
+    public Order findById(Integer id) {
+        return orderRepository.findById(id).orElse(null);
+    }
+
+    public void updateStatus(Integer id, String status) {
+        Order order = findById(id);
+        if (order != null) {
+            order.setStatus(OrderStatus.valueOf(status));
+            orderRepository.save(order);
+        }
+    }
+    public Order findOrderWithDetails(Integer id) {
+        return orderRepository.findOrderWithDetails(id).orElse(null);
     }
 
 

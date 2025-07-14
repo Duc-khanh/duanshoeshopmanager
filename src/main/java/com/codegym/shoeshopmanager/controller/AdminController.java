@@ -7,6 +7,8 @@ import com.codegym.shoeshopmanager.service.IProductService;
 import com.codegym.shoeshopmanager.service.IUserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -35,16 +37,25 @@ public class AdminController {
         model.addAttribute("admin", currentUser);
         return "admin/homeAdmin";
     }
-
     @GetMapping("/products")
-    public String listProducts(Model model, @RequestParam(required = false) String keyword) {
-        List<Product> products = (keyword != null)
-                ? productService.searchByName(keyword)
-                : productService.findAll();
-        model.addAttribute("products", products);
+    public String listProducts(Model model,
+                               @RequestParam(defaultValue = "0") int page,
+                               @RequestParam(defaultValue = "5") int size,
+                               @RequestParam(required = false) String keyword) {
+        Page<Product> productPage;
+
+        if (keyword != null && !keyword.isEmpty()) {
+            productPage = productService.searchByName(keyword, PageRequest.of(page, size));
+        } else {
+            productPage = productService.findAll(PageRequest.of(page, size));
+        }
+        model.addAttribute("products", productPage.getContent());
+        model.addAttribute("currentPage", page);
+        model.addAttribute("totalPages", productPage.getTotalPages());
         model.addAttribute("keyword", keyword);
         return "admin/manageProduct/product_list";
     }
+
 
     @GetMapping("/user")
     public String homeUser(Model model) {
@@ -56,7 +67,7 @@ public class AdminController {
     @GetMapping("/categories")
     public String listCategories(Model model) {
         model.addAttribute("categories", categoryService.findAll());
-        return "admin/manageCategory/category_list";
+        return "admin/manage-category/category_list";
     }
 
 

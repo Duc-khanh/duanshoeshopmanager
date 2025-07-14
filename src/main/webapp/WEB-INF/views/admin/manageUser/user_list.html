@@ -1,4 +1,3 @@
-<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8" />
@@ -28,13 +27,13 @@
             display: inline-flex;
             align-items: center;
             justify-content: center;
-            width: 36px;
-            height: 36px;
+            width: 44px;
+            height: 44px;
             border-radius: 0.5rem;
             transition: background-color 0.3s ease;
             cursor: pointer;
             color: white;
-            font-size: 1rem;
+            font-size: 1.25rem;
         }
         .icon-btn:hover {
             opacity: 0.85;
@@ -43,14 +42,35 @@
         table th,
         table td {
             vertical-align: middle !important;
+            font-size: 1.125rem; /* Increase font size */
+            padding-top: 1rem;
+            padding-bottom: 1rem;
+        }
+        /* Increase header font size and weight */
+        table thead th {
+            font-size: 1.25rem;
+            font-weight: 700;
+        }
+        /* Larger user image and cell */
+        .user-image {
+            width: 96px;
+            height: 96px;
+            object-fit: cover;
+            border-radius: 0.5rem;
+            margin-left: auto;
+            margin-right: auto;
+            display: block;
+        }
+        .image-cell {
+            width: 120px;
         }
     </style>
 </head>
-<body class="bg-gray-100 min-h-screen p-6">
-
+<body class="bg-gray-100 min-h-screen pt-24 pb-24">
 <div th:replace="/admin/layout :: sidebar"></div>
-<div class="max-w-7xl mx-auto bg-white rounded-lg shadow p-6 flex-1 p-6 ml-[28rem] mt-[5rem]">
-    <h1 class="text-3xl font-semibold text-gray-800 mb-6 text-center">Quản lý người dùng</h1>
+<div th:replace="/admin/layout :: header"></div>
+    <div class="max-w-[93rem] mx-auto bg-white rounded-lg shadow p-6 flex-1 ml-[22rem]">
+    <h1 class="text-4xl font-semibold text-gray-800 mb-6 text-center">Quản lý người dùng</h1>
 
     <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-6 space-y-4 sm:space-y-0">
         <form th:action="@{/users/search}" method="get" class="flex w-full sm:w-auto">
@@ -59,11 +79,11 @@
                     name="username"
                     th:value="${keyword}"
                     placeholder="Tìm kiếm người dùng..."
-                    class="w-full sm:w-72 px-4 py-2 border border-gray-300 rounded-l-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    class="w-full sm:w-80 px-5 py-3 border border-gray-300 rounded-l-md focus:outline-none focus:ring-2 focus:ring-blue-500 text-lg"
             />
             <button
                     type="submit"
-                    class="bg-blue-600 hover:bg-blue-700 text-white px-5 py-2 rounded-r-md font-semibold transition-colors duration-300"
+                    class="bg-blue-600 hover:bg-blue-700 text-white px-7 py-3 rounded-r-md font-semibold transition-colors duration-300 text-lg"
             >
                 Tìm
             </button>
@@ -71,7 +91,7 @@
         <a th:href="@{/users/create}">
             <button
                     type="button"
-                    class="bg-green-600 hover:bg-green-700 text-white px-6 py-2 rounded-md font-semibold transition-colors duration-300"
+                    class="bg-green-600 hover:bg-green-700 text-white px-8 py-3 rounded-md font-semibold transition-colors duration-300 text-lg"
             >
                 Thêm người dùng
             </button>
@@ -82,20 +102,39 @@
         <table class="min-w-full border border-gray-300 rounded-md overflow-hidden text-center">
             <thead class="bg-gray-50">
             <tr>
-                <th class="px-5 py-4 border-b border-gray-300 text-gray-700 font-semibold select-none">#</th>
-                <th class="px-5 py-4 border-b border-gray-300 text-gray-700 font-semibold select-none">Tên đăng nhập</th>
-                <th class="px-5 py-4 border-b border-gray-300 text-gray-700 font-semibold select-none">Email</th>
-                <th class="px-5 py-4 border-b border-gray-300 text-gray-700 font-semibold select-none">Vai trò</th>
-                <th class="px-5 py-4 border-b border-gray-300 text-gray-700 font-semibold select-none">Hành động</th>
+                <th class="px-6 py-5 border-b border-gray-300 text-gray-700 font-semibold select-none">#</th>
+                <th class="px-6 py-5 border-b border-gray-300 text-gray-700 font-semibold select-none image-cell">Hình ảnh</th>
+                <th class="px-6 py-5 border-b border-gray-300 text-gray-700 font-semibold select-none">Tên đăng nhập</th>
+                <th class="px-6 py-5 border-b border-gray-300 text-gray-700 font-semibold select-none">Email</th>
+                <th class="px-6 py-5 border-b border-gray-300 text-gray-700 font-semibold select-none">Địa chỉ</th>
+                <th class="px-6 py-5 border-b border-gray-300 text-gray-700 font-semibold select-none">Vai trò</th>
+                <th class="px-6 py-5 border-b border-gray-300 text-gray-700 font-semibold select-none">Hành động</th>
             </tr>
             </thead>
             <tbody>
             <tr th:each="user, stat : ${users}" class="even:bg-gray-50 hover:bg-gray-100 transition-colors duration-200">
-                <td class="px-5 py-3 border-b border-gray-300" th:text="${stat.count}"></td>
-                <td class="px-5 py-3 border-b border-gray-300 font-medium text-gray-800" th:text="${user.username}"></td>
-                <td class="px-5 py-3 border-b border-gray-300" th:text="${user.email}"></td>
-                <td class="px-5 py-3 border-b border-gray-300" th:text="${user.role != null ? user.role.roleName : 'N/A'}"></td>
-                <td class="px-5 py-3 border-b border-gray-300 space-x-2 whitespace-nowrap">
+                <td class="px-6 py-4 border-b border-gray-300" th:text="${stat.count}"></td>
+<!--                <td class="px-6 py-4 border-b border-gray-300 image-cell">-->
+<!--                    <img th:if="${user.image != null}"-->
+<!--                         th:src="${user.image}"-->
+<!--                         alt="User Image"-->
+<!--                         class="mx-auto h-[180px] w-[280px] object-contain rounded-md border border-gray-200" />-->
+
+<!--                    <img th:if="${user.image == null}"-->
+<!--                         src="https://storage.googleapis.com/a1aa/image/87e3fa51-f86f-465d-a4de-9c2158252302.jpg"-->
+<!--                         alt="Default User"-->
+<!--                         class="mx-auto h-[180px] w-[280px] object-contain rounded-md border border-gray-200" />-->
+<!--                </td>-->
+                <td class="px-6 py-4 border-b border-gray-300 image-cell w-[160px]">
+                    <img th:src="${user.image}" alt="User Image" class="mx-auto h-[130px] w-[130px] object-contain" />
+                </td>
+
+
+                <td class="px-6 py-4 border-b border-gray-300 font-medium text-gray-800" th:text="${user.username}"></td>
+                <td class="px-6 py-4 border-b border-gray-300" th:text="${user.email}"></td>
+                <td class="px-6 py-4 border-b border-gray-300" th:text="${user.address != null ? user.address : 'N/A'}"></td>
+                <td class="px-6 py-4 border-b border-gray-300" th:text="${user.role != null ? user.role.roleName : 'N/A'}"></td>
+                <td class="px-6 py-4 border-b border-gray-300 space-x-3 whitespace-nowrap">
                     <a
                             th:href="@{/users/view/{userID}(userID=${user.userID})}"
                             title="Xem chi tiết"
@@ -122,7 +161,7 @@
             </tr>
             </tbody>
         </table>
-        <div th:if="${#lists.isEmpty(users)}" class="text-center text-gray-700 font-semibold py-6">Không tìm thấy người dùng</div>
+        <div th:if="${#lists.isEmpty(users)}" class="text-center text-gray-700 font-semibold py-8 text-xl">Không tìm thấy người dùng</div>
     </div>
 </div>
 <div th:replace="/admin/layout :: footer"></div>

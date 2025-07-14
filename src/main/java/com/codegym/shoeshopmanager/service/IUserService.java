@@ -2,7 +2,9 @@ package com.codegym.shoeshopmanager.service;
 
 
 import com.codegym.shoeshopmanager.model.User;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.List;
 
 public interface IUserService {
@@ -22,5 +24,6 @@ public interface IUserService {
     void blockUser(Integer userId);
 
     List<User> searchByName(String username);
+    String uploadImage(MultipartFile file) throws IOException;
 
 }

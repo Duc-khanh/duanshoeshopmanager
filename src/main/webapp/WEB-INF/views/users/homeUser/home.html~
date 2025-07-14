@@ -1,7 +1,7 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1"/>
     <title>Sản Phẩm Nổi Bật</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet"/>
@@ -12,51 +12,69 @@
         }
     </style>
 </head>
-<body class="bg-gray-50 min-h-screen flex flex-col">
+<!--<body class="bg-gray-50 min-h-screen flex flex-col">-->
+<body class="bg-gradient-to-b from-blue-50 to-white min-h-screen flex flex-col">
 
 <div th:replace="/users/layout :: header"></div>
 
-<div align="center" th:if="${#lists.isEmpty(productList)}" class="py-8 text-gray-700 font-semibold text-lg bg-blue-100">
-    <p>Không tìm thấy sản phẩm phù hợp.</p>
-</div>
+<section class="max-w-[110rem] mx-auto px-4 mt-8">
+    <div class="grid grid-cols-1 md:grid-cols-12 gap-6 items-center">
 
-<!-- Updated banner section with 3 images horizontally aligned and right side 2 stacked images -->
-<!--<main class="max-w-7xl mx-auto px-4 py-6 grid grid-cols-1 md:grid-cols-3 gap-6">-->
-<!--    <div class="md:col-span-2 relative border border-gray-200 max-h-[400px] w-full md:w-[55%]">-->
-<!--        <img alt="Jordan Dunk Nike Air Force 1 sneaker blue shoes on light wooden background with text overlay" class="w-full h-full object-cover" height="400" src="https://storage.googleapis.com/a1aa/image/7d32a739-4e4c-4ec0-47cd-5f77e96d39f6.jpg" width="600"/>-->
-<!--        <div aria-hidden="true" class="absolute top-0 left-0 w-full h-full pointer-events-none">-->
-<!--        </div>-->
-<!--    </div>-->
-<!--    <div class="flex flex-col gap-6 justify-between w-full md:w-[45%] max-h-[400px]">-->
-<!--        <img alt="Basketball player wearing black sneakers on court with basketball" class="w-full h-[49%] object-cover" height="196" src="https://storage.googleapis.com/a1aa/image/e24390a3-fb6b-4133-9a3f-211be438f9fc.jpg" width="300"/>-->
-<!--        <img alt="White sneakers with red and black socks on white background" class="w-full h-[49%] object-cover" height="196" src="https://storage.googleapis.com/a1aa/image/0fc22abd-adcd-4410-df1d-554d3fe37b18.jpg" width="300"/>-->
-<!--    </div>-->
-<!--</main>-->
+        <div class="md:col-span-7 rounded-lg overflow-hidden shadow-lg group">
+            <img    
+                    src="https://sneaker.giaodienwebmau.com/wp-content/uploads/2022/04/giay-nike.jpg.webp"
+                    alt="Large sneaker image"
+                    class="w-full h-auto object-cover transform transition duration-500 group-hover:scale-105"
+                    loading="lazy"
+            />
+        </div>
 
 
-<!-- Product section -->
+        <div class="md:col-span-5 flex flex-col gap-6">
+            <div class="rounded-lg overflow-hidden shadow-lg group">
+                <img
+                        src="https://sneaker.giaodienwebmau.com/wp-content/uploads/2022/04/giay-jordan.jpg.webp"
+                        alt="Top right sneaker image"
+                        class="w-full h-auto object-cover transform transition duration-500 group-hover:scale-105"
+                        loading="lazy"
+                />
+            </div>
+            <div class="rounded-lg overflow-hidden shadow-lg group">
+                <img
+                        src="https://sneaker.giaodienwebmau.com/wp-content/uploads/2022/04/giay-mlb.jpg.webp"
+                        alt="Bottom right sneaker image"
+                        class="w-full h-auto object-cover transform transition duration-500 group-hover:scale-105"
+                        loading="lazy"
+                />
+            </div>
+        </div>
+    </div>
+</section>
+
 <main class="max-w-[110rem] mx-auto px-4 py-12 flex-grow">
     <h2 class="text-4xl font-extrabold text-gray-900 mb-12 text-center tracking-tight">
-        Sản Phẩm Của Cửa Hàng
+        Sản Phẩm Nổi Bật
     </h2>
 
     <div
+            th:if="${featuredProducts != null and #lists.isEmpty(featuredProducts) == false}"
             class="max-w-7xl mx-auto mt-6 px-4 grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-6 pb-10"
     >
         <div
-                th:each="product : ${productList}"
+                th:each="product : ${featuredProducts}"
                 th:if="${product.stock > 0}"
-                class="border border-white p-4 flex flex-col"
+                class="border border-gray-300 p-4 flex flex-col group rounded-lg shadow-sm"
         >
-            <div class="relative w-full h-44 rounded overflow-hidden bg-gray-50 flex items-center justify-center p-2">
+            <a th:href="@{/managerUser/view/{productID}(productID=${product.productID})}" class="relative w-full h-44 rounded overflow-hidden bg-gray-100 flex items-center justify-center focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
                 <img
                         th:src="${product.image}"
                         th:alt="'Hình ảnh sản phẩm ' + ${product.productName}"
-                        class="object-contain max-h-full max-w-full hover:scale-105 transition-transform duration-300 ease-in-out"
+                        class="object-contain max-h-full max-w-full transition-transform duration-300 ease-in-out group-hover:scale-105"
                         width="180"
                         height="180"
+                        loading="lazy"
                 />
-            </div>
+            </a>
             <p
                     class="text-center text-xs mt-2 flex-grow"
                     th:text="${product.productName}"
@@ -70,68 +88,63 @@
                 <i class="fas fa-star"></i>
                 <i class="fas fa-star"></i>
             </div>
-            <p
-                    class="text-center text-xs font-semibold text-orange-600 mt-1"
-                    th:text="${#numbers.formatDecimal(product.price, 0, 'COMMA', 3, 'POINT')} + ' đ'"
-            >
+            <p class="text-center text-xs font-semibold text-orange-600 mt-1"
+               th:text="${#numbers.formatDecimal(product.price / 1000, 0, 'COMMA', 3, 'POINT')} + ' đ'">
                 0 đ
             </p>
+
             <div class="flex justify-center gap-6 mt-auto">
-                <a th:href="@{/cart/add/{productID}(productID=${product.productID})}"
-                   class="bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-xl shadow-lg font-semibold flex items-center justify-center space-x-2 transition-colors duration-300">
-                    <i class="fas fa-shopping-cart text-lg"></i>
-                    <span>Đặt hàng</span>
-                </a>
-                <a th:href="@{/managerUser/view/{productID}(productID=${product.productID})}"
-                   class="bg-blue-100 hover:bg-blue-200 text-blue-700 px-6 py-3 rounded-xl shadow-lg font-semibold flex items-center justify-center space-x-2 transition-colors duration-300">
-                    <i class="fas fa-eye text-lg"></i>
-                    <span>Chi tiết</span>
-                </a>
+
             </div>
         </div>
-
     </div>
 
-<!--    <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-4 gap-6">-->
-<!--        <div th:each="product : ${productList}" th:if="${product.stock > 0}"-->
-<!--             class="bg-white rounded-3xl shadow-xl hover:shadow-2xl min-h-[560px] flex flex-col">-->
-<!--            <div class="relative w-full h-64 rounded-t-3xl overflow-hidden bg-gray-50 flex items-center justify-center p-6">-->
-<!--                <img th:src="${product.image}" alt="Hình ảnh sản phẩm ${product.productName}" class="object-contain max-h-full max-w-full hover:scale-105 transition-transform duration-300 ease-in-out"/>-->
-<!--            </div>-->
-<!--            <div class="p-5 flex flex-col flex-grow">-->
-<!--                <h3 class="text-2xl font-semibold text-gray-900 truncate mb-2" th:text="${product.productName}">Tên SP</h3>-->
-<!--                <p class="text-gray-700 text-base mb-2 leading-relaxed  text-sm mb-3 line-clamp-2"-->
-<!--                   th:text="${product.description}">-->
-<!--                    Mô tả...-->
-<!--                </p>-->
-
-<!--                <div class="mb-2 text-sm font-semibold">-->
-<!--                    <div class="flex justify-between text-lg font-bold text-red-600">-->
-<!--                        <span>Giá</span>-->
-<!--                        <span th:text="${#numbers.formatDecimal(product.price, 0, 'COMMA', 3, 'POINT')} + ' đ'">0 đ</span>-->
-<!--                    </div>-->
-<!--                </div>-->
-
-<!--                <div class="flex justify-center gap-6 mt-auto">-->
-<!--                    <a th:href="@{/cart/add/{productID}(productID=${product.productID})}"-->
-<!--                       class="bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-xl shadow-lg font-semibold flex items-center justify-center space-x-2 transition-colors duration-300">-->
-<!--                        <i class="fas fa-shopping-cart text-lg"></i>-->
-<!--                        <span>Đặt hàng</span>-->
-<!--                    </a>-->
-<!--                    <a th:href="@{/managerUser/view/{productID}(productID=${product.productID})}"-->
-<!--                       class="bg-blue-100 hover:bg-blue-200 text-blue-700 px-6 py-3 rounded-xl shadow-lg font-semibold flex items-center justify-center space-x-2 transition-colors duration-300">-->
-<!--                        <i class="fas fa-eye text-lg"></i>-->
-<!--                        <span>Chi tiết</span>-->
-<!--                    </a>-->
-<!--                </div>-->
-<!--            </div>-->
-
-<!--        </div>-->
-<!--    </div>-->
+    <div th:if="${featuredProducts == null or #lists.isEmpty(featuredProducts)}" class="max-w-7xl mx-auto mt-6 px-4 pb-10">
+        <p class="text-center text-gray-500 text-lg font-semibold select-none">Không tìm thấy sản phẩm phù hợp.</p>
+    </div>
 
     <h2 class="text-4xl font-extrabold text-gray-900 mb-12 mt-20 text-center tracking-tight">
         Sản Phẩm Khuyến Mãi Giảm Giá
     </h2>
+
+    <div
+            th:if="${discountedProducts != null and #lists.isEmpty(discountedProducts) == false}"
+            class="max-w-7xl mx-auto mt-6 px-4 grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-6 pb-10"
+    >
+        <div
+                th:each="product : ${discountedProducts}"
+                th:if="${product.stock > 0}"
+                class="border border-gray-300 p-4 flex flex-col group rounded-lg shadow-sm"
+        >
+            <a th:href="@{/managerUser/view/{productID}(productID=${product.productID})}" class="relative w-full h-44 rounded overflow-hidden bg-gray-100 flex items-center justify-center focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                <img
+                        th:src="${product.image}"
+                        th:alt="'Hình ảnh sản phẩm ' + ${product.productName}"
+                        class="object-contain max-h-full max-w-full transition-transform duration-300 ease-in-out group-hover:scale-105"
+                        width="180"
+                        height="180"
+                        loading="lazy"
+                />
+            </a>
+            <p class="text-center text-xs mt-2 flex-grow" th:text="${product.productName}">Tên sản phẩm</p>
+            <div class="flex justify-center mt-1 text-yellow-500 text-xs space-x-0.5">
+                <i class="fas fa-star"></i>
+                <i class="fas fa-star"></i>
+                <i class="fas fa-star"></i>
+                <i class="fas fa-star"></i>
+                <i class="fas fa-star"></i>
+            </div>
+            <p class="text-center text-xs font-semibold text-orange-600 mt-1"
+               th:text="${#numbers.formatDecimal(product.price / 1000, 0, 'COMMA', 3, 'POINT')} + ' đ'">
+                0 đ
+            </p>
+
+        </div>
+    </div>
+
+    <div th:if="${discountedProducts == null or #lists.isEmpty(discountedProducts)}" class="max-w-7xl mx-auto mt-6 px-4 pb-10">
+        <p class="text-center text-gray-500 text-lg font-semibold select-none">Không tìm thấy sản phẩm phù hợp.</p>
+    </div>
 
 </main>
 

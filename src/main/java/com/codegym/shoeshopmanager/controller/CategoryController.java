@@ -18,7 +18,7 @@ public class CategoryController {
     @GetMapping("/create")
     public String showCreateCategoryForm(Model model) {
         model.addAttribute("category", new Category());
-        return "admin/manageCategory/add_category";
+        return "admin/manage-category/add_category";
     }
 
     @PostMapping("/save")
@@ -32,6 +32,11 @@ public class CategoryController {
     public String showEditCategory(Model model, @PathVariable Integer id) {
         Category category = categoryService.findById(id);
         model.addAttribute("category", category);
-        return "admin/manageCategory/update_category";
+        return "admin/manage-category/update_category";
     }
-}
+    @GetMapping("/delete/{id}")
+    public String deleteCategory( @PathVariable Integer id) {
+        categoryService.delete(id);
+        return "redirect:/admin/categories";
+    }
+}  

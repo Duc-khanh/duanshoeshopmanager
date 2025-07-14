@@ -4,9 +4,12 @@ import com.codegym.shoeshopmanager.model.Product;
 import com.codegym.shoeshopmanager.repository.ProductRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
+
 import java.io.File;
 import java.io.IOException;
 
@@ -41,8 +44,8 @@ public class ProductService implements IProductService {
     }
 
     @Override
-    public List<Product> searchByName(String productName) {
-        return productRepository.searchByName(productName);
+    public List<Product> searchByName(String keyword) {
+        return productRepository.searchByName(keyword);
     }
 
     @Override
@@ -55,8 +58,27 @@ public class ProductService implements IProductService {
         }
         return null;
     }
-//    public List<Product> findByCategory(String category) {
-//        return productRepository.findByCategoryContainingIgnoreCase(category);
-//    }
+
+
+    @Override
+    public Page<Product> findAll(Pageable pageable) {
+        return productRepository.findAll(pageable);
+    }
+
+    @Override
+    public Page<Product> searchByName(String keyword, Pageable pageable) {
+        return productRepository.findByProductNameContainingIgnoreCase(keyword, pageable);
+    }
+
+    @Override
+    public Object getFeaturedProducts() {
+        return productRepository.searchByName("keyword");
+    }
+
+    @Override
+    public Object getDiscountedProducts() {
+        return productRepository.searchByName("keyword");
+    }
+
 
 }

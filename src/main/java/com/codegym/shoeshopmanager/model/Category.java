@@ -1,6 +1,8 @@
 package com.codegym.shoeshopmanager.model;
 
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name = "Categories")
@@ -24,6 +26,9 @@ public class Category {
         this.categoryName = categoryName;
     }
 
+
+
+
     public Integer getCategoryID() {
         return categoryID;
     }
@@ -38,6 +43,15 @@ public class Category {
 
     public void setCategoryName(String categoryName) {
         this.categoryName = categoryName;
+    }
+
+    @Override
+    public String toString() {
+        return "Category{" +
+                "categoryID=" + categoryID +
+                ", categoryName='" + categoryName + '\'' +
+                ", parentCategory=" +
+                '}';
     }
 }
 

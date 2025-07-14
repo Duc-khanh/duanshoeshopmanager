@@ -30,70 +30,42 @@
     </style>
 </head>
 <body class="bg-white text-black min-h-screen flex flex-col">
-
-<!-- Top thin bar -->
-<div class="bg-[#e6f0e9] text-[#7cae8f] text-xs text-center py-1 select-none">
-    Nhận Order Mẫu giày Hiếm...!
-</div>
-
-<!-- Header -->
 <div th:fragment="header">
     <header class="border-b border-gray-300 sticky top-0 z-50 bg-white w-full">
         <div class="w-full max-w-full px-4 py-3 flex items-center justify-between mx-auto">
             <!-- Logo -->
-            <a href="/" class="flex items-center space-x-2 select-none">
+            <a th:href="@{/users}" class="flex items-center space-x-2 select-none">
                 <img src="https://storage.googleapis.com/a1aa/image/87e3fa51-f86f-465d-a4de-9c2158252302.jpg"
                      alt="1Sneaker logo black background with white text" class="h-10 w-auto" width="120" height="40"/>
                 <span class="text-xs font-bold tracking-tight select-none">YOUNG FASHION STYLE</span>
             </a>
+            <nav><ul class="hidden md:flex space-x-10 text-gray-700 font-semibold items-center">
+                <li>
+                    <a class="flex items-center text-lg hover:text-blue-600 relative" th:href="@{/cart}">
+                        <i class="fas fa-shopping-cart mr-2 text-xl"></i>
+                        <span>Giỏ hàng</span>
+                        <span class="absolute -top-2 -right-3 bg-red-600 text-white rounded-full px-2 text-xs font-bold shadow-lg"
+                              th:if="${session.cartItemCount != null}">
+                <span th:text="${session.cartItemCount}"></span>
+            </span>
+                    </a>
+                </li>
 
-            <!-- Search form -->
-            <form th:action="@{/managerUser/searchProduct}" method="GET" role="search"
-                  class="flex border border-gray-300 rounded overflow-hidden max-w-xl w-full mx-4">
-                <input type="search" name="keyword" th:value="${keyword}" placeholder="Tìm kiếm..."
-                       class="flex-grow px-3 py-2 text-sm outline-none"/>
-                <select aria-label="Category select"
-                        class="border-l border-gray-300 text-xs px-2 py-2 outline-none bg-white">
-                    <option>Tất cả danh mục</option>
-                    <option>Giày Nike</option>
-                    <option>Giày MLB</option>
-                    <option>Balenciaga</option>
-                    <option>Adidas</option>
-                    <option>Giày Converse</option>
-                    <option>Vans</option>
-                    <option>Giày Sneaker</option>
-                    <option>Giày Thể Thao</option>
-                    <option>Gucci</option>
-                </select>
-                <button type="submit" aria-label="Search"
-                        class="bg-white px-3 flex items-center justify-center border-l border-gray-300 text-gray-600 hover:text-black">
-                    <i class="fas fa-search"></i>
-                </button>
-            </form>
+                <li>
+                    <a class="flex items-center text-lg hover:text-blue-600" th:href="@{/my-orders}">
+                        <i class="fas fa-box mr-2 text-xl"></i>
+                        <span>Đơn hàng</span>
+                    </a>
+                </li>
 
-            <nav>
-                <ul class="hidden md:flex space-x-10 text-gray-700 font-semibold">
-                    <li>
-                        <a class="hover:text-blue-600 text-lg" th:href="@{/users}">
-                            Xem sản phẩm
-                        </a>
-                    </li>
-                    <li>
-                        <a class="hover:text-blue-600 relative flex items-center text-lg" th:href="@{/cart}">
-                            <i class="fas fa-shopping-cart mr-2 text-2xl">
-                            </i>
-                            Giỏ hàng
-                            <span class="absolute -top-2 -right-3 bg-red-600 text-white rounded-full px-2 text-xs font-bold shadow-lg"
-                                  th:text="${session.cartItemCount != null ? session.cartItemCount : 0}">
-         </span>
-                        </a>
-                    </li>
-                    <li>
-                        <a class="hover:text-blue-600 text-lg" th:href="@{/logout}">
-                            Đăng xuất
-                        </a>
-                    </li>
-                </ul>
+                <li>
+                    <a class="flex items-center text-lg hover:text-blue-600" th:href="@{/logout}">
+                        <i class="fas fa-sign-out-alt mr-2 text-xl"></i>
+                        <span>Đăng xuất</span>
+                    </a>
+                </li>
+            </ul>
+
                 <button aria-label="Toggle mobile menu" class="md:hidden text-gray-700" id="mobile-menu-button">
                     <i class="fas fa-bars fa-lg">
                     </i>
@@ -153,17 +125,43 @@
                              alt="Gucci logo white on black background" class="w-5 h-5" width="20" height="20"/>
                         <span>GUCCI</span>
                     </li>
-                    <li>
-                        <button type="button"
-                                class="border border-white rounded px-3 py-1 text-xs font-semibold hover:bg-white hover:text-black transition">
-                            CHỌN SIZE
-                        </button>
-                    </li>
+
                 </ul>
             </nav>
         </div>
+<!--            <nav class="bg-black text-white text-xs w-full px-4">-->
+<!--                <ul class="flex flex-wrap items-center justify-center gap-3 py-2 font-semibold select-none max-w-full mx-auto">-->
+<!--                    <li th:each="categories : ${categories}" class="flex items-center space-x-1 cursor-pointer">-->
+<!--                        <img th:src="${categories.imageUrl}" alt="logo" class="w-5 h-5" width="20" height="20"/>-->
+<!--                        <span th:text="${categories.categoryName}">Tên danh mục</span>-->
+<!--                    </li>-->
+<!--                </ul>-->
+<!--            </nav>-->
+
+        <div class="w-full max-w-full px-4 py-3 border-t border-gray-300 bg-white">
+            <form th:action="@{/managerUser/searchProduct}" method="GET" class="flex max-w-2xl mx-auto"
+                  role="search" aria-label="Tìm kiếm sản phẩm">
+                <input
+                        type="search"
+                        name="keyword"
+                        th:value="${keyword}"
+                        placeholder="Tìm kiếm sản phẩm..."
+                        aria-label="Tìm kiếm sản phẩm"
+                        class="flex-grow border border-gray-300 rounded-l-lg px-5 py-3 text-gray-700 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition"
+                />
+                <button
+                        type="submit"
+                        class="bg-blue-600 hover:bg-blue-700 text-white px-6 rounded-r-lg font-semibold transition flex items-center justify-center shadow-md"
+                        aria-label="Tìm kiếm"
+                >
+                    <i class="fas fa-search text-lg"></i>
+                </button>
+            </form>
+        </div>
     </header>
+
 </div>
+
 <main class="flex-grow" th:fragment="content">
     <p>Nội dung</p>
 </main>

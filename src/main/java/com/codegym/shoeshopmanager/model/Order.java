@@ -2,6 +2,7 @@ package com.codegym.shoeshopmanager.model;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Entity
 @Table(name = "Orders")
@@ -18,6 +19,8 @@ public class Order {
 
     @Enumerated(EnumType.STRING)
     private OrderStatus status;
+    @OneToMany(mappedBy = "order", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private List<OrderDetail> orderDetails;
 
     public Order() {
     }
@@ -35,6 +38,23 @@ public class Order {
         this.currentTime = currentTime;
         this.totalAmount = totalAmount;
         this.status = status;
+    }
+
+    public Order(Integer orderID, User user, LocalDateTime currentTime, Double totalAmount, OrderStatus status, List<OrderDetail> orderDetails) {
+        this.orderID = orderID;
+        this.user = user;
+        this.currentTime = currentTime;
+        this.totalAmount = totalAmount;
+        this.status = status;
+        this.orderDetails = orderDetails;
+    }
+
+    public List<OrderDetail> getOrderDetails() {
+        return orderDetails;
+    }
+
+    public void setOrderDetails(List<OrderDetail> orderDetails) {
+        this.orderDetails = orderDetails;
     }
 
     public Integer getOrderID() {

@@ -73,7 +73,7 @@
         <p id="errorMsg" class="text-red-600 font-medium text-center hidden"></p>
         <button
                 type="submit"
-                class="w-full bg-green-600 hover:bg-green-700 text-white font-semibold py-3 rounded-md transition-colors duration-300"
+                class="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 rounded-md transition-colors duration-300"
         >
             Đăng ký
         </button>
