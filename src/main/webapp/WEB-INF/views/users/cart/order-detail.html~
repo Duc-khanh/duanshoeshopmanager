@@ -9,8 +9,8 @@
 
 
 </head>
-<!--<body class="bg-white text-gray-900 font-sans max-w-7xl mx-auto p-6">-->
-<body class="bg-gradient-to-b from-blue-50 to-white min-h-screen flex flex-col">
+<body class="bg-white text-gray-900 font-sans max-w-7xl mx-auto p-6">
+<!--<body class="bg-gradient-to-b from-blue-50 to-white min-h-screen flex flex-col">-->
 <div  th:replace="/users/layout :: header"></div>
 
 <h2 class="text-3xl font-extrabold mb-10 text-center">Chi tiết hóa đơn</h2>

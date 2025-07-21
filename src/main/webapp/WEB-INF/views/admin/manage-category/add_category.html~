@@ -28,11 +28,11 @@
 
     <div class="flex-1  flex-col p-20">
 
-        <div class=" bg-white p-8 rounded-xl shadow-md mt-8  flex flex-col items-center justify-center mt-[5rem] ml-72">
+        <div class="max-w-md mx-auto bg-white p-8 rounded-xl shadow-md mt-8 ">
 <!--            flex flex-col items-center justify-center mt-[5rem] ml-72-->
 
         <h2 class="text-2xl font-semibold text-gray-800 mb-6 text-center">Thêm danh mục mới</h2>
-            <form action="#" th:action="@{/categories/save}" th:object="${category}" method="post" class="space-y-6">
+            <form action="#" th:action="@{/categories/save}" th:object="${category}" method="post" class="space-y-6" enctype="multipart/form-data">
                 <div>
                     <label for="name" class="block text-gray-700 font-medium mb-2">Tên danh mục:</label>
                     <input
@@ -44,6 +44,9 @@
                             class="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                     />
                 </div>
+
+                <input type="file" name="imageFile" accept="image/*" />
+
                 <button
                         type="submit"
                         class="w-full bg-green-600 hover:bg-green-700 text-white font-semibold py-3 rounded-md transition-colors duration-300"

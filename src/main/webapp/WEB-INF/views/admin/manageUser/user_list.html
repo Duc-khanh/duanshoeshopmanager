@@ -1,4 +1,5 @@
-<html lang="en">
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -114,17 +115,7 @@
             <tbody>
             <tr th:each="user, stat : ${users}" class="even:bg-gray-50 hover:bg-gray-100 transition-colors duration-200">
                 <td class="px-6 py-4 border-b border-gray-300" th:text="${stat.count}"></td>
-<!--                <td class="px-6 py-4 border-b border-gray-300 image-cell">-->
-<!--                    <img th:if="${user.image != null}"-->
-<!--                         th:src="${user.image}"-->
-<!--                         alt="User Image"-->
-<!--                         class="mx-auto h-[180px] w-[280px] object-contain rounded-md border border-gray-200" />-->
 
-<!--                    <img th:if="${user.image == null}"-->
-<!--                         src="https://storage.googleapis.com/a1aa/image/87e3fa51-f86f-465d-a4de-9c2158252302.jpg"-->
-<!--                         alt="Default User"-->
-<!--                         class="mx-auto h-[180px] w-[280px] object-contain rounded-md border border-gray-200" />-->
-<!--                </td>-->
                 <td class="px-6 py-4 border-b border-gray-300 image-cell w-[160px]">
                     <img th:src="${user.image}" alt="User Image" class="mx-auto h-[130px] w-[130px] object-contain" />
                 </td>

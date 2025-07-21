@@ -164,10 +164,6 @@ public class HomeUserController {
         model.addAttribute("categories", categories);
         return "users/layout";
     }
-    @ModelAttribute("categories")
-    public List<Category> getCategories() {
-        return categoryService.findAll();
-    }
 
 
 }

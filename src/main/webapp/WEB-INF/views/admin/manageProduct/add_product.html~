@@ -22,7 +22,7 @@
 
         <div class="flex flex-col items-center justify-center mt-[5rem] ml-72">
             <form
-                    th:action="@{/managerProduct/products/save}"
+                    th:action="@{/managerProduct/products/create}"
                     th:object="${product}"
                     method="post"
                     enctype="multipart/form-data"

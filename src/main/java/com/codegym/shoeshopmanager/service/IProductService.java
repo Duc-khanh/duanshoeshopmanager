@@ -21,4 +21,6 @@ public interface IProductService {
     Page<Product> searchByName(String keyword, Pageable pageable);
     Object getFeaturedProducts();
     Object getDiscountedProducts();
+
+    List<Product> findByCategoryId(Integer id);
 }

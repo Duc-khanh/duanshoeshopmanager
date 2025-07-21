@@ -49,6 +49,17 @@
             />
         </div>
         <div>
+            <label for="address" class="block text-gray-700 font-medium mb-2">Địa chỉ:</label>
+            <input
+                    type="text"
+                    id="address"
+                    th:field="*{address}"
+                    required
+                    placeholder="Nhập địa chỉ"
+                    class="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+            />
+        </div>
+        <div>
             <label for="password" class="block text-gray-700 font-medium mb-2">Mật khẩu:</label>
             <input
                     type="password"
@@ -70,6 +81,22 @@
                     class="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
             />
         </div>
+
+        <div>
+            <label for="image" class="block text-gray-700 font-medium mb-2">Hình ảnh:</label>
+            <input
+                    type="file"
+                    id="image"
+                    name="image"
+                    accept="image/*"
+                    onchange="previewImage(event)"
+                    class="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+            />
+            <div class="mt-4 flex justify-center">
+                <img id="imagePreview" src="#" alt="Ảnh đại diện" class="w-32 h-32 object-cover rounded-full border hidden" />
+            </div>
+        </div>
+
         <p id="errorMsg" class="text-red-600 font-medium text-center hidden"></p>
         <button
                 type="submit"

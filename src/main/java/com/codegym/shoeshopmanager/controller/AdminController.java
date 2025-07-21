@@ -37,6 +37,13 @@ public class AdminController {
         model.addAttribute("admin", currentUser);
         return "admin/homeAdmin";
     }
+    @ModelAttribute
+    public void addCurrentUserToModel(HttpSession session, Model model) {
+        User currentUser = (User) session.getAttribute("currentUser");
+        if (currentUser != null) {
+            model.addAttribute("admin", currentUser);
+        }
+    }
     @GetMapping("/products")
     public String listProducts(Model model,
                                @RequestParam(defaultValue = "0") int page,
@@ -69,6 +76,16 @@ public class AdminController {
         model.addAttribute("categories", categoryService.findAll());
         return "admin/manage-category/category_list";
     }
+    @GetMapping("/profile")
+    public String viewAdminProfile(HttpSession session, Model model) {
+        User currentUser = (User) session.getAttribute("currentUser");
+        if (currentUser == null || !currentUser.getRole().getRoleName().equals("ADMIN")) {
+            return "redirect:/login";
+        }
+        model.addAttribute("admin", currentUser);
+        return "admin/profile";
+    }
+
 
 
 }

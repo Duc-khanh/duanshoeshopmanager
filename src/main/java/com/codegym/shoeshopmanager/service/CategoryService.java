@@ -9,10 +9,9 @@ import javax.transaction.Transactional;
 import java.util.List;
 
 @Service
-public class CategoryService implements ICategoryService<Category> {
+public class CategoryService implements ICategoryService {
     @Autowired
     private CategoryRepository categoryRepository;
-
 
     @Override
     public List<Category> findAll() {
@@ -27,22 +26,11 @@ public class CategoryService implements ICategoryService<Category> {
     @Override
     public void save(Category category) {
         categoryRepository.save(category);
-
     }
 
     @Override
     public void delete(int id) {
         categoryRepository.deleteById(id);
-
     }
-
-//    @Override
-//    public List<Category> findAllParentCategories() {
-//        return categoryRepository.findAll();
-//    }
-
-
-
-
 
 }

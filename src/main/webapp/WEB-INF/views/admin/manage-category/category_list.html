@@ -51,7 +51,8 @@
         }
     </style>
 </head>
-<body class="bg-gray-100 min-h-screen pt-24">
+<body class="bg-gray-100 min-h-screen pt-24 pb-24">
+
 
 
 <div th:replace="/admin/layout :: sidebar"></div>
@@ -73,6 +74,9 @@
             <tr>
                 <th class="px-6 py-3 border-b border-gray-300 text-gray-700 font-semibold text-center select-none">#
                 </th>
+                <th class="px-6 py-3 border-b border-gray-300 text-gray-700 font-semibold text-center select-none">
+                    Ảnh
+                </th>
                 <th class="px-6 py-3 border-b border-gray-300 text-gray-700 font-semibold text-left select-none">Tên
                     danh mục
                 </th>
@@ -88,6 +92,10 @@
 
                 <td class="px-6 py-4 border-b border-gray-300 text-center"
                     th:text="${iterStat.count}">1</td>
+                <td class="px-6 py-4 border-b border-gray-300 text-center">
+                    <img th:src="@{${category.image}}" alt="Ảnh danh mục"
+                         class="w-16 h-16 object-cover rounded-md inline-block"/>
+                </td>
 
                 <td class="px-6 py-4 border-b border-gray-300 text-left font-medium text-gray-800"
                     th:text="${category.categoryName}">Tên danh mục</td>

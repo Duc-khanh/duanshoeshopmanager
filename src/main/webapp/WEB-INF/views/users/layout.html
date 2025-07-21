@@ -33,7 +33,6 @@
 <div th:fragment="header">
     <header class="border-b border-gray-300 sticky top-0 z-50 bg-white w-full">
         <div class="w-full max-w-full px-4 py-3 flex items-center justify-between mx-auto">
-            <!-- Logo -->
             <a th:href="@{/users}" class="flex items-center space-x-2 select-none">
                 <img src="https://storage.googleapis.com/a1aa/image/87e3fa51-f86f-465d-a4de-9c2158252302.jpg"
                      alt="1Sneaker logo black background with white text" class="h-10 w-auto" width="120" height="40"/>
@@ -72,72 +71,20 @@
                 </button>
             </nav>
         </div>
-        <div>
-            <nav class="bg-black text-white text-xs w-full px-4">
-                <ul class="flex flex-wrap items-center justify-center gap-3 py-2 font-semibold select-none max-w-full mx-auto">
-                    <li class="flex items-center space-x-1 cursor-pointer">
-                        <img src="https://storage.googleapis.com/a1aa/image/376c8dbd-c992-42c4-b075-5b314b74e7aa.jpg"
-                             alt="Nike logo white on black background" class="w-5 h-5" width="20" height="20"/>
-                        <span>GIÀY NIKE</span>
-                    </li>
-                    <li class="flex items-center space-x-1 cursor-pointer">
-                        <img src="https://storage.googleapis.com/a1aa/image/ea53750d-70ce-43bc-5702-40b06b5f1381.jpg"
-                             alt="Xvessel logo white on black background" class="w-5 h-5" width="20" height="20"/>
-                        <span>XVESSEL</span>
-                    </li>
-                    <li class="flex items-center space-x-1 cursor-pointer">
-                        <img src="https://storage.googleapis.com/a1aa/image/199071a5-2e8d-493e-a780-921e64a83a0a.jpg"
-                             alt="MLB logo white on black background" class="w-5 h-5" width="20" height="20"/>
-                        <span>GIÀY MLB</span>
-                    </li>
-                    <li class="flex items-center space-x-1 cursor-pointer">
-                        <img src="https://storage.googleapis.com/a1aa/image/a98ee995-4da4-485c-6d94-01476612029a.jpg"
-                             alt="Balenciaga logo white on black background" class="w-5 h-5" width="20" height="20"/>
-                        <span>BALENCIAGA</span>
-                    </li>
-                    <li class="flex items-center space-x-1 cursor-pointer">
-                        <img src="https://storage.googleapis.com/a1aa/image/48db2ab9-127f-4322-ba0a-f2f63fb2b8b3.jpg"
-                             alt="Adidas logo white on black background" class="w-5 h-5" width="20" height="20"/>
-                        <span>ADIDAS</span>
-                    </li>
-                    <li class="flex items-center space-x-1 cursor-pointer">
-                        <img src="https://storage.googleapis.com/a1aa/image/2b8ebaba-f7b4-4132-95d2-b559c427b4ff.jpg"
-                             alt="Converse logo white on black background" class="w-5 h-5" width="20" height="20"/>
-                        <span>GIÀY CONVERSE</span>
-                    </li>
-                    <li class="flex items-center space-x-1 cursor-pointer">
-                        <img src="https://storage.googleapis.com/a1aa/image/fe184414-85f5-4dda-00cd-4ff8054b7b93.jpg"
-                             alt="Vans logo white on black background" class="w-5 h-5" width="20" height="20"/>
-                        <span>VANS</span>
-                    </li>
-                    <li class="flex items-center space-x-1 cursor-pointer">
-                        <img src="https://storage.googleapis.com/a1aa/image/4903383b-a047-4a94-3972-ade83a6ab956.jpg"
-                             alt="Sneaker icon white on black background" class="w-5 h-5" width="20" height="20"/>
-                        <span>GIÀY SNEAKER</span>
-                    </li>
-                    <li class="flex items-center space-x-1 cursor-pointer">
-                        <img src="https://storage.googleapis.com/a1aa/image/1baafd04-df48-4d81-fb2f-3a8cfca00c7b.jpg"
-                             alt="Sports icon white on black background" class="w-5 h-5" width="20" height="20"/>
-                        <span>GIÀY THỂ THAO</span>
-                    </li>
-                    <li class="flex items-center space-x-1 cursor-pointer">
-                        <img src="https://storage.googleapis.com/a1aa/image/8a9c4f40-7302-4796-09eb-83320a49f8f3.jpg"
-                             alt="Gucci logo white on black background" class="w-5 h-5" width="20" height="20"/>
-                        <span>GUCCI</span>
-                    </li>
-
-                </ul>
-            </nav>
-        </div>
-<!--            <nav class="bg-black text-white text-xs w-full px-4">-->
-<!--                <ul class="flex flex-wrap items-center justify-center gap-3 py-2 font-semibold select-none max-w-full mx-auto">-->
-<!--                    <li th:each="categories : ${categories}" class="flex items-center space-x-1 cursor-pointer">-->
-<!--                        <img th:src="${categories.imageUrl}" alt="logo" class="w-5 h-5" width="20" height="20"/>-->
-<!--                        <span th:text="${categories.categoryName}">Tên danh mục</span>-->
-<!--                    </li>-->
-<!--                </ul>-->
-<!--            </nav>-->
-
+            <div>
+                <nav class="bg-black text-white text-sm w-full px-4">
+                    <ul class="flex flex-wrap items-center justify-center gap-6 py-3 font-semibold select-none max-w-full mx-auto">
+                        <li th:each="category : ${categories}" class="flex items-center space-x-2">
+                            <a th:href="@{/managerProduct/category/{id}(id=${category.categoryID})}"
+                               class="flex items-center space-x-2 no-underline hover:no-underline">
+                                <img th:src="${category.image}" alt="Hình danh mục"
+                                     class="w-8 h-8 object-cover rounded-full border border-white" />
+                                <span th:text="${category.categoryName}" class="text-base">Tên danh mục</span>
+                            </a>
+                        </li>
+                    </ul>
+                </nav>
+            </div>
         <div class="w-full max-w-full px-4 py-3 border-t border-gray-300 bg-white">
             <form th:action="@{/managerUser/searchProduct}" method="GET" class="flex max-w-2xl mx-auto"
                   role="search" aria-label="Tìm kiếm sản phẩm">
@@ -158,7 +105,9 @@
                 </button>
             </form>
         </div>
+
     </header>
+
 
 </div>
 
@@ -167,50 +116,51 @@
 </main>
 
 <!-- Footer -->
-<footer th:fragment="footer" class="bg-blue-900 text-gray-300 mt-5">
+<footer th:fragment="footer" class="bg-gray-100 text-gray-800 mt-5">
     <div class="max-w-[90rem] mx-auto px-4 py-14 grid grid-cols-1 md:grid-cols-3 gap-12">
         <div>
-            <h4 class="text-white font-bold text-2xl mb-6 tracking-wide">Cửa Hàng Giày</h4>
-            <p class="mb-3 text-gray-300">Địa chỉ: 123 Đường Hồ Tùng Mậu, Quận Nam Từ Liêm, TP. Hà Nội</p>
-            <p class="mb-3 text-gray-300">Điện thoại: 0856 123 456</p>
-            <p class="text-gray-300">Email: Duckhanh@gmail.vn</p>
+            <h4 class="text-gray-900 font-bold text-2xl mb-6 tracking-wide">Cửa Hàng Giày</h4>
+            <p class="mb-3">Địa chỉ: 123 Đường Hồ Tùng Mậu, Quận Nam Từ Liêm, TP. Hà Nội</p>
+            <p class="mb-3">Điện thoại: 0856 123 456</p>
+            <p>Email: Duckhanh@gmail.vn</p>
         </div>
         <div>
-            <h4 class="text-white font-bold text-2xl mb-6 tracking-wide">Liên Kết</h4>
+            <h4 class="text-gray-900 font-bold text-2xl mb-6 tracking-wide">Liên Kết</h4>
             <ul class="space-y-4">
                 <li>
-                    <a class="hover:text-white transition text-lg" th:href="@{/users}">Xem sản phẩm</a>
+                    <a class="hover:text-blue-600 transition text-lg" th:href="@{/users}">Xem sản phẩm</a>
                 </li>
                 <li>
-                    <a class="hover:text-white transition text-lg" th:href="@{/cart}">Giỏ hàng</a>
+                    <a class="hover:text-blue-600 transition text-lg" th:href="@{/cart}">Giỏ hàng</a>
                 </li>
                 <li>
-                    <a class="hover:text-white transition text-lg" th:href="@{/logout}">Đăng xuất</a>
+                    <a class="hover:text-blue-600 transition text-lg" th:href="@{/logout}">Đăng xuất</a>
                 </li>
             </ul>
         </div>
         <div>
-            <h4 class="text-white font-bold text-2xl mb-6 tracking-wide">Theo Dõi Chúng Tôi</h4>
-            <div class="flex space-x-10 text-4xl">
-                <a aria-label="Facebook" class="hover:text-white transition" href="#">
+            <h4 class="text-gray-900 font-bold text-2xl mb-6 tracking-wide">Theo Dõi Chúng Tôi</h4>
+            <div class="flex space-x-8 text-3xl text-gray-600">
+                <a aria-label="Facebook" class="hover:text-blue-600 transition" href="#">
                     <i class="fab fa-facebook-square"></i>
                 </a>
-                <a aria-label="Instagram" class="hover:text-white transition" href="#">
+                <a aria-label="Instagram" class="hover:text-pink-500 transition" href="#">
                     <i class="fab fa-instagram"></i>
                 </a>
-                <a aria-label="Twitter" class="hover:text-white transition" href="#">
+                <a aria-label="Twitter" class="hover:text-sky-500 transition" href="#">
                     <i class="fab fa-twitter-square"></i>
                 </a>
-                <a aria-label="YouTube" class="hover:text-white transition" href="#">
+                <a aria-label="YouTube" class="hover:text-red-500 transition" href="#">
                     <i class="fab fa-youtube"></i>
                 </a>
             </div>
         </div>
     </div>
-    <div class="border-t border-blue-800 mt-12 py-6 text-center text-sm text-blue-300 select-none">
+    <div class="border-t border-gray-300 mt-12 py-6 text-center text-sm text-gray-600 select-none">
         © 2025 Cửa Hàng Giày. Tất cả quyền được bảo lưu.
     </div>
 </footer>
+
 
 <script>
     const btn = document.getElementById('mobile-menu-button');

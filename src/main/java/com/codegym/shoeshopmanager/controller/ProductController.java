@@ -1,5 +1,6 @@
 package com.codegym.shoeshopmanager.controller;
 
+import com.codegym.shoeshopmanager.model.Category;
 import com.codegym.shoeshopmanager.model.Product;
 import com.codegym.shoeshopmanager.service.CategoryService;
 import com.codegym.shoeshopmanager.service.IProductService;
@@ -89,6 +90,22 @@ public class ProductController {
         model.addAttribute("keyword", keyword);
         return "admin/manageProduct/product_list";
     }
+
+
+    @GetMapping("/category/{id}")
+    public String showProductsByCategory(@PathVariable Integer id, Model model) {
+        List<Product> products = productService.findByCategoryId(id);
+        Category category = categoryService.findById(id);
+        List<Category> categories = categoryService.findAll();
+
+        model.addAttribute("products", products);
+        model.addAttribute("selectedCategory", category);
+        model.addAttribute("categories", categories);
+
+        return "users/homeUser/product-by-category";
+    }
+
+
 
 
 }

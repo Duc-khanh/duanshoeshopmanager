@@ -24,14 +24,8 @@ import java.util.stream.Collectors;
 public class UserController {
     @Autowired
     private IProductService productService;
-    @Autowired
-    private ICategoryService categoryService;
-    @GetMapping("/home")
-    public String showHomePage(Model model) {
-        List<Category> categories = categoryService.findAll();
-        model.addAttribute("categories", categories);
-        return "users/homeUser/home";
-    }
+
+
     @GetMapping("/searchProduct")
     public String searchProducts(@RequestParam("keyword") String keyword, Model model) {
         List<Product> products = productService.searchByName(keyword)
