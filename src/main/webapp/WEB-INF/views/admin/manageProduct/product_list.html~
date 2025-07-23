@@ -132,7 +132,7 @@
                 <td class="px-5 py-3 border-b border-gray-300 font-medium text-gray-800"
                     th:text="${product.productName}"></td>
                 <td class="px-5 py-3 border-b border-gray-300 font-semibold text-green-600"
-                    th:text="${#numbers.formatDecimal(product.price, 0, 'COMMA', 3, 'POINT')} + ' đ'"></td>
+                    th:text="${#numbers.formatDecimal(product.price / 1000, 0, 'COMMA', 3, 'POINT')} + ' đ'"></td>
                 <td class="px-5 py-3 border-b border-gray-300" th:text="${product.stock}"></td>
                 <td class="px-5 py-3 border-b border-gray-300" th:text="${product.category.categoryName}"></td>
                 <td class="px-5 py-3 border-b border-gray-300 space-x-2 whitespace-nowrap">
@@ -194,4 +194,6 @@
 </div>
 <div th:replace="/admin/layout :: footer"></div>
 </body>
+<script src="/js/fragment.js"></script>
+
 </html>

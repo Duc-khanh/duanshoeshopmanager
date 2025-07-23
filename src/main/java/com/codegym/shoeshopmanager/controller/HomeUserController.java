@@ -3,10 +3,7 @@ package com.codegym.shoeshopmanager.controller;
 import com.codegym.shoeshopmanager.model.Category;
 import com.codegym.shoeshopmanager.model.Product;
 import com.codegym.shoeshopmanager.model.User;
-import com.codegym.shoeshopmanager.service.ICategoryService;
-import com.codegym.shoeshopmanager.service.IProductService;
-import com.codegym.shoeshopmanager.service.IUserService;
-import com.codegym.shoeshopmanager.service.RoleService;
+import com.codegym.shoeshopmanager.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
@@ -14,6 +11,7 @@ import org.springframework.ui.Model;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.servlet.http.HttpSession;
 import java.io.File;
@@ -22,6 +20,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
+import java.security.Principal;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -37,6 +36,8 @@ public class HomeUserController {
     private RoleService roleService;
     @Autowired
     private ICategoryService categoryService;
+    @Autowired
+    private IFavoriteService favoriteService;
     @Autowired
     private IProductService productService;
     @Value("${file-upload}")
@@ -70,16 +71,12 @@ public class HomeUserController {
 
         return "users/homeUser/home";
     }
-
-
     @GetMapping("/create")
     public String showFormNewUser(Model model) {
         model.addAttribute("user", new User());
         model.addAttribute("roles", roleService.findAll());
         return "admin/manageUser/add_user";
     }
-
-
     @GetMapping("edit/{id}")
     public String showEditFormUser(@PathVariable Integer id, Model model) {
         User user = userService.findById(id);
@@ -168,6 +165,81 @@ public class HomeUserController {
     public List<Category> getCategories() {
         return categoryService.findAll();
     }
+@PostMapping("/favorite/add/{productId}")
+public String addFavorite(@PathVariable("productId") Integer productId,
+                          HttpSession session,
+                          RedirectAttributes redirectAttributes) {
+    User currentUser = (User) session.getAttribute("currentUser");
+
+    if (currentUser == null) {
+        redirectAttributes.addFlashAttribute("error", "Vui lòng đăng nhập để sử dụng tính năng này!");
+        return "redirect:/login";
+    }
+
+    Product product = productService.findById(productId);
+    if (product != null) {
+        favoriteService.addFavorite(currentUser, product);
+        int favoriteCount = favoriteService.countFavoritesByUser(currentUser);
+        session.setAttribute("favoriteCount", favoriteCount);
+    }
+    return "redirect:/users";
+}
+    @PostMapping("/favorite/remove/{productId}")
+    public String removeFavorite(@PathVariable("productId") Integer productId, HttpSession session) {
+        User currentUser = (User) session.getAttribute("currentUser");
+        if (currentUser != null) {
+            Product product = productService.findById(productId);
+            favoriteService.removeFavorite(currentUser, product);
+            List<Product> favorites = favoriteService.getFavoriteProducts(currentUser);
+            session.setAttribute("favoriteCount", favorites.size());
+        }
+        return "redirect:/users/favorites";
+    }
+    @GetMapping("/favorites")
+    public String viewFavorites(Model model, HttpSession session) {
+        User currentUser = (User) session.getAttribute("currentUser");
+        if (currentUser != null) {
+            List<Product> favorites = favoriteService.getFavoriteProducts(currentUser);
+            model.addAttribute("favoriteProducts", favorites);
+        }
+        return "users/cart/favorite-list";
+    }
+    @ModelAttribute
+    public void populateFavoriteCount(HttpSession session) {
+        User currentUser = (User) session.getAttribute("currentUser");
+        if (currentUser != null) {
+            List<Product> favorites = favoriteService.getFavoriteProducts(currentUser);
+            session.setAttribute("favoriteCount", favorites.size());
+        }
+    }
+    @GetMapping("/account")
+    public String viewAccount(HttpSession session, Model model) {
+        User currentUser = (User) session.getAttribute("currentUser");
+        if (currentUser == null) {
+            return "redirect:/login";
+        }
+
+        model.addAttribute("user", currentUser);
+        return "users/homeUser/account";
+    }
+@GetMapping("/user/edit")
+public String showEditForm(Model model, HttpSession session) {
+    User currentUser = (User) session.getAttribute("currentUser");
+    if (currentUser == null) {
+        return "redirect:/login";
+    }
+    model.addAttribute("user", currentUser);
+    return "users/user/edit-user";
+}
+
+    @PostMapping("/user/update")
+    public String updateUser(@ModelAttribute("user") User user, HttpSession session) {
+        userService.update(user);
+        session.setAttribute("currentUser", userService.findById(user.getUserID()));
+        return "redirect:/users/account";
+    }
+
+
 
 
 }

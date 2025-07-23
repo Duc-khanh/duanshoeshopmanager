@@ -26,5 +26,4 @@ public interface IUserService {
     List<User> searchByName(String username);
     String uploadImage(MultipartFile file) throws IOException;
 
-    void update(User user);
 }

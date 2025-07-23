@@ -4,6 +4,14 @@
     <title>Chi tiết đơn hàng</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <meta name="viewport" content="width=device-width, initial-scale=1"/>
+    <link
+            href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap"
+            rel="stylesheet"
+    />
+    <link
+            rel="stylesheet"
+            href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css"
+    />
 </head>
 <body class="bg-gray-50 min-h-screen flex justify-center p-6">
 <!--<body class="bg-gray-50 min-h-screen flex flex-col">-->
@@ -59,7 +67,6 @@
                 <td colspan="3" class="border border-gray-300 px-4 py-2 text-right">Tổng cộng:</td>
                 <td class="border border-gray-300 px-4 py-2 text-right"
                     th:text="${#numbers.formatDecimal(totalAmount, 0, 'COMMA', 3, 'POINT')} + ' đ'">300,000 đ</td>
-                </td>
             </tr>
             </tfoot>
         </table>
@@ -68,4 +75,6 @@
 </div>
 <div th:replace="/admin/layout :: footer"></div>
 </body>
+<script src="/js/fragment.js"></script>
+
 </html>

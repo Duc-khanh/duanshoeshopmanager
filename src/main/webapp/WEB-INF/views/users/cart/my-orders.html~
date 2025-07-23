@@ -21,14 +21,34 @@
         <h1 class="text-3xl font-semibold text-gray-800 mb-4 sm:mb-0">Đơn hàng của bạn</h1>
 
         <form method="get" action="/my-orders" class="mb-4 flex items-center gap-4">
-            <label for="status" class="text-gray-700 font-medium">Lọc theo trạng thái:</label>
-            <select id="status" name="status" class="border border-gray-300 rounded px-3 py-1 text-sm">
-                <option value="" th:selected="${selectedStatus == null}">Tất cả</option>
-                <option value="PENDING" th:selected="${selectedStatus == 'PENDING'}">Chờ xác nhận</option>
-                <option value="CONFIRMED" th:selected="${selectedStatus == 'CONFIRMED'}">Đã xác nhận</option>
-                <option value="SHIPPED" th:selected="${selectedStatus == 'SHIPPED'}">Đang giao</option>
-                <option value="CANCELLED" th:selected="${selectedStatus == 'CANCELLED'}">Đã huỷ</option>
-            </select>
+            <label>
+                <select name="status">
+                    <option value="" selected>-- Tất cả --</option>
+                    <option th:each="status : ${statuses}"
+                            th:value="${status}"
+                            th:text="${status.displayName}"
+                            th:selected="${status == selectedStatus}">
+                    </option>
+                </select>
+            </label>
+
+
+            <!--            <label for="status" class="text-gray-700 font-medium">Lọc theo trạng thái:</label>-->
+<!--            <select id="status" name="status" class="border border-gray-300 rounded px-3 py-1 text-sm">-->
+<!--                <option value="" th:selected="${selectedStatus == null}">Tất cả</option>-->
+<!--                <option value="PENDING" th:selected="${selectedStatus == 'PENDING'}">Chờ xác nhận</option>-->
+<!--                <option value="CONFIRMED" th:selected="${selectedStatus == 'CONFIRMED'}">Đã xác nhận</option>-->
+<!--                <option value="SHIPPED" th:selected="${selectedStatus == 'SHIPPED'}">Đang giao</option>-->
+<!--                <option value="CANCELLED" th:selected="${selectedStatus == 'CANCELLED'}">Đã huỷ</option>-->
+<!--            </select>-->
+<!--            <select name="status">-->
+<!--                <option value="" selected>&#45;&#45; Tất cả &#45;&#45;</option>-->
+<!--                <option th:each="status : ${statuses}"-->
+<!--                        th:value="${status}"-->
+<!--                        th:text="${status.displayName}"-->
+<!--                        th:selected="${status == selectedStatus}">-->
+<!--                </option>-->
+<!--            </select>-->
 
             <button type="submit" class="bg-blue-600 text-white px-3 py-1 rounded">Lọc</button>
         </form>

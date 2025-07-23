@@ -49,9 +49,6 @@
 </section>
 
 <main class="max-w-7xl mx-auto px-2 py-12 flex-grow">
-    <div th:if="${selectedCategory != null}" class="text-center mb-6">
-        <h2 class="text-3xl font-bold text-blue-800 mb-2" th:text="'Danh mục: ' + ${selectedCategory.categoryName}"></h2>
-    </div>
     <h2 class="text-4xl font-extrabold text-gray-900 mb-12 text-center tracking-tight">
         Sản Phẩm Nổi Bật
     </h2>

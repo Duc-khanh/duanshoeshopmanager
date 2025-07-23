@@ -14,7 +14,6 @@
     />
 </head>
 <body class="bg-gray-50 min-h-screen flex justify-center p-6">
-<!--<body class="bg-gray-50 min-h-screen flex flex-col">-->
 <div th:replace="/admin/layout :: header"></div>
 <div th:replace="/admin/layout :: sidebar"></div>
 
@@ -67,7 +66,6 @@
                 <td colspan="3" class="border border-gray-300 px-4 py-2 text-right">Tổng cộng:</td>
                 <td class="border border-gray-300 px-4 py-2 text-right"
                     th:text="${#numbers.formatDecimal(totalAmount, 0, 'COMMA', 3, 'POINT')} + ' đ'">300,000 đ</td>
-                </td>
             </tr>
             </tfoot>
         </table>
@@ -76,4 +74,6 @@
 </div>
 <div th:replace="/admin/layout :: footer"></div>
 </body>
+<script src="/js/fragment.js"></script>
+
 </html>

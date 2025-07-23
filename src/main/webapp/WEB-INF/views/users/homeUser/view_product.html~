@@ -69,7 +69,12 @@
                     <i class="fas fa-heart"></i> Yêu thích
                 </button>
             </form>
-
+<!--            <form th:if="${product.favorite}" th:action="@{/users/favorite/remove/{id}(id=${product.productID})}" method="post">-->
+<!--                <button class="text-red-600 text-lg"><i class="fas fa-heart"></i></button>-->
+<!--            </form>-->
+<!--            <form th:unless="${product.favorite}" th:action="@{/users/favorite/add/{id}(id=${product.productID})}" method="post">-->
+<!--                <button class="text-gray-500 text-lg"><i class="far fa-heart"></i></button>-->
+<!--            </form>-->
 
 
         </div>

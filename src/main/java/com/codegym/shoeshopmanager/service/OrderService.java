@@ -27,4 +27,5 @@ public interface OrderService {
 
     Order findOrderWithDetails(Integer id);
 
+    List<Order> getOrdersByUserAndStatus(User user, String status);
 }

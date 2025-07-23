@@ -64,4 +64,12 @@
     </div>
 </div>
 </body>
+<script th:if="${error}">
+    Swal.fire({
+        icon: 'warning',
+        title: 'Thông báo',
+        text: [[${error}]],
+        confirmButtonText: 'OK'
+    });
+</script>
 </html>

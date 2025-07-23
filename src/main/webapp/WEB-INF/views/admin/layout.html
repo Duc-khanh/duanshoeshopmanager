@@ -6,6 +6,7 @@
         Admin Dashboard
     </title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet"/>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet"/>
     <style>
@@ -156,11 +157,14 @@
                             </a>
                         </div>
                     </div>
-                    <a class="flex items-center space-x-4 text-red-600 hover:text-red-800 font-semibold px-4 py-3 rounded-lg transition border border-red-600 hover:border-red-800 mt-8 shadow-sm hover:shadow-md"
-                       href="/logout" role="menuitem" aria-label="Logout">
+                    <a id="logout-link"
+                       href="/logout"
+                       class="flex items-center space-x-4 text-red-600 hover:text-red-800 font-semibold px-4 py-3 rounded-lg transition border border-red-600 hover:border-red-800 mt-8 shadow-sm hover:shadow-md"
+                       role="menuitem" aria-label="Logout">
                         <i class="fas fa-sign-out-alt fa-lg w-6 text-center"></i>
                         <span class="text-base">Đăng xuất</span>
                     </a>
+
                 </nav>
             </div>
         </aside>
@@ -217,67 +221,6 @@
         © 2025 Cửa Hàng Giày. Tất cả quyền được bảo lưu.
     </div>
 </footer>
-
-<script>
-    const sidebar = document.getElementById('sidebar');
-    const overlay = document.getElementById('overlay');
-    const mobileMenuButton = document.getElementById('mobile-menu-button');
-
-    if (mobileMenuButton) {
-        mobileMenuButton.addEventListener('click', () => {
-            if (sidebar.classList.contains('-translate-x-full')) {
-                sidebar.classList.remove('-translate-x-full');
-                overlay.classList.remove('hidden');
-                mobileMenuButton.setAttribute('aria-expanded', 'true');
-            } else {
-                sidebar.classList.add('-translate-x-full');
-                overlay.classList.add('hidden');
-                mobileMenuButton.setAttribute('aria-expanded', 'false');
-            }
-        });
-    }
-
-    overlay.addEventListener('click', () => {
-        sidebar.classList.add('-translate-x-full');
-        overlay.classList.add('hidden');
-        mobileMenuButton.setAttribute('aria-expanded', 'false');
-    });
-
-    function toggleDropdown(dropdownId) {
-        const dropdown = document.getElementById(dropdownId);
-        const button = dropdown.previousElementSibling;
-        const isHidden = dropdown.classList.contains('hidden');
-        if (isHidden) {
-            dropdown.classList.remove('hidden');
-            button.setAttribute('aria-expanded', 'true');
-        } else {
-            dropdown.classList.add('hidden');
-            button.setAttribute('aria-expanded', 'false');
-        }
-    }
-
-    document.addEventListener('DOMContentLoaded', () => {
-        const currentPath = window.location.pathname;
-        const links = document.querySelectorAll('a[data-parent]');
-
-        links.forEach(link => {
-            const parentId = link.getAttribute('data-parent');
-            const linkPath = link.pathname;
-
-            if (currentPath === linkPath || currentPath.startsWith(linkPath)) {
-                const parentDropdown = document.getElementById(parentId);
-                if (parentDropdown) {
-                    parentDropdown.classList.remove('hidden');
-                    const button = parentDropdown.previousElementSibling;
-                    if (button) {
-                        button.setAttribute('aria-expanded', 'true');
-                    }
-                }
-
-                link.classList.add('text-blue-600', 'font-bold');
-            }
-        });
-    });
-</script>
+<script src="/js/fragment.js"></script>
 </body>
 </html>

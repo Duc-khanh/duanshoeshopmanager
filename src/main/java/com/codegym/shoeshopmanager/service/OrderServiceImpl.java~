@@ -106,7 +106,7 @@ public class OrderServiceImpl implements OrderService {
         cartService.clearCart(user);
     }
     public List<Order> getOrdersByUserAndStatus(User user, String status) {
-        return orderRepository.findByUserAndStatus(user, OrderStatus.valueOf(status));
+        return orderRepository.findByUserAndStatus(user, status);
     }
 
 

@@ -71,7 +71,7 @@
                         </a>
                     </li>
                     <li>
-                        <a class="flex items-center text-lg hover:text-blue-600" th:href="@{/users/account}">
+                        <a class="flex items-center text-lg hover:text-blue-600" th:href="@{/account}">
                             <i class="fas fa-user-circle mr-2 text-xl"></i>
                             <span>Tài khoản</span>
                         </a>

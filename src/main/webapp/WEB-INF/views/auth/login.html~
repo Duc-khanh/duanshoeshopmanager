@@ -15,7 +15,7 @@
         }
     </style>
 </head>
-<body class="bg-gradient-to-tr from-blue-400 via-indigo-500 to-purple-600 min-h-screen flex items-center justify-center p-4">
+<body class="bg-gradient-to-tr via-indigo-500 to-purple-600 min-h-screen flex items-center justify-center p-4">
 <div class="bg-white bg-opacity-90 shadow-2xl rounded-2xl max-w-4xl w-full flex flex-col md:flex-row overflow-hidden">
     <div class="md:w-1/2 hidden md:flex items-center justify-center bg-gradient-to-br from-indigo-600 to-purple-700">
         <img alt="Illustration of people using devices with security icons representing login and protection" class="object-cover h-full w-full" height="500" src="https://storage.googleapis.com/a1aa/image/87e3fa51-f86f-465d-a4de-9c2158252302.jpg" width="400"/>

@@ -2,6 +2,7 @@ package com.codegym.shoeshopmanager.controller;
 
 import com.codegym.shoeshopmanager.model.CartItem;
 import com.codegym.shoeshopmanager.model.Order;
+import com.codegym.shoeshopmanager.model.OrderStatus;
 import com.codegym.shoeshopmanager.model.User;
 import com.codegym.shoeshopmanager.repository.OrderRepository;
 import com.codegym.shoeshopmanager.service.CartService;
@@ -122,17 +123,37 @@ public String viewOrder(@PathVariable Integer id, Model model) {
         orderService.updateStatus(orderId, status);
         return "redirect:/orders";
     }
-    @GetMapping("/my-orders")
-    public String viewMyOrders(HttpSession session, Model model) {
-        User user = (User) session.getAttribute("currentUser");
-        if (user == null) {
-            return "redirect:/login";
-        }
-
-        List<Order> myOrders = orderService.getOrdersByUser(user);
-        model.addAttribute("orders", myOrders);
-        return "users/cart/my-orders";
+//    @GetMapping("/my-orders")
+//    public String viewMyOrders(HttpSession session, Model model) {
+//        User user = (User) session.getAttribute("currentUser");
+//        if (user == null) {
+//            return "redirect:/login";
+//        }
+//        List<Order> myOrders = orderService.getOrdersByUser(user);
+//        model.addAttribute("orders", myOrders);
+//        return "users/cart/my-orders";
+//    }
+@GetMapping("/my-orders")
+public String viewMyOrders(@RequestParam(value = "status", required = false) String status,
+                           HttpSession session,
+                           Model model) {
+    User user = (User) session.getAttribute("currentUser");
+    if (user == null) {
+        return "redirect:/login";
     }
+    List<Order> myOrders;
+    if (status != null && !status.isEmpty()) {
+        myOrders = orderService.getOrdersByUserAndStatus(user, status);
+    } else {
+        myOrders = orderService.getOrdersByUser(user);
+    }
+    model.addAttribute("orders", myOrders);
+    model.addAttribute("selectedStatus", status);
+    model.addAttribute("statuses", OrderStatus.values());
+
+    return "users/cart/my-orders";
+}
+
 
     private int getTotalQuantity(List<CartItem> cart) {
         return cart.stream().mapToInt(CartItem::getQuantity).sum();
