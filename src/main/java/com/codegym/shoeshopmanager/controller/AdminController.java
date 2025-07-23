@@ -11,9 +11,18 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.servlet.http.HttpSession;
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
 import java.util.List;
 
 @Controller
@@ -37,6 +46,7 @@ public class AdminController {
         model.addAttribute("admin", currentUser);
         return "admin/homeAdmin";
     }
+
     @ModelAttribute
     public void addCurrentUserToModel(HttpSession session, Model model) {
         User currentUser = (User) session.getAttribute("currentUser");
@@ -44,6 +54,7 @@ public class AdminController {
             model.addAttribute("admin", currentUser);
         }
     }
+
     @GetMapping("/products")
     public String listProducts(Model model,
                                @RequestParam(defaultValue = "0") int page,
@@ -76,16 +87,75 @@ public class AdminController {
         model.addAttribute("categories", categoryService.findAll());
         return "admin/manage-category/category_list";
     }
-    @GetMapping("/profile")
-    public String viewAdminProfile(HttpSession session, Model model) {
-        User currentUser = (User) session.getAttribute("currentUser");
-        if (currentUser == null || !currentUser.getRole().getRoleName().equals("ADMIN")) {
+    @GetMapping("/account/info")
+    public String viewAccountInfo(HttpSession session, Model model) {
+        User user = (User) session.getAttribute("currentUser");
+        if (user == null) {
             return "redirect:/login";
         }
-        model.addAttribute("admin", currentUser);
-        return "admin/profile";
+
+        model.addAttribute("user", user);
+        return "admin/manage-account-info/account-info";
     }
 
+    @GetMapping("/account/edit")
+    public String editAccountForm(HttpSession session, Model model) {
+        User user = (User) session.getAttribute("currentUser");
+        if (user == null) {
+            return "redirect:/login";
+        }
+
+        model.addAttribute("user", user);
+        return "admin/manage-account-info/edit-account";
+    }
+
+    @PostMapping("/account/edit")
+    public String updateAccount(@ModelAttribute("user") User updatedUser,
+                                @RequestParam("imageFile") MultipartFile imageFile,
+                                HttpSession session,
+                                RedirectAttributes redirectAttributes) {
+        User currentUser = (User) session.getAttribute("currentUser");
+        if (currentUser == null) {
+            return "redirect:/login";
+        }
+
+        // Cập nhật thông tin
+        currentUser.setEmail(updatedUser.getEmail());
+        currentUser.setAddress(updatedUser.getAddress());
+
+        // Xử lý upload ảnh
+        if (imageFile != null && !imageFile.isEmpty()) {
+            try {
+                String fileName = StringUtils.cleanPath(imageFile.getOriginalFilename());
+
+                // Đường dẫn thư mục upload (nên khai báo ở config hoặc biến static)
+                String uploadDir = "src/main/resources/static/image/";
+
+                // Tạo thư mục nếu chưa có
+                File uploadPath = new File(uploadDir);
+                if (!uploadPath.exists()) {
+                    uploadPath.mkdirs();
+                }
+
+                // Đường dẫn đầy đủ để lưu file
+                Path filePath = Paths.get(uploadDir + fileName);
+                Files.copy(imageFile.getInputStream(), filePath, StandardCopyOption.REPLACE_EXISTING);
+
+                // Lưu đường dẫn ảnh vào DB (đường dẫn web)
+                currentUser.setImage("/image/" + fileName);
+            } catch (IOException e) {
+                e.printStackTrace();
+                redirectAttributes.addFlashAttribute("error", "Lỗi khi lưu ảnh!");
+            }
+        }
+
+        // Lưu user
+        userService.save(currentUser);
+        session.setAttribute("currentUser", currentUser);
+
+        redirectAttributes.addFlashAttribute("message", "Cập nhật thành công!");
+        return "redirect:/admin/account/info";
+    }
 
 
 }

@@ -58,4 +58,20 @@
 }
 });
 });
+       const logoutUrl = /*[[@{/logout}]]*/ '/logout';
+      document.getElementById('logout-button')?.addEventListener('click', function () {
+         Swal.fire({
+              title: 'Bạn có chắc chắn muốn đăng xuất?',
+            icon: 'warning',
+               showCancelButton: true,
+              confirmButtonColor: '#2563eb',
+               cancelButtonColor: '#d33',
+               confirmButtonText: 'Đăng xuất',
+             cancelButtonText: 'Hủy'
+          }).then((result) => {
+               if (result.isConfirmed) {
+                   window.location.href = logoutUrl;
+              }
+         });
+      });
 

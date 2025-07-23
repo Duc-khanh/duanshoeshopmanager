@@ -17,6 +17,26 @@
 <div th:replace="/users/layout :: header"></div>
 
 <section class="w-screen px-4 mt-8">
+    <div class="w-full max-w-full px-4 py-3 border-t border-gray-300 bg-white">
+        <form th:action="@{/managerUser/searchProduct}" method="GET" class="flex max-w-2xl mx-auto"
+              role="search" aria-label="Tìm kiếm sản phẩm">
+            <input
+                    type="search"
+                    name="keyword"
+                    th:value="${keyword}"
+                    placeholder="Tìm kiếm sản phẩm..."
+                    aria-label="Tìm kiếm sản phẩm"
+                    class="flex-grow border border-gray-300 rounded-l-lg px-5 py-3 text-gray-700 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition"
+            />
+            <button
+                    type="submit"
+                    class="bg-blue-600 hover:bg-blue-700 text-white px-6 rounded-r-lg font-semibold transition flex items-center justify-center shadow-md"
+                    aria-label="Tìm kiếm"
+            >
+                <i class="fas fa-search text-lg"></i>
+            </button>
+        </form>
+    </div>
     <div class="grid grid-cols-1 md:grid-cols-12 gap-6 items-center">
         <div class="md:col-span-7 w-full rounded-lg overflow-hidden shadow-lg group">
             <img
@@ -259,6 +279,7 @@
     </div>
 </div>
 <div th:replace="/users/layout :: footer"></div>
-<script src="/js/logout-handler.js"></script>
+<!--<script src="/js/logout-handler.js"></script>-->
 </body>
+
 </html>
