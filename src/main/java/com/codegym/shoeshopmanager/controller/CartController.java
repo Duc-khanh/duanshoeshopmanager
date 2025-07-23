@@ -1,6 +1,7 @@
 package com.codegym.shoeshopmanager.controller;
 
 import com.codegym.shoeshopmanager.model.CartItem;
+import com.codegym.shoeshopmanager.model.Category;
 import com.codegym.shoeshopmanager.model.Product;
 import com.codegym.shoeshopmanager.model.User;
 import com.codegym.shoeshopmanager.repository.ProductRepository;
@@ -58,6 +59,8 @@ public class CartController {
     @GetMapping("")
     public String viewCart(HttpSession session, Model model) {
         List<CartItem> cart = (List<CartItem>) session.getAttribute("cart");
+//        List<Category> categories = (List<Category>) session.getAttribute("categories");
+//        model.addAttribute("categories", categories);
         if (cart == null) {
             cart = new ArrayList<>();
             session.removeAttribute("cartItemCount");
