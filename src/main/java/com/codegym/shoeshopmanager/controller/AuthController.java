@@ -1,16 +1,18 @@
 package com.codegym.shoeshopmanager.controller;
 
+import com.codegym.shoeshopmanager.model.CartItem;
 import com.codegym.shoeshopmanager.model.Role;
 import com.codegym.shoeshopmanager.model.User;
 import com.codegym.shoeshopmanager.repository.RoleRepository;
+import com.codegym.shoeshopmanager.service.CartService;
 import com.codegym.shoeshopmanager.service.IUserService;
-import com.codegym.shoeshopmanager.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpSession;
+import java.util.List;
 
 
 @Controller
@@ -22,10 +24,12 @@ public class AuthController {
 
     @Autowired
     private RoleRepository roleRepository;
+    @Autowired
+    private CartService cartService;
 
     @GetMapping("/login")
     public String loginForm() {
-        return "login";
+        return "auth/login";
     }
 
     @PostMapping("/login")
@@ -36,29 +40,30 @@ public class AuthController {
         User user = userService.login(username, password);
         if (user != null) {
             session.setAttribute("currentUser", user);
+
             String role = user.getRole().getRoleName();
-            return role.equals("ADMIN") ? "redirect:/admin/dashboard" : "redirect:/homeUser";
+            return role.equals("ADMIN") ? "redirect:/admin/dashboard" : "redirect:/users";
         } else {
             model.addAttribute("error", "Sai tên đăng nhập hoặc mật khẩu!");
-            return "login";
+            return "auth/login";
         }
     }
 
     @GetMapping("/register")
     public String registerForm(Model model) {
         model.addAttribute("user", new User());
-        return "register";
+        return "auth/register";
     }
 
     @PostMapping("/register")
     public String register(@ModelAttribute("user") User user, Model model) {
         if (userService.existsByUsername(user.getUsername())) {
             model.addAttribute("error", "Tên đăng nhập đã tồn tại!");
-            return "register";
+            return "auth/register";
         }
 
         Role userRole = roleRepository.findByRoleName("USER")
-                .orElseThrow(() -> new RuntimeException("Role USER không tồn tại"));
+                  .orElseThrow(() -> new RuntimeException("Role USER không tồn tại"));
         user.setRole(userRole);
 
         userService.save(user);
@@ -67,6 +72,9 @@ public class AuthController {
 
     @GetMapping("/logout")
     public String logout(HttpSession session) {
+        session.removeAttribute("currentUser");
+        session.removeAttribute("cartItemCount");
+        session.removeAttribute("cartItems");
         session.invalidate();
         return "redirect:/login";
     }

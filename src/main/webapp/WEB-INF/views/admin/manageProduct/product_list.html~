@@ -1,0 +1,199 @@
+<html lang="en">
+<head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1"/>
+    <title>Quản lý sản phẩm</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link
+            href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap"
+            rel="stylesheet"
+    />
+    <link
+            rel="stylesheet"
+            href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css"
+    />
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+        .pagination-container {
+            overflow-y: hidden;
+        }
+
+        /* For table scroll on small screens */
+        .table-container {
+            overflow-x: auto;
+            border-radius: 0.5rem;
+            box-shadow: 0 0 10px rgb(0 0 0 / 0.05);
+        }
+
+        /* Icon button styles */
+        .icon-btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 36px;
+            height: 36px;
+            border-radius: 0.5rem;
+            transition: background-color 0.3s ease;
+            cursor: pointer;
+            color: white;
+            font-size: 1rem;
+        }
+
+        .icon-btn:hover {
+            opacity: 0.85;
+        }
+
+        /* Truncate multiline description with ellipsis */
+        .truncate-multiline {
+            display: -webkit-box;
+            -webkit-line-clamp: 3;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            max-width: 24rem;
+            word-break: break-word;
+        }
+
+
+        /* Center all table cells vertically and horizontally */
+        table th,
+        table td {
+            vertical-align: middle !important;
+        }
+
+        /* Align description text left and vertically centered */
+        .desc-cell {
+            text-align: left;
+            vertical-align: middle !important;
+        }
+    </style>
+</head>
+<body class="bg-gray-100 min-h-screen pt-24 pb-24">
+<div th:replace="/admin/layout :: sidebar"></div>
+<div th:replace="/admin/layout :: header"></div>
+<div class="max-w-[93rem] mx-auto bg-white rounded-lg shadow p-6 flex-1 ml-[22rem]">
+    <h1 class="text-3xl font-semibold text-gray-800 mb-6 text-center">Danh sách sản phẩm</h1>
+
+    <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-6 space-y-4 sm:space-y-0">
+        <form th:action="@{/admin/products}" method="get" class="flex w-full sm:w-auto">
+            <input
+                    type="text"
+                    name="keyword"
+                    th:value="${keyword}"
+                    placeholder="Tìm kiếm sản phẩm..."
+                    class="w-full sm:w-72 px-4 py-2 border border-gray-300 rounded-l-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+            />
+            <button
+                    type="submit"
+                    class="bg-blue-600 hover:bg-blue-700 text-white px-5 py-2 rounded-r-md font-semibold transition-colors duration-300"
+            >
+                Tìm
+            </button>
+        </form>
+        <a th:href="@{/managerProduct/create}">
+            <button
+                    type="button"
+                    class="bg-green-600 hover:bg-green-700 text-white px-6 py-2 rounded-md font-semibold transition-colors duration-300"
+            >
+                Thêm sản phẩm
+            </button>
+        </a>
+    </div>
+
+    <div class="table-container">
+        <table class="min-w-full border border-gray-300 rounded-md overflow-hidden text-center">
+            <thead class="bg-transparent">
+            <tr class="hover:bg-gray-100 transition-colors duration-200">
+            <th class="px-5 py-4 border-b border-gray-300 text-gray-700 font-semibold select-none">#</th>
+                <th class="px-5 py-4 border-b border-gray-300 text-gray-700 font-semibold select-none">Ảnh</th>
+                <th class="px-5 py-4 border-b border-gray-300 text-gray-700 font-semibold select-none">Tên sản phẩm</th>
+                <th class="px-5 py-4 border-b border-gray-300 text-gray-700 font-semibold select-none w-[12rem]">Giá</th>
+                <th class="px-5 py-4 border-b border-gray-300 text-gray-700 font-semibold select-none">Số lượng</th>
+                <th class="px-5 py-4 border-b border-gray-300 text-gray-700 font-semibold select-none">Danh mục</th>
+                <th class="px-5 py-4 border-b border-gray-300 text-gray-700 font-semibold select-none">Hành động</th>
+            </tr>
+
+            </thead>
+            <tbody>
+            <tr
+                    th:each="product, stat : ${products}"
+                    class=" hover:bg-gray-100 transition-colors duration-200"
+            >
+                <td class="px-5 py-3 border-b border-gray-300" th:text="${stat.count}"></td>
+                <td class="px-5 py-3 border-b border-gray-300">
+                    <img
+                            th:src="${product.image}"
+                            alt="Ảnh sản phẩm"
+                            class="mx-auto h-[130px] w-[130px] object-contain rounded-md border border-gray-200"
+                    />
+                </td>
+                <td class="px-5 py-3 border-b border-gray-300 font-medium text-gray-800"
+                    th:text="${product.productName}"></td>
+                <td class="px-5 py-3 border-b border-gray-300 font-semibold text-green-600"
+                    th:text="${#numbers.formatDecimal(product.price / 1000, 0, 'COMMA', 3, 'POINT')} + ' đ'"></td>
+                <td class="px-5 py-3 border-b border-gray-300" th:text="${product.stock}"></td>
+                <td class="px-5 py-3 border-b border-gray-300" th:text="${product.category.categoryName}"></td>
+                <td class="px-5 py-3 border-b border-gray-300 space-x-2 whitespace-nowrap">
+                    <a
+                            th:href="@{/managerProduct/view/{productID}(productID = ${product.productID})}"
+                            title="Xem chi tiết"
+                            class="icon-btn bg-indigo-600 hover:bg-indigo-700"
+                    >
+                        <i class="fas fa-eye"></i>
+                    </a>
+                    <a
+                            th:href="@{/managerProduct/edit/{productID}(productID = ${product.productID})}"
+                            title="Sửa"
+                            class="icon-btn bg-blue-600 hover:bg-blue-700"
+                    >
+                        <i class="fas fa-edit"></i>
+                    </a>
+                    <a
+                            th:href="@{/managerProduct/delete/{productID}(productID = ${product.productID})}"
+                            title="Xóa"
+                            class="icon-btn bg-red-600 hover:bg-red-700"
+                            onclick="return confirm('Bạn có chắc muốn xóa sản phẩm này?')"
+                    >
+                        <i class="fas fa-trash-alt"></i>
+                    </a>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+        <div th:if="${#lists.isEmpty(products)}" class="text-center text-gray-700 font-semibold py-6">Không tìm thấy sản
+            phẩm
+        </div>
+        <div class="pagination-container">
+            <div th:if="${!#lists.isEmpty(products)}" class="flex justify-center mt-6 space-x-2">
+                <ul class="inline-flex -space-x-px text-sm">
+                    <li th:if="${currentPage > 0}">
+                        <a th:href="@{/admin/products(page=${currentPage - 1}, size=5, keyword=${keyword})}"
+                           class="px-3 py-2 ml-0 leading-tight text-gray-500 bg-white border border-gray-300 rounded-l-lg hover:bg-gray-100 hover:text-gray-700">
+                            Trước
+                        </a>
+                    </li>
+                    <li th:each="i : ${#numbers.sequence(0, totalPages - 1)}">
+                        <a th:href="@{/admin/products(page=${i}, size=5, keyword=${keyword})}"
+                           th:classappend="${i == currentPage} ? 'bg-blue-500 text-white' : 'text-gray-500 bg-white'"
+                           class="px-3 py-2 border border-gray-300 hover:bg-gray-100 hover:text-gray-700">
+                            <span th:text="${i + 1}">1</span>
+                        </a>
+                    </li>
+                    <li th:if="${currentPage < totalPages - 1}">
+                        <a th:href="@{/admin/products(page=${currentPage + 1}, size=5, keyword=${keyword})}"
+                           class="px-3 py-2 leading-tight text-gray-500 bg-white border border-gray-300 rounded-r-lg hover:bg-gray-100 hover:text-gray-700">
+                            Sau
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+<div th:replace="/admin/layout :: footer"></div>
+</body>
+<script src="/js/fragment.js"></script>
+
+</html>

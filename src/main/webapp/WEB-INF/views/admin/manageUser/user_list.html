@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Quản lý người dùng</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link
+            href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap"
+            rel="stylesheet"
+    />
+    <link
+            rel="stylesheet"
+            href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css"
+    />
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+        /* For table scroll on small screens */
+        .table-container {
+            overflow-x: auto;
+            border-radius: 0.5rem;
+            box-shadow: 0 0 10px rgb(0 0 0 / 0.05);
+        }
+        /* Icon button styles */
+        .icon-btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 44px;
+            height: 44px;
+            border-radius: 0.5rem;
+            transition: background-color 0.3s ease;
+            cursor: pointer;
+            color: white;
+            font-size: 1.25rem;
+        }
+        .icon-btn:hover {
+            opacity: 0.85;
+        }
+        /* Center all table cells vertically and horizontally */
+        table th,
+        table td {
+            vertical-align: middle !important;
+            font-size: 1.125rem; /* Increase font size */
+            padding-top: 1rem;
+            padding-bottom: 1rem;
+        }
+        /* Increase header font size and weight */
+        table thead th {
+            font-size: 1.25rem;
+            font-weight: 700;
+        }
+        /* Larger user image and cell */
+        .user-image {
+            width: 96px;
+            height: 96px;
+            object-fit: cover;
+            border-radius: 0.5rem;
+            margin-left: auto;
+            margin-right: auto;
+            display: block;
+        }
+        .image-cell {
+            width: 120px;
+        }
+    </style>
+</head>
+<body class="bg-gray-100 min-h-screen pt-24 pb-24">
+<div th:replace="/admin/layout :: sidebar"></div>
+<div th:replace="/admin/layout :: header"></div>
+    <div class="max-w-[93rem] mx-auto bg-white rounded-lg shadow p-6 flex-1 ml-[22rem]">
+    <h1 class="text-4xl font-semibold text-gray-800 mb-6 text-center">Quản lý người dùng</h1>
+
+    <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-6 space-y-4 sm:space-y-0">
+        <form th:action="@{/users/search}" method="get" class="flex w-full sm:w-auto">
+            <input
+                    type="text"
+                    name="username"
+                    th:value="${keyword}"
+                    placeholder="Tìm kiếm người dùng..."
+                    class="w-full sm:w-80 px-5 py-3 border border-gray-300 rounded-l-md focus:outline-none focus:ring-2 focus:ring-blue-500 text-lg"
+            />
+            <button
+                    type="submit"
+                    class="bg-blue-600 hover:bg-blue-700 text-white px-7 py-3 rounded-r-md font-semibold transition-colors duration-300 text-lg"
+            >
+                Tìm
+            </button>
+        </form>
+        <a th:href="@{/users/create}">
+            <button
+                    type="button"
+                    class="bg-green-600 hover:bg-green-700 text-white px-8 py-3 rounded-md font-semibold transition-colors duration-300 text-lg"
+            >
+                Thêm người dùng
+            </button>
+        </a>
+    </div>
+
+    <div class="table-container">
+        <table class="min-w-full border border-gray-300 rounded-md overflow-hidden text-center">
+            <thead class="bg-gray-50">
+            <tr>
+                <th class="px-6 py-5 border-b border-gray-300 text-gray-700 font-semibold select-none">#</th>
+                <th class="px-6 py-5 border-b border-gray-300 text-gray-700 font-semibold select-none image-cell">Hình ảnh</th>
+                <th class="px-6 py-5 border-b border-gray-300 text-gray-700 font-semibold select-none">Tên đăng nhập</th>
+                <th class="px-6 py-5 border-b border-gray-300 text-gray-700 font-semibold select-none">Email</th>
+                <th class="px-6 py-5 border-b border-gray-300 text-gray-700 font-semibold select-none">Địa chỉ</th>
+                <th class="px-6 py-5 border-b border-gray-300 text-gray-700 font-semibold select-none">Vai trò</th>
+                <th class="px-6 py-5 border-b border-gray-300 text-gray-700 font-semibold select-none">Hành động</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="user, stat : ${users}" class="even:bg-gray-50 hover:bg-gray-100 transition-colors duration-200">
+                <td class="px-6 py-4 border-b border-gray-300" th:text="${stat.count}"></td>
+
+                <td class="px-6 py-4 border-b border-gray-300 image-cell w-[160px]">
+                    <img th:src="${user.image}" alt="User Image" class="mx-auto h-[130px] w-[130px] object-contain" />
+                </td>
+
+
+                <td class="px-6 py-4 border-b border-gray-300 font-medium text-gray-800" th:text="${user.username}"></td>
+                <td class="px-6 py-4 border-b border-gray-300" th:text="${user.email}"></td>
+                <td class="px-6 py-4 border-b border-gray-300" th:text="${user.address != null ? user.address : 'N/A'}"></td>
+                <td class="px-6 py-4 border-b border-gray-300" th:text="${user.role != null ? user.role.roleName : 'N/A'}"></td>
+                <td class="px-6 py-4 border-b border-gray-300 space-x-3 whitespace-nowrap">
+                    <a
+                            th:href="@{/users/view/{userID}(userID=${user.userID})}"
+                            title="Xem chi tiết"
+                            class="icon-btn bg-indigo-600 hover:bg-indigo-700"
+                    >
+                        <i class="fas fa-eye"></i>
+                    </a>
+                    <a
+                            th:href="@{/users/edit/{userID}(userID=${user.userID})}"
+                            title="Sửa"
+                            class="icon-btn bg-blue-600 hover:bg-blue-700"
+                    >
+                        <i class="fas fa-edit"></i>
+                    </a>
+                    <a
+                            th:href="@{/users/delete/{userID}(userID=${user.userID})}"
+                            title="Xóa"
+                            class="icon-btn bg-red-600 hover:bg-red-700"
+                            onclick="return confirm('Bạn có chắc muốn xóa người dùng này?')"
+                    >
+                        <i class="fas fa-trash-alt"></i>
+                    </a>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+        <div th:if="${#lists.isEmpty(users)}" class="text-center text-gray-700 font-semibold py-8 text-xl">Không tìm thấy người dùng</div>
+    </div>
+</div>
+<div th:replace="/admin/layout :: footer"></div>
+<script src="/js/fragment.js"></script>
+</body>
+</html>

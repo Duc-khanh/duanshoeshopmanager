@@ -1,6 +1,10 @@
 package com.codegym.shoeshopmanager.model;
 
+import org.springframework.web.multipart.MultipartFile;
+
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name = "Categories")
@@ -11,6 +15,9 @@ public class Category {
 
     @Column(nullable = false)
     private String categoryName;
+    private String image;
+    @Transient
+    private MultipartFile imageFile;
 
     public Category() {
     }
@@ -22,6 +29,29 @@ public class Category {
     public Category(Integer categoryID, String categoryName) {
         this.categoryID = categoryID;
         this.categoryName = categoryName;
+    }
+
+    public Category(Integer categoryID, String categoryName, String image, MultipartFile imageFile) {
+        this.categoryID = categoryID;
+        this.categoryName = categoryName;
+        this.image = image;
+        this.imageFile = imageFile;
+    }
+
+    public String getImage() {
+        return image;
+    }
+
+    public void setImage(String image) {
+        this.image = image;
+    }
+
+    public MultipartFile getImageFile() {
+        return imageFile;
+    }
+
+    public void setImageFile(MultipartFile imageFile) {
+        this.imageFile = imageFile;
     }
 
     public Integer getCategoryID() {
@@ -39,5 +69,16 @@ public class Category {
     public void setCategoryName(String categoryName) {
         this.categoryName = categoryName;
     }
+
+    @Override
+    public String toString() {
+        return "Category{" +
+                "categoryID=" + categoryID +
+                ", categoryName='" + categoryName + '\'' +
+                ", parentCategory=" +
+                '}';
+    }
+
+
 }
 

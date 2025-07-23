@@ -1,0 +1,123 @@
+<html lang="en">
+<head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1"/>
+    <title>Danh sách danh mục</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link
+            href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap"
+            rel="stylesheet"
+    />
+    <link
+            rel="stylesheet"
+            href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css"
+    />
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+
+        .table-container {
+            overflow-x: auto;
+            border-radius: 0.5rem;
+            box-shadow: 0 0 10px rgb(0 0 0 / 0.05);
+        }
+
+        a.button {
+            @apply bg-green-600 hover:bg-green-700 text-white px-5 py-2 rounded-md font-semibold transition-colors duration-300 inline-block;
+            text-decoration: none;
+        }
+
+        a.button:hover {
+            opacity: 0.9;
+        }
+
+        .icon-btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 32px;
+            height: 32px;
+            border-radius: 0.5rem;
+            background-color: #2563eb; /* blue-600 */
+            color: white;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            font-size: 1rem;
+        }
+
+        .icon-btn:hover {
+            background-color: #1d4ed8; /* blue-700 */
+        }
+    </style>
+</head>
+<body class="bg-gray-100 min-h-screen pt-24 pb-24">
+
+<div th:replace="/admin/layout :: sidebar"></div>
+<div th:replace="/admin/layout :: header"></div>
+<div class="max-w-[93rem] mx-auto bg-white rounded-lg shadow p-6 flex-1 ml-[22rem]">
+    <h2 class="text-2xl font-semibold text-gray-800 mb-6 text-center">Danh sách danh mục</h2>
+    <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-6 space-y-4 sm:space-y-0">
+        <a th:href="@{/categories/create}"
+           class="bg-green-600 hover:bg-green-700 text-white px-5 py-2 rounded-md font-semibold transition-colors duration-300">
+            Thêm danh mục mới
+        </a>
+    </div>
+    <div class="table-container">
+        <table class="min-w-full border border-gray-300 rounded-md overflow-hidden">
+            <thead class="bg-gray-50">
+            <tr>
+                <th class="px-6 py-3 border-b border-gray-300 text-gray-700 font-semibold text-center select-none">#
+                </th>
+                <th class="px-6 py-3 border-b border-gray-300 text-gray-700 font-semibold text-center select-none">
+                    Ảnh
+                </th>
+                <th class="px-6 py-3 border-b border-gray-300 text-gray-700 font-semibold text-left select-none">Tên
+                    danh mục
+                </th>
+
+                <th class="px-6 py-3 border-b border-gray-300 text-gray-700 font-semibold text-center select-none">Hành
+                    động
+                </th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="category, iterStat : ${categories}"
+                class="even:bg-gray-50 hover:bg-gray-100 transition-colors duration-200">
+
+                <td class="px-6 py-4 border-b border-gray-300 text-center"
+                    th:text="${iterStat.count}">1</td>
+                <td class="px-6 py-4 border-b border-gray-300 text-center">
+                    <img th:src="@{${category.image}}" alt="Ảnh danh mục"
+                         class="w-16 h-16 object-cover rounded-md inline-block"/>
+                </td>
+
+                <td class="px-6 py-4 border-b border-gray-300 text-left font-medium text-gray-800"
+                    th:text="${category.categoryName}">Tên danh mục</td>
+
+                <td class="px-6 py-4 border-b border-gray-300 text-center space-x-2">
+
+                    <a th:href="@{/categories/edit/{id}(id=${category.categoryID})}"
+                       title="Cập nhật danh mục"
+                       class="inline-flex items-center justify-center w-10 h-10 rounded-xl bg-blue-600 hover:bg-blue-700 text-white shadow transition">
+                        <i class="fas fa-edit"></i>
+                    </a>
+
+                    <a th:href="@{/categories/delete/{id}(id=${category.categoryID})}"
+                       title="Xóa danh mục"
+                       class="inline-flex items-center justify-center w-10 h-10 rounded-xl bg-red-600 hover:bg-red-700 text-white shadow transition"
+                       onclick="return confirm('Bạn có chắc chắn muốn xóa danh mục này không?');">
+                        <i class="fas fa-trash-alt"></i>
+                    </a>
+
+                </td>
+            </tr>
+            </tbody>
+
+        </table>
+    </div>
+</div>
+<div th:replace="/admin/layout :: footer"></div>
+</body>
+<script src="/js/fragment.js"></script>
+</html>

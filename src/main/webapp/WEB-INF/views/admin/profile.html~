@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Thông tin tài khoản</title>
+    <meta charset="UTF-8">
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100 min-h-screen pt-24 pb-24">
+<div th:replace="/admin/layout :: sidebar"></div>
+<!--<div th:replace="/admin/layout :: header"></div>-->
+<div class="max-w-xl mx-auto bg-white p-6 rounded shadow">
+    <h2 class="text-2xl font-semibold mb-4">Thông tin tài khoản Admin</h2>
+
+    <div class="mb-4">
+        <label class="font-semibold">Tên đăng nhập:</label>
+        <p th:text="${admin.username}" class="text-gray-700"></p>
+    </div>
+
+    <div class="mb-4">
+        <label class="font-semibold">Email:</label>
+        <p th:text="${admin.email}" class="text-gray-700"></p>
+    </div>
+
+    <div class="mb-4">
+        <label class="font-semibold">Địa chỉ:</label>
+        <p th:text="${admin.address}" class="text-gray-700"></p>
+    </div>
+
+    <div class="mb-4">
+        <label class="font-semibold">Mật khẩu:</label>
+        <p th:text="${admin.password}" class="text-gray-500 italic">******</p> <!-- Ẩn mật khẩu -->
+    </div>
+
+    <div class="mb-4">
+        <label class="font-semibold">Ảnh đại diện:</label>
+        <div class="mt-2">
+            <img th:src="@{'/images/' + ${admin.image}}" alt="Avatar" class="w-24 h-24 rounded-full object-cover">
+        </div>
+    </div>
+</div>
+<div th:replace="/admin/layout :: footer"></div>
+</body>
+</html>

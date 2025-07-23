@@ -1,0 +1,19 @@
+package com.codegym.shoeshopmanager.model;
+
+import javax.persistence.*;
+
+@Entity
+@Table(name = "favorites")
+public class Favorite {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Integer id;
+
+    @ManyToOne
+    private User user;
+
+    @ManyToOne
+    private Product product;
+}
+
+

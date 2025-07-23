@@ -1,0 +1,107 @@
+<html lang="vi">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Chi tiết sản phẩm</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet" />
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+    </style>
+</head>
+<body class="bg-gray-100 min-h-screen flex flex-col">
+
+<div th:replace="/users/layout :: header"></div>
+
+<main class="flex-grow container mx-auto px-4 py-10 max-w-5xl">
+    <div class="bg-white rounded-2xl shadow-xl p-8 md:p-12 flex flex-col md:flex-row">
+
+        <div class="md:w-1/2 flex justify-center items-center p-8 relative">
+            <img alt="Hình ảnh sản phẩm chi tiết, rõ nét, màu sắc trung thực, kích thước vừa phải, nền trắng"
+                 class="object-contain max-h-[360px] w-full max-w-[400px]"
+                 th:src="${product.image}" />
+
+        </div>
+
+        <div class="md:w-1/2 mt-10 md:mt-0 flex flex-col justify-center px-4 md:px-0 text-gray-900">
+            <h2 class="font-bold text-xl leading-tight mb-2" th:text="${product.productName}">Tên sản phẩm</h2>
+            <div class="w-14 h-0.5 bg-gray-300 mb-4"></div>
+            <p class="text-[#f15a29] font-semibold text-lg mb-2" th:text="${#numbers.formatDecimal(product.price, 0, 'COMMA', 3, 'POINT')} + ' đ'">₫0</p>
+            <p class="text-sm font-semibold mb-1" th:text="${product.description}">Mô tả chi tiết sản phẩm.</p>
+            <p class="text-sm font-bold mb-4">Miễn phí đổi size | đổi mẫu trong 1 tuần !!!</p>
+
+            <div class="mb-4">
+                <label class="text-xs font-semibold uppercase tracking-wide text-gray-700 mb-1 block">SIZE</label>
+                <div class="flex flex-wrap gap-2 max-w-md">
+                    <button type="button" class="border border-gray-300 rounded px-3 py-1 text-sm text-gray-700 hover:bg-gray-100">39</button>
+                    <button type="button" class="border border-gray-300 rounded px-3 py-1 text-sm text-gray-700 hover:bg-gray-100">40</button>
+                    <button type="button" class="border border-gray-300 rounded px-3 py-1 text-sm text-gray-700 hover:bg-gray-100">41</button>
+                    <button type="button" class="border border-gray-300 rounded px-3 py-1 text-sm text-gray-700 hover:bg-gray-100">42</button>
+                    <button type="button" class="border border-gray-300 rounded px-3 py-1 text-sm text-gray-700 hover:bg-gray-100">43</button>
+                    <button type="button" class="border border-gray-300 rounded px-3 py-1 text-sm text-gray-700 hover:bg-gray-100">44</button>
+                    <button type="button" class="border border-gray-300 rounded px-3 py-1 text-sm text-gray-700 hover:bg-gray-100">45</button>
+                </div>
+            </div>
+            <form th:action="@{/cart/add/{productID}(productID=${product.productID})}" method="post"
+                  class="flex items-center space-x-3 max-w-md mb-6">
+                <button type="button" onclick="decreaseQuantity()"
+                        class="border border-gray-300 rounded px-3 py-1 text-lg font-semibold text-gray-700 select-none">-</button>
+
+                <input id="quantity" name="quantity" type="number" aria-label="Quantity" min="1" value="1"
+                       class="w-12 text-center border border-gray-300 rounded py-1 text-sm" />
+                <input type="hidden" id="maxStock" th:value="${product.stock}" />
+
+
+                <button type="button" onclick="increaseQuantity()"
+                        class="border border-gray-300 rounded px-3 py-1 text-lg font-semibold text-gray-700 select-none">+</button>
+
+                <button type="submit"
+                        class="bg-[#f5a07e] text-white font-bold text-sm uppercase px-5 py-2 rounded hover:bg-[#f28f5f] transition flex-shrink-0"
+                        title="Thêm vào giỏ hàng" aria-label="Thêm sản phẩm vào giỏ hàng">
+                    Thêm vào giỏ hàng
+                </button>
+            </form>
+            <form th:action="@{/users/favorite/add/{id}(id=${product.productID})}" method="post">
+                <button type="submit" class="text-red-500 hover:text-red-700">
+                    <i class="fas fa-heart"></i> Yêu thích
+                </button>
+            </form>
+<!--            <form th:if="${product.favorite}" th:action="@{/users/favorite/remove/{id}(id=${product.productID})}" method="post">-->
+<!--                <button class="text-red-600 text-lg"><i class="fas fa-heart"></i></button>-->
+<!--            </form>-->
+<!--            <form th:unless="${product.favorite}" th:action="@{/users/favorite/add/{id}(id=${product.productID})}" method="post">-->
+<!--                <button class="text-gray-500 text-lg"><i class="far fa-heart"></i></button>-->
+<!--            </form>-->
+
+
+        </div>
+    </div>
+</main>
+
+<div th:replace="/users/layout :: footer"></div>
+
+</body>
+<script src="/js/logout-handler.js"></script>
+<script>
+    function increaseQuantity() {
+        const input = document.getElementById('quantity');
+        const max = parseInt(document.getElementById('maxStock').value);
+
+        if (parseInt(input.value) < max) {
+            input.value = parseInt(input.value) + 1;
+        } else {
+            alert("Không thể thêm quá " + max + " sản phẩm còn trong kho.");
+        }
+    }
+    function decreaseQuantity() {
+        const input = document.getElementById('quantity');
+        if (parseInt(input.value) > 1) {
+            input.value = parseInt(input.value) - 1;
+        }
+    }
+</script>
+
+</html>

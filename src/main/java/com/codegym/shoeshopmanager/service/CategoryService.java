@@ -3,21 +3,15 @@ package com.codegym.shoeshopmanager.service;
 import com.codegym.shoeshopmanager.model.Category;
 import com.codegym.shoeshopmanager.repository.CategoryRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Example;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
-import org.springframework.data.repository.query.FluentQuery;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
 import java.util.List;
-import java.util.Optional;
-import java.util.function.Function;
+
 @Service
-public class CategoryService implements ICategoryService<Category> {
+public class CategoryService implements ICategoryService {
     @Autowired
     private CategoryRepository categoryRepository;
-
 
     @Override
     public List<Category> findAll() {
@@ -32,15 +26,11 @@ public class CategoryService implements ICategoryService<Category> {
     @Override
     public void save(Category category) {
         categoryRepository.save(category);
-
     }
 
     @Override
     public void delete(int id) {
         categoryRepository.deleteById(id);
-
     }
-
-
 
 }

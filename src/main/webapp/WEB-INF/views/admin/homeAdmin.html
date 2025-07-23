@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8"/>
+    <meta content="width=device-width, initial-scale=1" name="viewport"/>
+    <title>Admin Dashboard</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet"/>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet"/>
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+
+        ::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background-color: #4B5563;
+            border-radius: 3px;
+        }
+    </style>
+</head>
+
+<body class="bg-gray-100 min-h-screen flex flex-col">
+
+
+
+
+<div th:replace="/admin/layout :: sidebar"></div>
+<div th:replace="/admin/layout :: header"></div>
+
+
+<div id="overlay" class="fixed inset-0 bg-black bg-opacity-30 hidden z-30 md:hidden"></div>
+
+<main class="flex-1 ml-0 md:ml-72 p-6 overflow-auto">
+    <h2 class="text-3xl font-semibold text-gray-800 mb-6">Trang quản trị</h2>
+    <section class="mt-2 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 max-w-7xl">
+        <div class="bg-white rounded-lg shadow p-6 flex flex-col items-center">
+            <img src="https://storage.googleapis.com/a1aa/image/d67d3db2-9cdc-43d7-77fa-00179b74b301.jpg"
+                 alt="Product icon" class="mb-4" width="100" height="100"/>
+            <a th:href="@{/admin/products}" class="text-xl font-semibold text-gray-800 mb-2">Quản lý sản phẩm</a>
+        </div>
+        <div class="bg-white rounded-lg shadow p-6 flex flex-col items-center">
+            <img src="https://storage.googleapis.com/a1aa/image/ccd7a934-cccc-465c-0398-7970f04ba63a.jpg"
+                 alt="User icon" class="mb-4" width="100" height="100"/>
+            <a th:href="@{/admin/user}" class="text-xl font-semibold text-gray-800 mb-2">Quản lý người dùng</a>
+        </div>
+        <div class="bg-white rounded-lg shadow p-6 flex flex-col items-center">
+            <img src="https://storage.googleapis.com/a1aa/image/f9d4d478-78c1-4c5a-639c-8b1814f9a0fd.jpg"
+                 alt="Category icon" class="mb-4" width="100" height="100"/>
+            <a th:href="@{/admin/categories}" class="text-xl font-semibold text-gray-800 mb-2">Quản lý danh mục</a>
+        </div>
+        <div class="bg-white rounded-lg shadow p-6 flex flex-col items-center">
+            <img src="https://storage.googleapis.com/a1aa/image/f5fd8867-fba7-4d46-38cd-425db156526c.jpg"
+                 alt="Order icon" class="mb-4" width="100" height="100"/>
+            <a th:href="@{/orders}" class="text-xl font-semibold text-gray-800 mb-2">Quản lý đơn hàng</a>
+        </div>
+    </section>
+</main>
+<div th:replace="/admin/layout :: footer"></div>
+
+<script>
+    function toggleDropdown(id) {
+        const element = document.getElementById(id);
+        element.classList.toggle("hidden");
+    }
+
+    const sidebar = document.getElementById('sidebar');
+    const overlay = document.getElementById('overlay');
+    const mobileMenuButton = document.getElementById('mobile-menu-button');
+
+    mobileMenuButton.addEventListener('click', () => {
+        sidebar.classList.toggle('-translate-x-full');
+        overlay.classList.toggle('hidden');
+    });
+
+    overlay.addEventListener('click', () => {
+        sidebar.classList.add('-translate-x-full');
+        overlay.classList.add('hidden');
+    });
+</script>
+
+</body>
+</html>

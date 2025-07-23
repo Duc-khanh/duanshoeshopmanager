@@ -4,18 +4,16 @@ import com.codegym.shoeshopmanager.model.Product;
 import com.codegym.shoeshopmanager.model.User;
 import com.codegym.shoeshopmanager.service.CategoryService;
 import com.codegym.shoeshopmanager.service.IProductService;
+import com.codegym.shoeshopmanager.service.IUserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpSession;
-import java.io.File;
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.List;
 
 @Controller
@@ -25,6 +23,10 @@ public class AdminController {
     private IProductService productService;
     @Autowired
     private CategoryService categoryService;
+    @Autowired
+    private IUserService userService;
+    @Value("${file-upload}")
+    private String uploadDir;
 
     @GetMapping("/dashboard")
     public String dashboard(HttpSession session, Model model) {
@@ -33,54 +35,56 @@ public class AdminController {
             return "redirect:/login";
         }
         model.addAttribute("admin", currentUser);
-        return "admin/dashboard";
+        return "admin/homeAdmin";
+    }
+    @ModelAttribute
+    public void addCurrentUserToModel(HttpSession session, Model model) {
+        User currentUser = (User) session.getAttribute("currentUser");
+        if (currentUser != null) {
+            model.addAttribute("admin", currentUser);
+        }
     }
     @GetMapping("/products")
-    public String listProducts(Model model, @RequestParam(required = false) String keyword) {
-        List<Product> products = (keyword != null)
-                ? productService.searchByName(keyword)
-                : productService.findAll();
-        model.addAttribute("products", products);
-        model.addAttribute("keyword", keyword);
-        return "admin/product_list";
-    }
-    @GetMapping("products/create")
-    public String showAddForm(Model model) {
-        model.addAttribute("product", new Product());
-        model.addAttribute("categories", categoryService.findAll());
-        return "admin/add_product";
-    }
+    public String listProducts(Model model,
+                               @RequestParam(defaultValue = "0") int page,
+                               @RequestParam(defaultValue = "5") int size,
+                               @RequestParam(required = false) String keyword) {
+        Page<Product> productPage;
 
-    @PostMapping("/products/save")
-    public String saveProduct(@ModelAttribute Product product,
-                              @RequestParam("imageFile") MultipartFile imageFile) throws IOException {
-        if (imageFile != null && !imageFile.isEmpty()) {
-            // Lấy tên file gốc
-            String fileName = imageFile.getOriginalFilename();
-
-            // Đảm bảo thư mục tồn tại
-            String uploadDir = "src/main/resources/static/images/";
-            File uploadPath = new File(uploadDir);
-            if (!uploadPath.exists()) {
-                uploadPath.mkdirs();
-            }
-
-            // Tạo đường dẫn đến file đích
-            Path filePath = Paths.get(uploadDir, fileName);
-
-            // Ghi file
-            Files.write(filePath, imageFile.getBytes());
-
-            // Gán tên file vào trường image của Product
-            product.setImage(fileName);
+        if (keyword != null && !keyword.isEmpty()) {
+            productPage = productService.searchByName(keyword, PageRequest.of(page, size));
+        } else {
+            productPage = productService.findAll(PageRequest.of(page, size));
         }
-
-        // Lưu sản phẩm
-        productService.save(product);
-
-        return "redirect:/admin/products";
+        model.addAttribute("products", productPage.getContent());
+        model.addAttribute("currentPage", page);
+        model.addAttribute("totalPages", productPage.getTotalPages());
+        model.addAttribute("keyword", keyword);
+        return "admin/manageProduct/product_list";
     }
 
+
+    @GetMapping("/user")
+    public String homeUser(Model model) {
+        List<User> users = userService.findAll();
+        model.addAttribute("users", users);
+        return "admin/manageUser/user_list";
+    }
+
+    @GetMapping("/categories")
+    public String listCategories(Model model) {
+        model.addAttribute("categories", categoryService.findAll());
+        return "admin/manage-category/category_list";
+    }
+    @GetMapping("/profile")
+    public String viewAdminProfile(HttpSession session, Model model) {
+        User currentUser = (User) session.getAttribute("currentUser");
+        if (currentUser == null || !currentUser.getRole().getRoleName().equals("ADMIN")) {
+            return "redirect:/login";
+        }
+        model.addAttribute("admin", currentUser);
+        return "admin/profile";
+    }
 
 
 

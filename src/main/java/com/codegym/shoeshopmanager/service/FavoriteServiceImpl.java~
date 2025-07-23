@@ -1,0 +1,47 @@
+package com.codegym.shoeshopmanager.service;
+
+import com.codegym.shoeshopmanager.model.Favorite;
+import com.codegym.shoeshopmanager.model.Product;
+import com.codegym.shoeshopmanager.model.User;
+import com.codegym.shoeshopmanager.repository.FavoriteRepository;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import javax.transaction.Transactional;
+import java.util.List;
+import java.util.stream.Collectors;
+
+@Service
+public class FavoriteServiceImpl implements IFavoriteService {
+    @Autowired
+    private FavoriteRepository favoriteRepository;
+
+    @Override
+    public void addFavorite(User user, Product product) {
+        if (!favoriteRepository.existsByUserAndProduct(user, product)) {
+            Favorite favorite = new Favorite();
+            favorite.setUser(user);
+            favorite.setProduct(product);
+            favoriteRepository.save(favorite);
+        }
+    }
+
+    @Override
+    @Transactional
+    public void removeFavorite(User user, Product product) {
+        favoriteRepository.deleteByUserAndProduct(user, product);
+    }
+
+    @Override
+    public List<Product> getFavoriteProducts(User user) {
+        return favoriteRepository.findByUser(user).stream()
+                .map(Favorite::getProduct)
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public boolean isFavorite(User user, Product product) {
+        return favoriteRepository.existsByUserAndProduct(user, product);
+    }
+}
+

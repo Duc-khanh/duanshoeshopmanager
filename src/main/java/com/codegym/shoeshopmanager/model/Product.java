@@ -1,5 +1,6 @@
 package com.codegym.shoeshopmanager.model;
 import org.hibernate.annotations.CreationTimestamp;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.persistence.*;
 
@@ -16,6 +17,8 @@ public class Product {
     private Double price;
     private String image;
     private Integer stock;
+    @Transient
+    private MultipartFile imageFile;
 
     @ManyToOne
     @JoinColumn(name = "categoryID")
@@ -41,6 +44,14 @@ public class Product {
         this.image = image;
         this.stock = stock;
         this.category = category;
+    }
+
+    public MultipartFile getImageFile() {
+        return imageFile;
+    }
+
+    public void setImageFile(MultipartFile imageFile) {
+        this.imageFile = imageFile;
     }
 
     public Integer getProductID() {
@@ -97,5 +108,19 @@ public class Product {
 
     public void setCategory(Category category) {
         this.category = category;
+    }
+
+    @Override
+    public String toString() {
+        return "Product{" +
+                "productID=" + productID +
+                ", productName='" + productName + '\'' +
+                ", description='" + description + '\'' +
+                ", price=" + price +
+                ", image='" + image + '\'' +
+                ", stock=" + stock +
+                ", imageFile=" + imageFile +
+                ", category=" + category +
+                '}';
     }
 }
