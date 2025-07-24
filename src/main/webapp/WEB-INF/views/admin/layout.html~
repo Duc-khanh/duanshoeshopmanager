@@ -50,7 +50,9 @@
                          class="w-8 h-8 rounded-full" height="32"
                          src="https://storage.googleapis.com/a1aa/image/e19001d9-317a-4eb2-1450-2219756ede27.jpg"
                          width="32"/>
-
+<!--                    <a th:href="@{/admin/profile}" class="text-gray-700 font-medium hover:text-blue-600">-->
+<!--                        <span th:text="${admin.username}">Admin</span>-->
+<!--                    </a>-->
 
                 </div>
             </div>
