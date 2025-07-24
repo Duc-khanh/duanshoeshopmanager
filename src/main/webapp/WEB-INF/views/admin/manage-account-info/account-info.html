@@ -1,0 +1,65 @@
+<html lang="vi">
+<head>
+    <meta charset="utf-8"/>
+    <title>
+        Thông Tin Tài Khoản
+    </title>
+    <script src="https://cdn.tailwindcss.com">
+    </script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet"/>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto&amp;display=swap" rel="stylesheet"/>
+</head>
+<body class="bg-gray-50 font-['Roboto'] min-h-screen flex flex-col">
+<div th:replace="/admin/layout :: sidebar"></div>
+<div th:replace="/admin/layout :: header"></div>
+<main class="ml-64 flex-grow flex justify-center items-center px-4 py-20">
+    <section class="bg-white rounded-xl shadow-lg p-10 w-full max-w-lg">
+        <h1 class="text-3xl font-bold text-center text-gray-900 mb-8">
+            <i class="fas fa-user-circle mr-2 text-indigo-600"></i>Thông Tin Tài Khoản
+        </h1>
+
+        <div class="flex justify-center mb-8">
+            <img alt="Ảnh đại diện người dùng"
+                 class="w-32 h-32 rounded-full object-cover border-4 border-indigo-500 shadow"
+                 th:src="@{${user.image}}" />
+        </div>
+
+        <div class="space-y-5 text-base text-gray-700">
+            <div class="flex items-center gap-3">
+                <i class="fas fa-user text-indigo-600 w-6 text-lg"></i>
+                <span class="font-semibold w-40">Tên đăng nhập:</span>
+                <span th:text="${user.username}" class="truncate text-gray-800"></span>
+            </div>
+            <div class="flex items-center gap-3">
+                <i class="fas fa-envelope text-indigo-600 w-6 text-lg"></i>
+                <span class="font-semibold w-40">Email:</span>
+                <span th:text="${user.email}" class="truncate text-gray-800 break-all"></span>
+            </div>
+            <div class="flex items-center gap-3">
+                <i class="fas fa-map-marker-alt text-indigo-600 w-6 text-lg"></i>
+                <span class="font-semibold w-40">Địa chỉ:</span>
+                <span th:text="${user.address}" class="truncate text-gray-800"></span>
+            </div>
+        </div>
+
+        <div class="mt-10 text-center">
+            <a class="inline-block bg-indigo-600 hover:bg-indigo-700 text-white font-medium py-2 px-8 rounded-lg shadow transition"
+               href="/admin/account/edit">
+                <i class="fas fa-edit mr-2"></i>Sửa thông tin
+            </a>
+        </div>
+    </section>
+</main>
+<div th:replace="/admin/layout :: footer"></div>
+<script src="/js/fragment.js"></script>
+
+
+<script>
+    const menuBtn = document.getElementById('menu-btn');
+    const mobileMenu = document.getElementById('mobile-menu');
+    menuBtn.addEventListener('click', () => {
+        mobileMenu.classList.toggle('hidden');
+    });
+</script>
+</body>
+</html>

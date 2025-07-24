@@ -7,13 +7,6 @@
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap" rel="stylesheet"/>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet"/>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-    <!-- Bootstrap 5 CSS -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
-
-    <!-- Bootstrap 5 JS (cuối body) -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-
-
     <style>
         body {
             font-family: 'Montserrat', sans-serif;
@@ -44,8 +37,9 @@
             <a th:href="@{/users}" class="flex items-center space-x-2 select-none">
                 <img src="https://storage.googleapis.com/a1aa/image/87e3fa51-f86f-465d-a4de-9c2158252302.jpg"
                      alt="1Sneaker logo black background with white text" class="h-10 w-auto" width="120" height="40"/>
-                <span class="text-xs font-bold tracking-tight select-none">YOUNG FASHION STYLE</span>
+                <span class="text-sm font-bold tracking-tight select-none">YOUNG FASHION STYLE</span>
             </a>
+
             <nav>
                 <ul class="hidden md:flex space-x-10 text-gray-700 font-semibold items-center">
                     <li>
@@ -82,15 +76,24 @@
                             <span>Tài khoản</span>
                         </a>
                     </li>
-                    <li>
-                        <button type="button"
-                                class="flex items-center text-lg hover:text-blue-600 bg-transparent border-0"
-                                data-bs-toggle="modal"
-                                data-bs-target="#logoutModal">
+
+
+                    <li th:if="${session.currentUser == null}">
+                        <a href="/login"
+                           class="flex items-center text-lg hover:text-blue-600 bg-transparent border-0 cursor-pointer">
+                            <i class="fas fa-sign-in-alt mr-2 text-xl"></i>
+                            <span>Đăng nhập</span>
+                        </a>
+                    </li>
+                    <li th:if="${session.currentUser != null}">
+                        <a href="/logout"
+                           onclick="return confirm('Bạn có chắc chắn muốn đăng xuất không?');"
+                           class="flex items-center text-lg hover:text-blue-600 bg-transparent border-0 cursor-pointer">
                             <i class="fas fa-sign-out-alt mr-2 text-xl"></i>
                             <span>Đăng xuất</span>
-                        </button>
+                        </a>
                     </li>
+
 
                 </ul>
 
@@ -114,35 +117,28 @@
                 </ul>
             </nav>
         </div>
-        <div class="w-full max-w-full px-4 py-3 border-t border-gray-300 bg-white">
-            <form th:action="@{/managerUser/searchProduct}" method="GET" class="flex max-w-2xl mx-auto"
-                  role="search" aria-label="Tìm kiếm sản phẩm">
-                <input
-                        type="search"
-                        name="keyword"
-                        th:value="${keyword}"
-                        placeholder="Tìm kiếm sản phẩm..."
-                        aria-label="Tìm kiếm sản phẩm"
-                        class="flex-grow border border-gray-300 rounded-l-lg px-5 py-3 text-gray-700 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition"
-                />
-                <button
-                        type="submit"
-                        class="bg-blue-600 hover:bg-blue-700 text-white px-6 rounded-r-lg font-semibold transition flex items-center justify-center shadow-md"
-                        aria-label="Tìm kiếm"
-                >
-                    <i class="fas fa-search text-lg"></i>
-                </button>
-            </form>
-        </div>
-
+<!--        <div class="w-full max-w-full px-4 py-3 border-t border-gray-300 bg-white">-->
+<!--            <form th:action="@{/managerUser/searchProduct}" method="GET" class="flex max-w-2xl mx-auto"-->
+<!--                  role="search" aria-label="Tìm kiếm sản phẩm">-->
+<!--                <input-->
+<!--                        type="search"-->
+<!--                        name="keyword"-->
+<!--                        th:value="${keyword}"-->
+<!--                        placeholder="Tìm kiếm sản phẩm..."-->
+<!--                        aria-label="Tìm kiếm sản phẩm"-->
+<!--                        class="flex-grow border border-gray-300 rounded-l-lg px-5 py-3 text-gray-700 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition"-->
+<!--                />-->
+<!--                <button-->
+<!--                        type="submit"-->
+<!--                        class="bg-blue-600 hover:bg-blue-700 text-white px-6 rounded-r-lg font-semibold transition flex items-center justify-center shadow-md"-->
+<!--                        aria-label="Tìm kiếm"-->
+<!--                >-->
+<!--                    <i class="fas fa-search text-lg"></i>-->
+<!--                </button>-->
+<!--            </form>-->
+<!--        </div>-->
     </header>
-
-
 </div>
-
-<main class="flex-grow" th:fragment="content">
-    <p>Nội dung</p>
-</main>
 
 <footer th:fragment="footer" class="bg-gray-100 text-gray-800 mt-5">
     <div class="max-w-[90rem] mx-auto px-4 py-14 grid grid-cols-1 md:grid-cols-3 gap-12">
@@ -188,10 +184,6 @@
         © 2025 Cửa Hàng Giày. Tất cả quyền được bảo lưu.
     </div>
 </footer>
-<!-- Logout Confirmation Modal -->
 
-<!--<script src="/js/logout-handler.js"></script>-->
 </body>
-
-
 </html>

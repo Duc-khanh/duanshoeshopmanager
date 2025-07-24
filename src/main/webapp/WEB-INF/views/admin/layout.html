@@ -8,7 +8,7 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet"/>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet"/>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto&amp;display=swap" rel="stylesheet"/>
     <style>
         body {
             font-family: 'Inter', sans-serif;
@@ -31,28 +31,30 @@
 
 <div class="flex flex-1 overflow-hidden">
     <div th:fragment="header">
-        <header class="fixed top-0 left-0 right-0 bg-white shadow-md z-50 h-16 flex items-center px-6 md:pl-80">
+        <header class="fixed top-0 left-0 right-0 bg-white shadow-md z-50 h-16 flex items-center px-6 md:pl-80 font-['Roboto']">
             <div class="flex-1 flex items-center">
-                <button class="md:hidden text-gray-600 hover:text-blue-600 focus:outline-none mr-4"
+                <button class="md:hidden text-gray-600 hover:text-indigo-600 focus:outline-none mr-4"
                         id="mobile-menu-button" aria-label="Toggle sidebar menu">
                     <i class="fas fa-bars fa-lg"></i>
                 </button>
             </div>
             <div class="flex items-center space-x-4">
-                <button class="text-gray-600 hover:text-blue-600 focus:outline-none" aria-label="Notifications">
-                    <i class="fas fa-bell fa-lg"></i>
-                </button>
-                <button class="text-gray-600 hover:text-blue-600 focus:outline-none" aria-label="Settings">
-                    <i class="fas fa-cog fa-lg"></i>
-                </button>
+<!--                <button class="text-gray-600 hover:text-indigo-600 focus:outline-none" aria-label="Notifications">-->
+<!--                    <i class="fas fa-bell fa-lg"></i>-->
+<!--                </button>-->
+<!--                <button class="text-gray-600 hover:text-indigo-600 focus:outline-none" aria-label="Settings">-->
+<!--                    <i class="fas fa-cog fa-lg"></i>-->
+<!--                </button>-->
                 <div class="flex items-center space-x-2 cursor-pointer" tabindex="0" aria-label="User menu">
-                    <img alt="User avatar, a young Vietnamese admin with short hair and glasses"
-                         class="w-8 h-8 rounded-full" height="32"
-                         src="https://storage.googleapis.com/a1aa/image/e19001d9-317a-4eb2-1450-2219756ede27.jpg"
-                         width="32"/>
-
-
+                    <div th:if="${session.currentUser != null}" class="flex items-center gap-2">
+                        <i class="fas fa-user text-gray-600 text-lg"></i>
+                        <a href="/admin/account/info"
+                           class="text-gray-600 hover:text-indigo-600 font-medium transition">
+                            Tài khoản
+                        </a>
+                    </div>
                 </div>
+
             </div>
         </header>
     </div>
@@ -157,6 +159,7 @@
                     </div>
                     <a id="logout-link"
                        href="/logout"
+                       onclick="return confirm('Bạn có chắc chắn muốn đăng xuất không?');"
                        class="flex items-center space-x-4 text-red-600 hover:text-red-800 font-semibold px-4 py-3 rounded-lg transition border border-red-600 hover:border-red-800 mt-8 shadow-sm hover:shadow-md"
                        role="menuitem" aria-label="Logout">
                         <i class="fas fa-sign-out-alt fa-lg w-6 text-center"></i>

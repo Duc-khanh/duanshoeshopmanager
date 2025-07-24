@@ -15,13 +15,7 @@
     <style>
         body {
             font-family: 'Inter', sans-serif;
-        }
-
-        .form-container {
-            background: white;
-            padding: 2rem 2.5rem;
-            border-radius: 0.75rem;
-            box-shadow: 0 4px 12px rgb(0 0 0 / 0.1);
+            margin: 55px;
         }
     </style>
 </head>

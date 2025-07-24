@@ -4,16 +4,16 @@
     <title>Chỉnh sửa tài khoản</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Roboto&display=swap" rel="stylesheet" />
-    <link
-            rel="stylesheet"
-            href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css"
-    />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" />
 </head>
-<body class="bg-gray-50 min-h-screen p-6 font-['Roboto'] flex flex-col">
-<div class="w-full fixed top-0 left-0 right-0 z-50" th:replace="/users/layout :: header"></div>
+<body class="bg-gray-50 min-h-screen font-['Roboto'] flex flex-col">
 
-<main class="flex-grow max-w-lg w-full mx-auto bg-white rounded-xl shadow-lg p-8 mt-8">
-    <h2 class="text-3xl font-extrabold mb-8 text-center text-gray-900">Chỉnh sửa tài khoản</h2>
+<header class="w-full" th:replace="/users/layout :: header"></header>
+
+
+<main class="flex-1 flex items-center justify-center mt-6 p-6">
+    <div class="bg-white rounded-xl shadow-lg max-w-md w-full p-8">
+        <h2 class="text-3xl font-extrabold mb-8 text-center text-gray-900">Cập nhật tài khoản</h2>
     <form th:action="@{/users/user/update}" method="post" th:object="${user}" class="space-y-6">
         <input type="hidden" th:field="*{userID}" />
 
@@ -24,12 +24,12 @@
                         id="username"
                         type="text"
                         th:field="*{username}"
-                        class="w-full border border-gray-300 rounded-md p-3 pl-10 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
+                        class="w-full border border-gray-300 rounded-md p-3 pl-10 focus:outline-none focus:ring-2 focus:ring-indigo-500"
                         placeholder="Nhập tên đăng nhập"
                 />
                 <span class="absolute left-3 top-3 text-indigo-500">
-            <i class="fas fa-user"></i>
-          </span>
+                    <i class="fas fa-user"></i>
+                </span>
             </div>
         </div>
 
@@ -40,12 +40,12 @@
                         id="email"
                         type="email"
                         th:field="*{email}"
-                        class="w-full border border-gray-300 rounded-md p-3 pl-10 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
+                        class="w-full border border-gray-300 rounded-md p-3 pl-10 focus:outline-none focus:ring-2 focus:ring-indigo-500"
                         placeholder="Nhập email"
                 />
                 <span class="absolute left-3 top-3 text-indigo-500">
-            <i class="fas fa-envelope"></i>
-          </span>
+                    <i class="fas fa-envelope"></i>
+                </span>
             </div>
         </div>
 
@@ -56,12 +56,12 @@
                         id="address"
                         type="text"
                         th:field="*{address}"
-                        class="w-full border border-gray-300 rounded-md p-3 pl-10 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
+                        class="w-full border border-gray-300 rounded-md p-3 pl-10 focus:outline-none focus:ring-2 focus:ring-indigo-500"
                         placeholder="Nhập địa chỉ"
                 />
                 <span class="absolute left-3 top-3 text-indigo-500">
-            <i class="fas fa-map-marker-alt"></i>
-          </span>
+                    <i class="fas fa-map-marker-alt"></i>
+                </span>
             </div>
         </div>
 
@@ -74,8 +74,10 @@
             </button>
         </div>
     </form>
+    </div>
 </main>
 
-<div th:replace="/users/layout :: footer"></div>
+<footer class="w-full mt-12" th:replace="/users/layout :: footer"></footer>
+
 </body>
 </html>
