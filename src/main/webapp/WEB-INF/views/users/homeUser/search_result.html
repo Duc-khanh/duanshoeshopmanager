@@ -15,20 +15,18 @@
 </header>
 
 <main class="flex-grow pt-[120px] px-4 py-8 max-w-7xl mx-auto w-full">
-    <form th:action="@{/managerUser/searchProduct}" method="GET" class="flex max-w-2xl mx-auto"
-          role="search" aria-label="Tìm kiếm sản phẩm">
+    <form id="search-form" th:action="@{/managerUser/searchProduct}" method="GET" class="flex max-w-2xl mx-auto" role="search">
         <input
+                id="search-input"
                 type="search"
                 name="keyword"
                 th:value="${keyword}"
                 placeholder="Tìm kiếm sản phẩm..."
-                aria-label="Tìm kiếm sản phẩm"
                 class="flex-grow border border-gray-300 rounded-l-lg px-5 py-3 text-gray-700 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition"
         />
         <button
                 type="submit"
                 class="bg-blue-600 hover:bg-blue-700 text-white px-6 rounded-r-lg font-semibold transition flex items-center justify-center shadow-md"
-                aria-label="Tìm kiếm"
         >
             <i class="fas fa-search text-lg"></i>
         </button>
@@ -50,7 +48,7 @@
     </div>
 
     <div th:if="${searchResults == null or #lists.isEmpty(searchResults)}" class="mt-6 px-2 pb-10">
-        <p class="text-center text-gray-500 text-lg font-semibold select-none">Không tìm thấy sản phẩm phù hợp.</p>
+        <p class="text-center text-red-600  text-lg font-semibold select-none">Không tìm thấy sản phẩm phù hợp.</p>
     </div>
 
 </main>
@@ -60,4 +58,19 @@
 </footer>
 
 </body>
+<script>
+    const searchInput = document.getElementById('search-input');
+    const searchForm = document.getElementById('search-form');
+    let timeout = null;
+
+    searchInput.addEventListener('input', function () {
+        clearTimeout(timeout);
+        timeout = setTimeout(() => {
+            if (searchInput.value.trim().length > 0) {
+                searchForm.submit();
+            }
+        }, 600);
+    });
+</script>
+
 </html>

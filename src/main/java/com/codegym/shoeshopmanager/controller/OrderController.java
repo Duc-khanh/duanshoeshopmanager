@@ -8,6 +8,10 @@ import com.codegym.shoeshopmanager.repository.OrderRepository;
 import com.codegym.shoeshopmanager.service.CartService;
 import com.codegym.shoeshopmanager.service.OrderService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -19,6 +23,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import javax.servlet.http.HttpSession;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -33,7 +38,8 @@ public class OrderController {
     public String checkout(
             HttpSession session,
             RedirectAttributes redirectAttributes,
-            @RequestParam(value = "selectedItems", required = false) List<Integer> selectedProductIds
+            @RequestParam(value = "selectedItems", required = false) List<Integer> selectedProductIds,
+            @RequestParam Map<String, String> quantities
     ) {
         if (selectedProductIds == null || selectedProductIds.isEmpty()) {
             redirectAttributes.addFlashAttribute("error", "Vui lòng chọn sản phẩm để thanh toán!");
@@ -63,6 +69,19 @@ public class OrderController {
         }
 
         for (CartItem item : selectedItems) {
+            String key = "quantities[" + item.getProduct().getProductID() + "]";
+            if (quantities.containsKey(key)) {
+                try {
+                    int newQty = Integer.parseInt(quantities.get(key));
+                    if (newQty > 0) {
+                        item.setQuantity(newQty);
+                    }
+                } catch (NumberFormatException e) {
+                }
+            }
+        }
+
+        for (CartItem item : selectedItems) {
             int requestedQty = item.getQuantity();
             int availableStock = item.getProduct().getStock();
             if (requestedQty > availableStock) {
@@ -71,22 +90,21 @@ public class OrderController {
                 return "redirect:/cart";
             }
         }
+
         try {
             Order newOrder = orderService.placeOrder(user, selectedItems);
-            cart.removeIf(item -> selectedProductIds.contains(item.getProduct().getProductID()));
-            session.setAttribute("cart", cart);
-            session.setAttribute("cartItemCount", getTotalQuantity(cart));
 
             session.removeAttribute("pendingCheckoutItems");
-            redirectAttributes.addFlashAttribute("success", "Thanh toán thành công!");
             redirectAttributes.addAttribute("orderID", newOrder.getOrderID());
 
             return "redirect:/order/detail/{orderID}";
         } catch (Exception e) {
-            redirectAttributes.addFlashAttribute("error", "Lỗi thanh toán: " + e.getMessage());
+            redirectAttributes.addFlashAttribute("error", "Lỗi đặt hàng: " + e.getMessage());
             return "redirect:/cart";
         }
     }
+
+
     @GetMapping("/order/detail/{orderID}")
     public String orderDetail(@PathVariable("orderID") Integer id, Model model, HttpSession session) {
         User user = (User) session.getAttribute("currentUser");
@@ -123,39 +141,75 @@ public String viewOrder(@PathVariable Integer id, Model model) {
         orderService.updateStatus(orderId, status);
         return "redirect:/orders";
     }
-//    @GetMapping("/my-orders")
-//    public String viewMyOrders(HttpSession session, Model model) {
-//        User user = (User) session.getAttribute("currentUser");
-//        if (user == null) {
-//            return "redirect:/login";
-//        }
-//        List<Order> myOrders = orderService.getOrdersByUser(user);
-//        model.addAttribute("orders", myOrders);
-//        return "users/cart/my-orders";
-//    }
-@GetMapping("/my-orders")
-public String viewMyOrders(@RequestParam(value = "status", required = false) String status,
-                           HttpSession session,
-                           Model model) {
-    User user = (User) session.getAttribute("currentUser");
-    if (user == null) {
-        return "redirect:/login";
-    }
-    List<Order> myOrders;
-    if (status != null && !status.isEmpty()) {
-        myOrders = orderService.getOrdersByUserAndStatus(user, status);
-    } else {
-        myOrders = orderService.getOrdersByUser(user);
-    }
-    model.addAttribute("orders", myOrders);
-    model.addAttribute("selectedStatus", status);
-    model.addAttribute("statuses", OrderStatus.values());
+    @GetMapping("/my-orders")
+    public String viewMyOrders(@RequestParam(value = "status", required = false) String status,
+                               @RequestParam(value = "page", defaultValue = "0") int page,
+                               @RequestParam(value = "size", defaultValue = "10") int size,
+                               HttpSession session,
+                               Model model) {
+        User user = (User) session.getAttribute("currentUser");
+        if (user == null) {
+            return "redirect:/login";
+        }
 
-    return "users/cart/my-orders";
-}
+        Pageable pageable = PageRequest.of(page, size, Sort.by(Sort.Direction.DESC, "orderID"));
+
+        Page<Order> orderPage;
+
+        if (status != null && !status.isEmpty()) {
+            orderPage = orderService.getOrdersByUserAndStatus(user, status, pageable);
+        } else {
+            orderPage = orderService.getOrdersByUser(user, pageable);
+        }
+
+        model.addAttribute("orders", orderPage.getContent());
+        model.addAttribute("currentPage", page);
+        model.addAttribute("pageSize", size);
+        model.addAttribute("totalPages", orderPage.getTotalPages());
+        model.addAttribute("selectedStatus", status);
+        model.addAttribute("statuses", OrderStatus.values());
+
+        return "users/cart/my-orders";
+    }
+
 
 
     private int getTotalQuantity(List<CartItem> cart) {
         return cart.stream().mapToInt(CartItem::getQuantity).sum();
     }
+
+    @GetMapping("/order/confirm/{orderID}")
+    public String confirmOrder(@PathVariable("orderID") Integer orderID, HttpSession session, RedirectAttributes redirectAttributes) {
+        User user = (User) session.getAttribute("currentUser");
+        if (user == null) return "redirect:/login";
+
+        Optional<Order> orderOpt = orderRepository.findOrderWithDetails(orderID);
+
+        if (orderOpt.isPresent()) {
+            Order order = orderOpt.get();
+
+            if (!order.getUser().getUserID().equals(user.getUserID())) {
+                return "redirect:/users";
+            }
+
+            order.setStatus(OrderStatus.PENDING);
+            orderRepository.save(order);
+
+            List<CartItem> cart = (List<CartItem>) session.getAttribute("cart");
+            if (cart != null) {
+                List<Integer> orderedProductIds = order.getOrderDetails().stream()
+                        .map(od -> od.getProduct().getProductID())
+                        .collect(Collectors.toList());
+
+                cart.removeIf(item -> orderedProductIds.contains(item.getProduct().getProductID()));
+                session.setAttribute("cart", cart);
+                session.setAttribute("cartItemCount", getTotalQuantity(cart));
+            }
+
+            redirectAttributes.addFlashAttribute("success", "Đặt hàng thành công!");
+        }
+
+        return "redirect:/my-orders";
+    }
+
 }

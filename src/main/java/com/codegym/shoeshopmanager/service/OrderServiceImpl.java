@@ -5,6 +5,8 @@ import com.codegym.shoeshopmanager.repository.CartItemRepository;
 import com.codegym.shoeshopmanager.repository.OrderDetailRepository;
 import com.codegym.shoeshopmanager.repository.OrderRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -108,6 +110,22 @@ public class OrderServiceImpl implements OrderService {
     public List<Order> getOrdersByUserAndStatus(User user, String status) {
         return orderRepository.findByUserAndStatus(user, OrderStatus.valueOf(status));
     }
+
+    @Override
+    public Page<Order> findByUser(User user, Pageable pageable) {
+        return null;
+    }
+
+    @Override
+    public Page<Order> getOrdersByUserAndStatus(User user, String status, Pageable pageable) {
+        return orderRepository.findByUserAndStatus(user, status, pageable);
+    }
+    @Override
+    public Page<Order> getOrdersByUser(User user, Pageable pageable) {
+        return orderRepository.findByUser(user, pageable);
+    }
+
+
 
 
 }

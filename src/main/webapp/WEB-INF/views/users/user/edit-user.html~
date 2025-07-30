@@ -63,16 +63,12 @@
                             th:field="*{email}"
                             class="w-full border border-gray-300 rounded-md p-4 pl-12 text-lg focus:outline-none focus:ring-2 focus:ring-indigo-500"
                             placeholder="Nhập email"
-                            required
-                            pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$"
-                            title="Email phải đúng định dạng, ví dụ: ten@email.com"
                     />
                     <span class="absolute left-4 top-4 text-indigo-500 text-xl">
-            <i class="fas fa-envelope"></i>
-        </span>
+                        <i class="fas fa-envelope"></i>
+                    </span>
                 </div>
             </div>
-
 
             <div>
                 <label for="address" class="block text-gray-700 font-semibold mb-3 text-xl">Địa chỉ</label>

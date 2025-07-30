@@ -241,26 +241,26 @@ public String showEditForm(Model model, HttpSession session) {
     @GetMapping("/user/add")
     public String showAddUserForm(Model model) {
         model.addAttribute("user", new User());
-        return "users/user/add-address";
+        return "users/user/add-address"; // form thêm
     }
 
     @PostMapping("/user/add")
     public String addUser(@ModelAttribute("user") User user) {
-        userService.save(user);
-        return "redirect:/somewhere";
+        userService.save(user); // lưu vào DB
+        return "redirect:/somewhere"; // chuyển hướng sau khi thêm
     }
 
     @GetMapping("/user/edit/{id}")
     public String showEditUserForm(@PathVariable Integer id, Model model) {
         User user = userService.findById(id);
         model.addAttribute("user", user);
-        return "users/user/edit-address";
+        return "users/user/edit-address"; // form sửa
     }
 
     @PostMapping("/user/edit")
     public String updateUser(@ModelAttribute("user") User user) {
-        userService.update(user);
-        return "redirect:/somewhere";
+        userService.update(user); // cập nhật DB
+        return "redirect:/somewhere"; // chuyển hướng sau khi sửa
     }
 
 

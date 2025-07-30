@@ -3,6 +3,8 @@ package com.codegym.shoeshopmanager.service;
 import com.codegym.shoeshopmanager.model.CartItem;
 import com.codegym.shoeshopmanager.model.Order;
 import com.codegym.shoeshopmanager.model.User;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 import java.util.List;
 
@@ -28,4 +30,10 @@ public interface OrderService {
     Order findOrderWithDetails(Integer id);
 
     List<Order> getOrdersByUserAndStatus(User user, String status);
+    Page<Order> findByUser(User user, Pageable pageable);
+    Page<Order> getOrdersByUserAndStatus(User user, String status, Pageable pageable);
+    Page<Order> getOrdersByUser(User user, Pageable pageable);
+
+
+
 }

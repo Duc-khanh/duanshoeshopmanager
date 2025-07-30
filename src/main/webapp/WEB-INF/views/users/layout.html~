@@ -134,7 +134,7 @@
                 <a th:href="@{/managerProduct/category/{id}(id=${category.categoryID})}"
                    class="flex items-center space-x-2 no-underline hover:no-underline">
                     <img th:src="${category.image}" alt="Hình danh mục"
-                         class="w-10 h-10 object-cover rounded-full border border-white"/>
+                         class="w-12 h-12 object-cover rounded-full border border-white"/>
                     <span th:text="${category.categoryName}" class="text-base">Tên danh mục</span>
                 </a>
             </li>

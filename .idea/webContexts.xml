@@ -7,8 +7,10 @@
         <entry key="file://$PROJECT_DIR$/src/main/webapp/WEB-INF/views/admin/manage-account-info/edit-account.html" value="file://$PROJECT_DIR$/src/main/webapp/WEB-INF/views/admin/manage-account-info" />
         <entry key="file://$PROJECT_DIR$/src/main/webapp/WEB-INF/views/admin/manage-order/view_order.html" value="file://$PROJECT_DIR$/src/main/webapp/WEB-INF/views/admin/manage-order" />
         <entry key="file://$PROJECT_DIR$/src/main/webapp/WEB-INF/views/admin/manageProduct/product_list.html" value="file://$PROJECT_DIR$/src/main/webapp/WEB-INF/views/admin/manageProduct" />
+        <entry key="file://$PROJECT_DIR$/src/main/webapp/WEB-INF/views/users/cart/cart_view.html" value="file://$PROJECT_DIR$/src/main/webapp/WEB-INF/views/users/cart" />
         <entry key="file://$PROJECT_DIR$/src/main/webapp/WEB-INF/views/users/homeUser/product-by-category.html" value="file://$PROJECT_DIR$/src/main/webapp/WEB-INF/views/users/homeUser" />
         <entry key="file://$PROJECT_DIR$/src/main/webapp/WEB-INF/views/users/layout.html" value="file://$PROJECT_DIR$/src/main/webapp/WEB-INF/views/users" />
+        <entry key="file://$PROJECT_DIR$/src/main/webapp/WEB-INF/views/users/user/user-form-edit-add.html" value="file://$PROJECT_DIR$/src/main/webapp/WEB-INF/views/users/user" />
       </map>
     </option>
   </component>

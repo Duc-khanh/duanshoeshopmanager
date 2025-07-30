@@ -24,10 +24,10 @@
         Sản phẩm yêu thích của bạn
     </h1>
 
-    <div th:if="${#lists.isEmpty(favoriteProducts)}" class="text-center text-gray-500 py-20">
+    <div th:if="${#lists.isEmpty(favoriteProducts)}" class="text-center text-red-600  py-20">
         <i class="fas fa-heart-broken text-6xl mb-6 text-gray-400"></i>
         <p class="text-xl font-semibold">Bạn chưa có sản phẩm yêu thích nào.</p>
-        <p class="mt-2 text-gray-400">Hãy thêm sản phẩm vào danh sách yêu thích để xem tại đây.</p>
+        <p class="mt-2 text-red-600 ">Hãy thêm sản phẩm vào danh sách yêu thích để xem tại đây.</p>
     </div>
 
     <div th:if="${!#lists.isEmpty(favoriteProducts)}"
@@ -49,7 +49,7 @@
                         class="font-semibold text-lg text-gray-800 mb-1"
                 ></h3>
                 <p class="text-[#3b82f6] font-semibold text-lg mb-6"
-                   th:text="${#numbers.formatDecimal(product.price, 0, 'COMMA', 3, 'POINT')} + ' đ'">₫0</p>
+                   th:text="${#numbers.formatDecimal(product.price / 1000  , 0, 'COMMA', 3, 'POINT')} + ' đ'">₫0</p>
 
                 <div class="flex gap-3 mt-auto justify-center">
                     <form

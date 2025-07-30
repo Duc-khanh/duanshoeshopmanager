@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.util.StringUtils;
@@ -62,18 +63,23 @@ public class AdminController {
                                @RequestParam(required = false) String keyword) {
         Page<Product> productPage;
 
+        PageRequest pageRequest = PageRequest.of(page, size, Sort.by(Sort.Direction.DESC, "productID"));
+
         if (keyword != null && !keyword.isEmpty()) {
-            productPage = productService.searchByName(keyword, PageRequest.of(page, size));
+            productPage = productService.searchByName(keyword, pageRequest);
         } else {
-            productPage = productService.findAll(PageRequest.of(page, size));
+            productPage = productService.findAll(pageRequest);
         }
+
         model.addAttribute("products", productPage.getContent());
         model.addAttribute("currentPage", page);
         model.addAttribute("size", size);
         model.addAttribute("totalPages", productPage.getTotalPages());
         model.addAttribute("keyword", keyword);
+
         return "admin/manageProduct/product_list";
     }
+
 
 
     @GetMapping("/user")
@@ -120,7 +126,6 @@ public class AdminController {
             return "redirect:/login";
         }
 
-        // Cập nhật thông tin
         currentUser.setEmail(updatedUser.getEmail());
         currentUser.setAddress(updatedUser.getAddress());
 
@@ -150,7 +155,6 @@ public class AdminController {
             }
         }
 
-        // Lưu user
         userService.save(currentUser);
         session.setAttribute("currentUser", currentUser);
 

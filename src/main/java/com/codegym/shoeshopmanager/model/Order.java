@@ -96,6 +96,15 @@ public class Order {
     public void setStatus(OrderStatus status) {
         this.status = status;
     }
+    @Transient
+    public int getTotalItems() {
+        if (orderDetails == null || orderDetails.isEmpty()) return 0;
+        return orderDetails.stream()
+                .mapToInt(OrderDetail::getQuantity)
+                .sum();
+    }
+
+
 
     @Override
     public String toString() {
@@ -107,4 +116,6 @@ public class Order {
                 ", status=" + status +
                 '}';
     }
+
+
 }

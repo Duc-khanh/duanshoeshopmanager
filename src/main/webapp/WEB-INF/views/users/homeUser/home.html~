@@ -41,10 +41,8 @@
             <img
                     src="https://sneaker.giaodienwebmau.com/wp-content/uploads/2022/04/giay-nike.jpg.webp"
                     alt="Large sneaker image"
-                    class="w-full h-100 object-cover transform transition duration-500 group-hover:scale-105"
-                    loading="lazy"
+                    class="w-full h-96 object-cover transform transition duration-500 group-hover:scale-105"
             />
-
         </div>
 
         <div class="md:col-span-5 flex flex-col gap-6 w-full">
@@ -52,24 +50,21 @@
                 <img
                         src="https://sneaker.giaodienwebmau.com/wp-content/uploads/2022/04/giay-jordan.jpg.webp"
                         alt="Top right sneaker image"
-                        class="w-full h-50 object-cover transform transition duration-500 group-hover:scale-105"
-                        loading="lazy"
+                        class="w-full h-96 object-cover transform transition duration-500 group-hover:scale-105"
+                loading="lazy"
                 />
             </div>
             <div class="rounded-lg overflow-hidden shadow-lg group w-full">
                 <img
                         src="https://sneaker.giaodienwebmau.com/wp-content/uploads/2022/04/giay-mlb.jpg.webp"
                         alt="Bottom right sneaker image"
-                        class="w-full h-50 object-cover transform transition duration-500 group-hover:scale-105"
-                        loading="lazy"
+                        class="w-full h-96 object-cover transform transition duration-500 group-hover:scale-105"  
                 />
             </div>
         </div>
     </div>
 </section>
-
-<main class="max-w-7xl mx-auto px-2 py-12 flex-grow">
-    <h2 class="text-4xl font-extrabold text-gray-900 mb-12 text-center tracking-tight">
+<h2 class="text-4xl font-extrabold text-gray-900 mb-12 text-center tracking-tight">
         Sản Phẩm Nổi Bật
     </h2>
 

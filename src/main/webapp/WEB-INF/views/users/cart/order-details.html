@@ -1,4 +1,13 @@
+<!DOCTYPE html>
 <html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+
+</body>
+</html><html lang="en">
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -60,7 +69,7 @@
                             </div>
 
                             <div class="font-semibold text-gray-900 truncate col-span-1">
-                                 x <span th:text="${detail.quantity}">1</span>
+                                x <span th:text="${detail.quantity}">1</span>
                             </div>
 
                             <div class="font-semibold text-gray-900 col-span-1 text-right"
@@ -93,19 +102,6 @@
                     <span th:text="${#numbers.formatDecimal(order.totalAmount / 1000, 0, 'COMMA', 3, 'POINT')} + ' đ'">20.000 đ</span>
                 </div>
             </div>
-        </div>
-
-        <div class="border-t border-gray-200 p-6 flex flex-col sm:flex-row justify-center items-center gap-4">
-            <a th:href="@{/cart}" class="bg-white border border-blue-600 text-blue-600 hover:bg-blue-50 font-bold py-2 px-6 rounded-md transition duration-300 shadow-sm">
-                Quay lại giỏ hàng
-            </a>
-
-
-            <a th:href="@{/order/confirm/{id}(id=${order.orderID})}"
-               class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-6 rounded-md transition duration-300 shadow-md">
-                Đặt hàng
-            </a>
-
         </div>
 
     </section>

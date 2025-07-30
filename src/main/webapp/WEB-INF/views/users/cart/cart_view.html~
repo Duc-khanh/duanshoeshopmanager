@@ -146,7 +146,7 @@
                 }
             });
             summaryTotalAmountSpan.textContent = formatCurrency(total);
-            const fee = 0;
+            const fee = 0; 
             summaryFeeSpan.textContent = formatCurrency(fee);
             summaryFinalAmountSpan.textContent = formatCurrency(total + fee);
 

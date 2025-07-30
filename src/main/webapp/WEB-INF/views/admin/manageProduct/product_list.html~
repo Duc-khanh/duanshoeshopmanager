@@ -77,8 +77,9 @@
     <h1 class="text-3xl font-semibold text-gray-800 mb-6 text-center">Danh sách sản phẩm</h1>
 
     <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-6 space-y-4 sm:space-y-0">
-        <form th:action="@{/admin/products}" method="get" class="flex w-full sm:w-auto">
+        <form id="search-form" th:action="@{/admin/products}" method="get" class="flex w-full sm:w-auto">
             <input
+                    id="search-input"
                     type="text"
                     name="keyword"
                     th:value="${keyword}"
@@ -89,7 +90,7 @@
                     type="submit"
                     class="bg-blue-600 hover:bg-blue-700 text-white px-5 py-2 rounded-r-md font-semibold transition-colors duration-300"
             >
-                Tìm
+                Tìm kiếm
             </button>
         </form>
         <a th:href="@{/managerProduct/create}">
@@ -121,7 +122,8 @@
                     th:each="product, stat : ${products}"
                     class=" hover:bg-gray-100 transition-colors duration-200"
             >
-                <td class="px-5 py-3 border-b border-gray-300" th:text="${stat.count}"></td>
+                <td class="px-5 py-3 border-b border-gray-300"
+                    th:text="${currentPage * size + stat.index + 1}"></td>
                 <td class="px-5 py-3 border-b border-gray-300">
                     <img
                             th:src="${product.image}"
@@ -195,4 +197,20 @@
 <div th:replace="/admin/layout :: footer"></div>
 </body>
 <script src="/js/fragment.js"></script>
+<script>
+    const searchInput = document.getElementById('search-input');
+    const searchForm = document.getElementById('search-form');
+    let timeout = null;
+
+    searchInput.addEventListener('input', function () {
+        clearTimeout(timeout);
+        timeout = setTimeout(() => {
+            const query = searchInput.value.trim();
+            if (query.length > 0) {
+                searchForm.submit();
+            }
+        }, 500);
+    });
+</script>
+
 </html>
