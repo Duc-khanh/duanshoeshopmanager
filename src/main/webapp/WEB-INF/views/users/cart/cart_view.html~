@@ -41,7 +41,8 @@
                         <input type="checkbox" class="item-checkbox cursor-pointer" th:name="selectedItems" th:value="${item.product.productID}">
                     </td>
                     <td class="px-6 py-4 whitespace-normal text-gray-900 font-medium align-middle break-words" th:text="${item.product.productName}">Tên sản phẩm</td>
-                    <td class="px-6 py-4 whitespace-nowrap text-right text-gray-700 price-cell align-middle font-mono" th:attr="data-price=${item.product.price}"></td>
+                    <td class="px-6 py-4 whitespace-nowrap text-right text-gray-700 price-cell align-middle font-mono"
+                        th:attr="data-price=${item.discountedPrice}"></td>
                     <td class="px-6 py-4 whitespace-nowrap text-center text-gray-700 align-middle">
                         <input type="number" min="1" th:value="${item.quantity}" onchange="#updateQuantity(this)"
                                th:name="${'quantities[' + item.product.productID + ']'}" th:attr="data-price=${item.product.price}, data-id=${item.product.productID}"
@@ -146,7 +147,7 @@
                 }
             });
             summaryTotalAmountSpan.textContent = formatCurrency(total);
-            const fee = 0; 
+            const fee = 0;
             summaryFeeSpan.textContent = formatCurrency(fee);
             summaryFinalAmountSpan.textContent = formatCurrency(total + fee);
 

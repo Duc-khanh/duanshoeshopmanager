@@ -21,11 +21,9 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 import java.security.Principal;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.List;
+import java.util.*;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @Controller
 @RequestMapping("/users")
@@ -59,10 +57,21 @@ public class HomeUserController {
                 .filter(p -> p.getStock() > 0)
                 .sorted(Comparator.comparingDouble(Product::getPrice))
                 .limit(10)
+                .peek(p -> p.setDiscountPercent(new Random().nextInt(41) + 10))
+                .collect(Collectors.toList());
+        Set<Integer> displayedIds = new HashSet<>();
+        displayedIds.addAll(featuredProducts.stream().map(Product::getProductID).collect(Collectors.toSet()));
+        displayedIds.addAll(discountedProducts.stream().map(Product::getProductID).collect(Collectors.toSet()));
+
+        List<Product> remainingProducts = allProducts.stream()
+                .filter(p -> p.getStock() > 0 && !displayedIds.contains(p.getProductID()))
                 .collect(Collectors.toList());
 
         model.addAttribute("featuredProducts", featuredProducts);
         model.addAttribute("discountedProducts", discountedProducts);
+        model.addAttribute("remainingProducts", remainingProducts);
+
+
 
         User currentUser = (User) session.getAttribute("currentUser");
         if (currentUser != null) {
@@ -241,26 +250,26 @@ public String showEditForm(Model model, HttpSession session) {
     @GetMapping("/user/add")
     public String showAddUserForm(Model model) {
         model.addAttribute("user", new User());
-        return "users/user/add-address"; // form thêm
+        return "users/user/add-address";
     }
 
     @PostMapping("/user/add")
     public String addUser(@ModelAttribute("user") User user) {
-        userService.save(user); // lưu vào DB
-        return "redirect:/somewhere"; // chuyển hướng sau khi thêm
+        userService.save(user);
+        return "redirect:/somewhere";
     }
 
     @GetMapping("/user/edit/{id}")
     public String showEditUserForm(@PathVariable Integer id, Model model) {
         User user = userService.findById(id);
         model.addAttribute("user", user);
-        return "users/user/edit-address"; // form sửa
+        return "users/user/edit-address";
     }
 
     @PostMapping("/user/edit")
     public String updateUser(@ModelAttribute("user") User user) {
-        userService.update(user); // cập nhật DB
-        return "redirect:/somewhere"; // chuyển hướng sau khi sửa
+        userService.update(user);
+        return "redirect:/somewhere";
     }
 
 

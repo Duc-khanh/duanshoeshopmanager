@@ -67,36 +67,96 @@
                          src="https://storage.googleapis.com/a1aa/image/87e3fa51-f86f-465d-a4de-9c2158252302.jpg"
                          width="80" height="80"/>
                     <span class="mt-3 text-lg font-bold tracking-tight select-none text-gray-900 text-center">
-                    YOUNG FASHION STYLE
-                </span>
+            YOUNG FASHION STYLE
+        </span>
                 </a>
             </div>
             <div class="flex-1 p-4">
                 <nav class="space-y-3" role="menu" aria-label="Main navigation">
-                    <a href="/admin/products"
-                       class="flex items-center space-x-4 text-gray-700 hover:text-blue-600 font-semibold px-4 py-3 rounded-lg transition shadow-sm hover:shadow-md"
-                       role="menuitem">
-                        <i class="fas fa-box-open fa-lg w-6 text-center"></i>
-                        <span class="text-base">Quản lý sản phẩm</span>
-                    </a>
-                    <a href="/admin/user"
-                       class="flex items-center space-x-4 text-gray-700 hover:text-blue-600 font-semibold px-4 py-3 rounded-lg transition shadow-sm hover:shadow-md"
-                       role="menuitem">
-                        <i class="fas fa-users fa-lg w-6 text-center"></i>
-                        <span class="text-base">Quản lý người dùng</span>
-                    </a>
-                    <a href="/admin/categories"
-                       class="flex items-center space-x-4 text-gray-700 hover:text-blue-600 font-semibold px-4 py-3 rounded-lg transition shadow-sm hover:shadow-md"
-                       role="menuitem">
-                        <i class="fas fa-tags fa-lg w-6 text-center"></i>
-                        <span class="text-base">Quản lý danh mục</span>
-                    </a>
-                    <a href="/orders"
-                       class="flex items-center space-x-4 text-gray-700 hover:text-blue-600 font-semibold px-4 py-3 rounded-lg transition shadow-sm hover:shadow-md"
-                       role="menuitem">
-                        <i class="fas fa-shopping-cart fa-lg w-6 text-center"></i>
-                        <span class="text-base">Quản lý đơn hàng</span>
-                    </a>
+                    <div>
+                        <button aria-expanded="false" aria-controls="productDropdown"
+                                class="flex items-center w-full space-x-4 text-gray-700 hover:text-blue-600 font-semibold px-4 py-3 rounded-lg transition shadow-sm hover:shadow-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                onclick="toggleDropdown('productDropdown')">
+                            <i class="fas fa-box-open fa-lg w-6 text-center"></i>
+                            <span class="text-base flex-1 text-left">Quản lý sản phẩm</span>
+                            <i class="fas fa-chevron-down w-4"></i>
+                        </button>
+                        <div id="productDropdown" class="hidden pl-10 mt-2 space-y-2" role="menu"
+                             aria-label="Quản lý sản phẩm submenu">
+                            <a class="flex items-center space-x-2 text-gray-700 hover:text-blue-600"
+                               href="/admin/products" data-parent="productDropdown" role="menuitem" tabindex="-1">
+                                <i class="fas fa-list-ul w-5"></i>
+                                <span>Danh sách sản phẩm</span>
+                            </a>
+                            <a class="flex items-center space-x-2 text-gray-700 hover:text-blue-600"
+                               href="/managerProduct/create" data-parent="productDropdown" role="menuitem"
+                               tabindex="-1">
+                                <i class="fas fa-plus-circle w-5"></i>
+                                <span>Thêm sản phẩm</span>
+                            </a>
+                        </div>
+                    </div>
+                    <div>
+                        <button aria-expanded="false" aria-controls="userDropdown"
+                                class="flex items-center w-full space-x-4 text-gray-700 hover:text-blue-600 font-semibold px-4 py-3 rounded-lg transition shadow-sm hover:shadow-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                onclick="toggleDropdown('userDropdown')">
+                            <i class="fas fa-users fa-lg w-6 text-center"></i>
+                            <span class="text-base flex-1 text-left">Quản lý người dùng</span>
+                            <i class="fas fa-chevron-down w-4"></i>
+                        </button>
+                        <div id="userDropdown" class="hidden pl-10 mt-2 space-y-2" role="menu"
+                             aria-label="Quản lý người dùng submenu">
+                            <a class="flex items-center space-x-2 text-gray-700 hover:text-blue-600" href="/admin/user"
+                               data-parent="userDropdown" role="menuitem" tabindex="-1">
+                                <i class="fas fa-list-ul w-5"></i>
+                                <span>Danh sách người dùng</span>
+                            </a>
+                            <a class="flex items-center space-x-2 text-gray-700 hover:text-blue-600"
+                               href="/users/create" data-parent="userDropdown" role="menuitem" tabindex="-1">
+                                <i class="fas fa-user-plus w-5"></i>
+                                <span>Thêm người dùng</span>
+                            </a>
+                        </div>
+                    </div>
+                    <div>
+                        <button aria-expanded="false" aria-controls="categoryDropdown"
+                                class="flex items-center w-full space-x-4 text-gray-700 hover:text-blue-600 font-semibold px-4 py-3 rounded-lg transition shadow-sm hover:shadow-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                onclick="toggleDropdown('categoryDropdown')">
+                            <i class="fas fa-tags fa-lg w-6 text-center"></i>
+                            <span class="text-base flex-1 text-left">Quản lý danh mục</span>
+                            <i class="fas fa-chevron-down w-4"></i>
+                        </button>
+                        <div id="categoryDropdown" class="hidden pl-10 mt-2 space-y-2" role="menu"
+                             aria-label="Quản lý danh mục submenu">
+                            <a class="flex items-center space-x-2 text-gray-700 hover:text-blue-600"
+                               href="/admin/categories" data-parent="categoryDropdown" role="menuitem" tabindex="-1">
+                                <i class="fas fa-list-ul w-5"></i>
+                                <span>Danh sách danh mục</span>
+                            </a>
+                            <a class="flex items-center space-x-2 text-gray-700 hover:text-blue-600"
+                               href="/categories/create" data-parent="categoryDropdown" role="menuitem" tabindex="-1">
+                                <i class="fas fa-plus-circle w-5"></i>
+                                <span>Thêm danh mục</span>
+                            </a>
+                        </div>
+                    </div>
+                    <div>
+                        <button aria-expanded="false" aria-controls="orderDropdown"
+                                class="flex items-center w-full space-x-4 text-gray-700 hover:text-blue-600 font-semibold px-4 py-3 rounded-lg transition shadow-sm hover:shadow-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                onclick="toggleDropdown('orderDropdown')">
+                            <i class="fas fa-shopping-cart fa-lg w-6 text-center"></i>
+                            <span class="text-base flex-1 text-left">Quản lý đơn hàng</span>
+                            <i class="fas fa-chevron-down w-4"></i>
+                        </button>
+                        <div id="orderDropdown" class="hidden pl-10 mt-2 space-y-2" role="menu"
+                             aria-label="Quản lý đơn hàng submenu">
+                            <a class="flex items-center space-x-2 text-gray-700 hover:text-blue-600" href="/orders"
+                               data-parent="orderDropdown" role="menuitem" tabindex="-1">
+                                <i class="fas fa-list-ul w-5"></i>
+                                <span>Danh sách đơn hàng</span>
+                            </a>
+                        </div>
+                    </div>
                     <a id="logout-link"
                        href="/logout"
                        onclick="return confirm('Bạn có chắc chắn muốn đăng xuất không?');"
@@ -105,6 +165,7 @@
                         <i class="fas fa-sign-out-alt fa-lg w-6 text-center"></i>
                         <span class="text-base">Đăng xuất</span>
                     </a>
+
                 </nav>
             </div>
         </aside>

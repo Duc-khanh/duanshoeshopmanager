@@ -21,7 +21,9 @@ public interface OrderRepository extends JpaRepository<Order, Integer> {
     Optional<Order> findOrderWithDetails(@Param("orderID") Integer id);
 
     List<Order> findByUserAndStatus(User user, OrderStatus status);
-    Page<Order> findByUserAndStatus(User user, String status, Pageable pageable);
+//    Page<Order> findByUserAndStatus(User user, String status, Pageable pageable);
+    Page<Order> findByUserAndStatus(User user, OrderStatus status, Pageable pageable);
+
     Page<Order> findByUser(User user, Pageable pageable);
 
 

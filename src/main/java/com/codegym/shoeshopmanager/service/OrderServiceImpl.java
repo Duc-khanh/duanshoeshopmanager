@@ -50,16 +50,19 @@ public class OrderServiceImpl implements OrderService {
                 throw new IllegalArgumentException("Sản phẩm không hợp lệ: " + product);
             }
 
+            int quantity = item.getQuantity();
+            int discountPercent = (product.getDiscountPercent() != null) ? product.getDiscountPercent() : 0;
+            double discountedPrice = product.getPrice() * (100 - discountPercent) / 100.0;
+
             OrderDetail detail = new OrderDetail();
             detail.setOrder(order);
             detail.setProduct(product);
-            detail.setQuantity(item.getQuantity());
-            detail.setPrice(product.getPrice());
+            detail.setQuantity(quantity);
+            detail.setPrice(discountedPrice);
 
             orderDetailRepository.save(detail);
-            totalAmount += item.getQuantity() * product.getPrice();
+            totalAmount += quantity * discountedPrice;
         }
-
 
         order.setTotalAmount(totalAmount);
         orderRepository.save(order);
@@ -118,8 +121,10 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     public Page<Order> getOrdersByUserAndStatus(User user, String status, Pageable pageable) {
-        return orderRepository.findByUserAndStatus(user, status, pageable);
+        OrderStatus orderStatus = OrderStatus.valueOf(status);
+        return orderRepository.findByUserAndStatus(user, orderStatus, pageable);
     }
+
     @Override
     public Page<Order> getOrdersByUser(User user, Pageable pageable) {
         return orderRepository.findByUser(user, pageable);

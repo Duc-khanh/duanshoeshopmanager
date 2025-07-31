@@ -67,22 +67,19 @@
     </div>
 </div>
 </body>
-<script th:if="${error != null}">
+<script th:if="${error}">
     Swal.fire({
         icon: 'warning',
         title: 'Thông báo',
         text: [[${error}]],
         confirmButtonText: 'OK'
     });
-</script>
-
-<script th:if="${loginRequired}">
-    Swal.fire({
+        Swal.fire({
         icon: 'warning',
         title: 'Yêu cầu đăng nhập',
         text: 'Vui lòng đăng nhập để sử dụng tính năng này!',
         confirmButtonText: 'OK'
     });
-</script>
 
+</script>
 </html>

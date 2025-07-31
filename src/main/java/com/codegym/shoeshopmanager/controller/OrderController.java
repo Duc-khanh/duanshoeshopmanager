@@ -1,11 +1,9 @@
 package com.codegym.shoeshopmanager.controller;
 
-import com.codegym.shoeshopmanager.model.CartItem;
-import com.codegym.shoeshopmanager.model.Order;
-import com.codegym.shoeshopmanager.model.OrderStatus;
-import com.codegym.shoeshopmanager.model.User;
+import com.codegym.shoeshopmanager.model.*;
 import com.codegym.shoeshopmanager.repository.OrderRepository;
 import com.codegym.shoeshopmanager.service.CartService;
+import com.codegym.shoeshopmanager.service.IProductService;
 import com.codegym.shoeshopmanager.service.OrderService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -33,6 +31,8 @@ public class OrderController {
     private OrderService orderService;
     @Autowired
     private OrderRepository orderRepository;
+    @Autowired
+    private IProductService productService;
 
     @PostMapping("/order")
     public String checkout(
@@ -211,5 +211,48 @@ public String viewOrder(@PathVariable Integer id, Model model) {
 
         return "redirect:/my-orders";
     }
+
+
+    @PostMapping("/checkout/buy-now/{productID}")
+    public String buyNow(@PathVariable Integer productID,
+                         @RequestParam int quantity,
+                         HttpSession session,
+                         RedirectAttributes redirectAttributes) {
+        User user = (User) session.getAttribute("currentUser");
+        if (user == null) {
+            return "redirect:/login";
+        }
+
+        Product product = productService.findById(productID);
+        if (product == null) {
+            redirectAttributes.addFlashAttribute("error", "Sản phẩm không tồn tại.");
+            return "redirect:/product/" + productID;
+        }
+
+        if (product.getStock() < quantity) {
+            redirectAttributes.addFlashAttribute("error", "Sản phẩm chỉ còn " + product.getStock() + " chiếc.");
+            return "redirect:/product/" + productID;
+        }
+
+        // Tạo CartItem giả lập cho "Mua ngay"
+        CartItem cartItem = new CartItem();
+        cartItem.setProduct(product);
+        cartItem.setQuantity(quantity);
+
+        List<CartItem> buyNowItems = new ArrayList<>();
+        buyNowItems.add(cartItem);
+
+        try {
+            Order newOrder = orderService.placeOrder(user, buyNowItems);
+
+            redirectAttributes.addAttribute("orderID", newOrder.getOrderID());
+            return "redirect:/order/detail/{orderID}";
+        } catch (Exception e) {
+            redirectAttributes.addFlashAttribute("error", "Không thể mua ngay: " + e.getMessage());
+            return "redirect:/product/" + productID;
+        }
+    }
+
+
 
 }

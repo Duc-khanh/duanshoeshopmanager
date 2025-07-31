@@ -21,11 +21,9 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 import java.security.Principal;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.List;
+import java.util.*;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @Controller
 @RequestMapping("/users")
@@ -56,13 +54,24 @@ public class HomeUserController {
                 .collect(Collectors.toList());
 
         List<Product> discountedProducts = allProducts.stream()
-                .filter(p -> p.getStock() > 0)
+                .filter(p -> p.getStock() > 0 && p.getDiscountPercent() != null && p.getDiscountPercent() > 0)
                 .sorted(Comparator.comparingDouble(Product::getPrice))
                 .limit(10)
                 .collect(Collectors.toList());
 
+        Set<Integer> displayedIds = new HashSet<>();
+        displayedIds.addAll(featuredProducts.stream().map(Product::getProductID).collect(Collectors.toSet()));
+        displayedIds.addAll(discountedProducts.stream().map(Product::getProductID).collect(Collectors.toSet()));
+
+        List<Product> remainingProducts = allProducts.stream()
+                .filter(p -> p.getStock() > 0 && !displayedIds.contains(p.getProductID()))
+                .collect(Collectors.toList());
+
         model.addAttribute("featuredProducts", featuredProducts);
         model.addAttribute("discountedProducts", discountedProducts);
+        model.addAttribute("remainingProducts", remainingProducts);
+
+
 
         User currentUser = (User) session.getAttribute("currentUser");
         if (currentUser != null) {
