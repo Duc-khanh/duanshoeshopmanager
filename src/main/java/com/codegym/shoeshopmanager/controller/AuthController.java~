@@ -76,7 +76,7 @@ public class AuthController {
         session.removeAttribute("cartItemCount");
         session.removeAttribute("cartItems");
         session.invalidate();
-        return "redirect:/login?logoutSuccess=true";
+        return "redirect:/login";
     }
 }
 

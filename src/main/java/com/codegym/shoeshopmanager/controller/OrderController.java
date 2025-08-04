@@ -120,11 +120,34 @@ public class OrderController {
         return "users/cart/order-detail";
     }
     @GetMapping("/orders")
-    public String listOrders(Model model) {
-        List<Order> orders = orderService.findAll();
-        model.addAttribute("orders", orders);
+    public String listOrders(Model model,
+                             @RequestParam(defaultValue = "0") int page,
+                             @RequestParam(defaultValue = "10") int size) {
+
+        Page<Order> orderPage = orderService.findPaginated(PageRequest.of(page, size));
+        int totalPages = orderPage.getTotalPages();
+
+        int maxPagesToShow = 5;
+        int startPage = Math.max(0, page - 2);
+        int endPage = Math.min(startPage + maxPagesToShow - 1, totalPages - 1);
+
+        if (endPage - startPage < maxPagesToShow - 1) {
+            startPage = Math.max(0, endPage - maxPagesToShow + 1);
+        }
+
+        List<Integer> pageNumbers = new ArrayList<>();
+        for (int i = startPage; i <= endPage; i++) {
+            pageNumbers.add(i);
+        }
+
+        model.addAttribute("orderPage", orderPage);
+        model.addAttribute("currentPage", page);
+        model.addAttribute("pageNumbers", pageNumbers);
+        model.addAttribute("totalPages", totalPages);
         return "admin/manage-order/list_orders";
     }
+
+
 @GetMapping("/view/{id}")
 public String viewOrder(@PathVariable Integer id, Model model) {
     Order order = orderService.findOrderWithDetails(id);
@@ -207,6 +230,9 @@ public String viewOrder(@PathVariable Integer id, Model model) {
             }
 
             redirectAttributes.addFlashAttribute("success", "Đặt hàng thành công!");
+            redirectAttributes.addFlashAttribute("addToCartSuccess", true);
+
+
         }
 
         return "redirect:/my-orders";
@@ -234,7 +260,6 @@ public String viewOrder(@PathVariable Integer id, Model model) {
             return "redirect:/product/" + productID;
         }
 
-        // Tạo CartItem giả lập cho "Mua ngay"
         CartItem cartItem = new CartItem();
         cartItem.setProduct(product);
         cartItem.setQuantity(quantity);

@@ -131,6 +131,12 @@ public class OrderServiceImpl implements OrderService {
     }
 
 
+    @Override
+    public Page<Order> findPaginated(Pageable pageable) {
+        return orderRepository.findAll(pageable);
+    }
+
+
 
 
 }

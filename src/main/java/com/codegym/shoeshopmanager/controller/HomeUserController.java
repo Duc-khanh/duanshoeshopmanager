@@ -71,15 +71,21 @@ public class HomeUserController {
         model.addAttribute("discountedProducts", discountedProducts);
         model.addAttribute("remainingProducts", remainingProducts);
 
-
-
         User currentUser = (User) session.getAttribute("currentUser");
         if (currentUser != null) {
             model.addAttribute("user", currentUser);
+
+            List<Product> favoriteProducts = favoriteService.getFavoriteProducts(currentUser);
+            Set<Integer> favoriteProductIds = favoriteProducts.stream()
+                    .map(Product::getProductID)
+                    .collect(Collectors.toSet());
+
+            model.addAttribute("favoriteProductIds", favoriteProductIds);
         }
 
         return "users/homeUser/home";
     }
+
     @GetMapping("/create")
     public String showFormNewUser(Model model) {
         model.addAttribute("user", new User());
@@ -181,7 +187,7 @@ public String addFavorite(@PathVariable("productId") Integer productId,
     User currentUser = (User) session.getAttribute("currentUser");
 
     if (currentUser == null) {
-        redirectAttributes.addFlashAttribute("error", "Vui lòng đăng nhập để sử dụng tính năng này!");
+        redirectAttributes.addFlashAttribute("loginRequired", true);
         return "redirect:/login";
     }
 
@@ -190,17 +196,20 @@ public String addFavorite(@PathVariable("productId") Integer productId,
         favoriteService.addFavorite(currentUser, product);
         int favoriteCount = favoriteService.countFavoritesByUser(currentUser);
         session.setAttribute("favoriteCount", favoriteCount);
+        redirectAttributes.addFlashAttribute("addToFavoriteSuccess", true);
     }
     return "redirect:/users";
 }
     @PostMapping("/favorite/remove/{productId}")
-    public String removeFavorite(@PathVariable("productId") Integer productId, HttpSession session) {
+    public String removeFavorite(@PathVariable("productId") Integer productId, HttpSession session , RedirectAttributes redirectAttributes) {
         User currentUser = (User) session.getAttribute("currentUser");
         if (currentUser != null) {
             Product product = productService.findById(productId);
             favoriteService.removeFavorite(currentUser, product);
             List<Product> favorites = favoriteService.getFavoriteProducts(currentUser);
             session.setAttribute("favoriteCount", favorites.size());
+            redirectAttributes.addFlashAttribute("deleteSuccess", true);
+
         }
         return "redirect:/users/favorites";
     }

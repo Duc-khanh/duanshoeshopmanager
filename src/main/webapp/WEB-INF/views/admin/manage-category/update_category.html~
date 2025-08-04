@@ -15,7 +15,13 @@
     <style>
         body {
             font-family: 'Inter', sans-serif;
-            margin: 55px;
+        }
+
+        .form-container {
+            background: white;
+            padding: 2rem 2.5rem;
+            border-radius: 0.75rem;
+            box-shadow: 0 4px 12px rgb(0 0 0 / 0.1);
         }
     </style>
 </head>
@@ -23,7 +29,6 @@
 <div class="flex min-h-screen" style="padding:55px">
 
     <div th:replace="/admin/layout :: sidebar"></div>
-    <div th:replace="/admin/layout :: header"></div>
 
 
     <div class="flex flex-1 justify-center items-center p-6 ml-72">

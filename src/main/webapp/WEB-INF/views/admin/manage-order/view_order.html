@@ -12,9 +12,46 @@
             rel="stylesheet"
             href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css"
     />
+    <style>
+        /* Pagination container styling */
+        .pagination-container {
+            overflow-y: visible;
+            padding-top: 1rem;
+            padding-bottom: 1rem;
+        }
+        .pagination-list {
+            display: inline-flex;
+            font-size: 0.875rem; /* text-sm */
+        }
+        .pagination-list li a {
+            padding: 0.5rem 0.75rem;
+            border: 1px solid #d1d5db; /* border-gray-300 */
+            background-color: white;
+            color: #6b7280; /* text-gray-500 */
+            cursor: pointer;
+            transition: background-color 0.2s ease, color 0.2s ease;
+            user-select: none;
+        }
+        .pagination-list li a:hover {
+            background-color: #f3f4f6; /* bg-gray-100 */
+            color: #374151; /* text-gray-700 */
+        }
+        .pagination-list li:first-child a {
+            border-top-left-radius: 0.375rem; /* rounded-l-lg */
+            border-bottom-left-radius: 0.375rem;
+        }
+        .pagination-list li:last-child a {
+            border-top-right-radius: 0.375rem; /* rounded-r-lg */
+            border-bottom-right-radius: 0.375rem;
+        }
+        .pagination-list li.active a {
+            background-color: #3b82f6; /* bg-blue-500 */
+            color: white;
+            cursor: default;
+        }
+    </style>
 </head>
 <body class="bg-gray-50 min-h-screen flex justify-center p-6">
-<div th:replace="/admin/layout :: header"></div>
 <div th:replace="/admin/layout :: sidebar"></div>
 
 <div class="w-full max-w-4xl bg-white rounded-lg shadow-lg p-8 my-[10px] mt-[4rem] ml-72 mb-[48px]">
@@ -23,7 +60,7 @@
 
     <div class="mb-6 space-y-2 text-gray-700">
         <p><strong class="font-semibold">Khách hàng:</strong> <span th:text="${order.user.username}">Nguyễn Văn A</span></p>
-<!--        <p><strong class="font-semibold">Ngày đặt:</strong> <span th:text="${#dates.format(order.orderDate, 'dd/MM/yyyy HH:mm')}">01/01/2024 10:00</span></p>-->
+        <!-- <p><strong class="font-semibold">Ngày đặt:</strong> <span th:text="${#dates.format(order.orderDate, 'dd/MM/yyyy HH:mm')}">01/01/2024 10:00</span></p> -->
         <p><strong class="font-semibold">Trạng thái:</strong> <span th:text="${order.status}">PENDING</span></p>
     </div>
 
@@ -69,6 +106,33 @@
             </tr>
             </tfoot>
         </table>
+    </div>
+
+    <div class="pagination-container">
+        <div th:if="${totalPages > 1}" class="flex justify-center mt-6 space-x-2">
+            <ul class="inline-flex -space-x-px text-sm">
+                <li th:if="${currentPage > 0}">
+                    <a th:href="@{/admin/orders/detail(page=${currentPage - 1}, size=5, orderId=${order.orderID})}"
+                       class="px-3 py-2 ml-0 leading-tight text-gray-500 bg-white border border-gray-300 rounded-l-lg hover:bg-gray-100 hover:text-gray-700"
+                       aria-label="Previous page">
+                        Trước
+                    </a>
+                </li>
+                <li th:each="i : ${#numbers.sequence(0, totalPages - 1)}"
+                    th:classappend="${i == currentPage} ? 'bg-blue-500 text-white' : 'text-gray-500 bg-white'">
+                    <a th:href="@{/admin/orders/detail(page=${i}, size=5, orderId=${order.orderID})}"
+                       class="px-3 py-2 border border-gray-300 hover:bg-gray-100 hover:text-gray-700"
+                       th:text="${i + 1}">1</a>
+                </li>
+                <li th:if="${currentPage < totalPages - 1}">
+                    <a th:href="@{/admin/orders/detail(page=${currentPage + 1}, size=5, orderId=${order.orderID})}"
+                       class="px-3 py-2 leading-tight text-gray-500 bg-white border border-gray-300 rounded-r-lg hover:bg-gray-100 hover:text-gray-700"
+                       aria-label="Next page">
+                        Sau
+                    </a>
+                </li>
+            </ul>
+        </div>
     </div>
 
 </div>

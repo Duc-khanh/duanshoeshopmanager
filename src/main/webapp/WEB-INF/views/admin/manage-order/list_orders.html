@@ -8,7 +8,6 @@
 </head>
 <body class="bg-gray-50 min-h-screen flex flex-col">
 <header class="fixed top-0 left-0 right-0 bg-white shadow-md z-30">
-    <div th:replace="/admin/layout :: header"></div>
 </header>
 
 <div class="flex flex-1 pt-16 min-h-[calc(100vh-4rem)]">
@@ -19,7 +18,7 @@
     <main class="flex-1 ml-64 p-6 overflow-auto mb-[20px]">
         <div class="max-w-6xl mx-auto bg-white rounded-lg shadow-lg p-8">
             <h2 class="text-3xl font-bold text-gray-800 mb-8 border-b pb-3">Danh sách đơn hàng</h2>
-            <div class="overflow-x-auto">
+            <div class="overflow-x-hidden">
                 <table class="w-full table-auto border-collapse border border-gray-300">
                     <thead>
                     <tr class="bg-gray-100 text-gray-700 uppercase text-sm font-semibold">
@@ -30,11 +29,11 @@
                     </tr>
                     </thead>
                     <tbody>
-                    <tr th:each="order , stat : ${orders}"
+                    <tr th:each="order , stat : ${orderPage.content}"
                         class="border-b border-gray-200 hover:bg-blue-50 transition-colors duration-200 cursor-pointer">
-                        <td class="border border-gray-300 px-5 py-4 text-gray-700 font-medium" th:text="${stat.index+1}">DH001</td>
+                        <td class="border border-gray-300 px-5 py-4 text-gray-700 font-medium" th:text="${stat.index + 1 + (currentPage * orderPage.size)}"></td>
                         <td class="border border-gray-300 px-5 py-4 text-gray-700" th:text="${order.user.username}"></td>
-                        <td class="border border-gray-300 px-5 py-4" th:text="${order.status}">Đang xử lý</td>
+                        <td class="border border-gray-300 px-5 py-4" th:text="${order.status}"></td>
                         <td class="border border-gray-300 px-5 py-4 text-center">
                             <a th:href="@{/view/{id}(id=${order.orderID})}"
                                class="inline-flex items-center text-blue-600 hover:text-blue-800 font-semibold">
@@ -42,8 +41,52 @@
                             </a>
                         </td>
                     </tr>
+
                     </tbody>
                 </table>
+                <div class="mt-6 flex justify-center">
+                    <nav class="inline-flex items-center space-x-1 text-sm" aria-label="Pagination">
+
+                        <a th:if="${currentPage > 0}"
+                           th:href="@{/orders(page=${currentPage - 1}, size=10)}"
+                           class="px-3 py-2 rounded-l-lg border border-gray-300 bg-white text-gray-500 hover:bg-gray-100 hover:text-gray-700"
+                           aria-label="Previous page">
+                            Trước
+                        </a>
+
+                        <a th:href="@{/orders(page=0, size=10)}"
+                           th:classappend="${currentPage == 0} ? 'bg-blue-500 text-white' : 'bg-white text-gray-700 hover:bg-gray-100'"
+                           class="px-3 py-2 border border-gray-300 font-medium">
+                            1
+                        </a>
+
+                        <span th:if="${currentPage > 3}" class="px-2 py-2 text-gray-500 select-none">...</span>
+
+                        <span th:each="i : ${#numbers.sequence((currentPage - 1 > 1 ? currentPage - 1 : 1),
+                                               (currentPage + 1 < totalPages - 2 ? currentPage + 1 : totalPages - 2))}">
+                            <a th:href="@{/orders(page=${i}, size=10)}"
+                               th:text="${i + 1}"
+                               th:classappend="${i == currentPage} ? 'bg-blue-500 text-white' : 'bg-white text-gray-700 hover:bg-gray-100'"
+                               class="px-3 py-2 border border-gray-300 font-medium"></a>
+                        </span>
+
+                        <span th:if="${currentPage < totalPages - 4}" class="px-2 py-2 text-gray-500 select-none">...</span>
+
+                        <a th:if="${totalPages > 1}"
+                           th:href="@{/orders(page=${totalPages - 1}, size=10)}"
+                           th:text="${totalPages}"
+                           th:classappend="${currentPage == totalPages - 1} ? 'bg-blue-500 text-white' : 'bg-white text-gray-700 hover:bg-gray-100'"
+                           class="px-3 py-2 border border-gray-300 font-medium"></a>
+
+                        <a th:if="${currentPage < totalPages - 1}"
+                           th:href="@{/orders(page=${currentPage + 1}, size=10)}"
+                           class="px-3 py-2 rounded-r-lg border border-gray-300 bg-white text-gray-500 hover:bg-gray-100 hover:text-gray-700"
+                           aria-label="Next page">
+                            Sau
+                        </a>
+
+                    </nav>
+                </div>
             </div>
         </div>
     </main>

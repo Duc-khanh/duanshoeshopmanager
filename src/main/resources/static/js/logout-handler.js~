@@ -30,16 +30,16 @@
 //     }
 // });
 
-// function confirmLogout() {
-//     Swal.fire({
-//         title: 'Bạn có chắc muốn đăng xuất?',
-//         icon: 'warning',
-//         showCancelButton: true,
-//         confirmButtonText: 'Đăng xuất',
-//         cancelButtonText: 'Hủy'
-//     }).then((result) => {
-//         if (result.isConfirmed) {
-//             window.location.href = '/logout';
-//         }
-//     });
-// }
+function confirmLogout() {
+    Swal.fire({
+        title: 'Bạn có chắc muốn đăng xuất?',
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonText: 'Đăng xuất',
+        cancelButtonText: 'Hủy'
+    }).then((result) => {
+        if (result.isConfirmed) {
+            window.location.href = '/logout';
+        }
+    });
+}

@@ -60,7 +60,10 @@ public class CartController {
 
         session.setAttribute("cart", cart);
         session.setAttribute("cartItemCount", getTotalQuantity(cart));
-        return "redirect:/users";
+        redirectAttributes.addFlashAttribute("addToCartSuccess", true);
+
+        return "redirect:/managerUser/view/{productId}";
+//        return "redirect:/users";
     }
 
 
@@ -85,7 +88,7 @@ public class CartController {
 
 
     @GetMapping("/remove/{productId}")
-    public String removeItem(@PathVariable Integer productId, HttpSession session) {
+    public String removeItem(@PathVariable Integer productId, HttpSession session ,RedirectAttributes redirectAttributes) {
         List<CartItem> cart = (List<CartItem>) session.getAttribute("cart");
         if (cart != null) {
             cart.removeIf(item -> item.getProduct().getProductID().equals(productId));
@@ -98,6 +101,7 @@ public class CartController {
                 session.removeAttribute("cartItemCount");
             }
         }
+        redirectAttributes.addFlashAttribute("deleteSuccess", true);
         return "redirect:/cart";
     }
 

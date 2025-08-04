@@ -17,7 +17,8 @@
             font-family: 'Inter', sans-serif;
         }
         .pagination-container {
-            overflow-y: hidden;
+            overflow-y: visible; /* Changed from hidden to visible to prevent clipping */
+            padding-bottom: 1rem; /* Add some bottom padding to avoid cutting off */
         }
 
         /* For table scroll on small screens */
@@ -72,7 +73,6 @@
 </head>
 <body class="bg-gray-100 min-h-screen pt-24 pb-24">
 <div th:replace="/admin/layout :: sidebar"></div>
-<div th:replace="/admin/layout :: header"></div>
 <div class="max-w-[93rem] mx-auto bg-white rounded-lg shadow p-6 flex-1 ml-[22rem]">
     <h1 class="text-3xl font-semibold text-gray-800 mb-6 text-center">Danh sách sản phẩm</h1>
 
@@ -107,7 +107,7 @@
         <table class="min-w-full border border-gray-300 rounded-md overflow-hidden text-center">
             <thead class="bg-transparent">
             <tr class="hover:bg-gray-100 transition-colors duration-200">
-            <th class="px-5 py-4 border-b border-gray-300 text-gray-700 font-semibold select-none">#</th>
+                <th class="px-5 py-4 border-b border-gray-300 text-gray-700 font-semibold select-none">#</th>
                 <th class="px-5 py-4 border-b border-gray-300 text-gray-700 font-semibold select-none">Ảnh</th>
                 <th class="px-5 py-4 border-b border-gray-300 text-gray-700 font-semibold select-none">Tên sản phẩm</th>
                 <th class="px-5 py-4 border-b border-gray-300 text-gray-700 font-semibold select-none w-[12rem]">Giá</th>
@@ -115,7 +115,6 @@
                 <th class="px-5 py-4 border-b border-gray-300 text-gray-700 font-semibold select-none">Danh mục</th>
                 <th class="px-5 py-4 border-b border-gray-300 text-gray-700 font-semibold select-none">Hành động</th>
             </tr>
-
             </thead>
             <tbody>
             <tr

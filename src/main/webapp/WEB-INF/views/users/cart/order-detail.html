@@ -6,6 +6,8 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap" rel="stylesheet"/>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet"/>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
 </head>
 <body class="bg-gradient-to-b from-blue-50 to-white min-h-screen flex flex-col font-montserrat">
 <div th:replace="/users/layout :: header"></div>
@@ -112,5 +114,27 @@
 </div>
 
 <div th:replace="/users/layout :: footer"></div>
+<script th:inline="javascript">
+    let addToCartSuccess = /*[[${addToFavoriteSuccess}]]*/ false;
+
+    if (addToCartSuccess) {
+        const Toast = Swal.mixin({
+            toast: true,
+            position: 'top-end', // góc phải trên
+            showConfirmButton: false,
+            timer: 2000, // hiển thị 2 giây
+            timerProgressBar: true,
+            didOpen: (toast) => {
+                toast.addEventListener('mouseenter', Swal.stopTimer);
+                toast.addEventListener('mouseleave', Swal.resumeTimer);
+            }
+        });
+
+        Toast.fire({
+            icon: 'success',
+            title: 'Đã thanh toán thành công'
+        });
+    }
+</script>
 </body>
 </html>

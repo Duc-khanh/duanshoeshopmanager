@@ -5,6 +5,8 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css"/>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet"/>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
     <style>
         body {
             font-family: 'Inter', sans-serif;
@@ -150,6 +152,28 @@
     </div>
 </div>
 <div class="w-full" th:replace="/users/layout :: footer"></div>
+<script th:inline="javascript">
+    let addToCartSuccess = /*[[${addToCartSuccess}]]*/ false;
+
+    if (addToCartSuccess) {
+        const Toast = Swal.mixin({
+            toast: true,
+            position: 'top-end',
+            showConfirmButton: false,
+            timer: 2500,
+            timerProgressBar: true,
+            didOpen: (toast) => {
+                toast.addEventListener('mouseenter', Swal.stopTimer);
+                toast.addEventListener('mouseleave', Swal.resumeTimer);
+            }
+        });
+
+        Toast.fire({
+            icon: 'success',
+            title: 'Đặt hàng thành công!'
+        });
+    }
+</script>
 
 </body>
 </html>

@@ -16,6 +16,7 @@ public interface OrderService {
     List<Order> getOrdersByUser(User user);
 
     List<CartItem> getCartItems(User user);
+
     List<CartItem> getCartItemsByIds(List<Integer> selectedItemIds);
 
     void clearCart(User user);
@@ -30,10 +31,14 @@ public interface OrderService {
     Order findOrderWithDetails(Integer id);
 
     List<Order> getOrdersByUserAndStatus(User user, String status);
+
     Page<Order> findByUser(User user, Pageable pageable);
+
     Page<Order> getOrdersByUserAndStatus(User user, String status, Pageable pageable);
+
     Page<Order> getOrdersByUser(User user, Pageable pageable);
 
+    Page<Order> findPaginated(Pageable pageable);
 
 
 }

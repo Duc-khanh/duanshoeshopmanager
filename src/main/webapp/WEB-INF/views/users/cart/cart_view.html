@@ -8,6 +8,8 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css"/>
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap" rel="stylesheet"/>
     <link href="https://fonts.googleapis.com/css2?family=DM+Mono&display=swap" rel="stylesheet"/>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
 </head>
 
 <body class="bg-gray-50 min-h-screen font-['Montserrat']">
@@ -50,9 +52,14 @@
                     </td>
                     <td class="px-6 py-4 whitespace-nowrap text-right text-red-900 font-semibold item-total align-middle font-mono" th:attr="data-id=${item.product.productID}"></td>
                     <td class="px-6 py-4 whitespace-nowrap text-center align-middle">
-                        <a th:href="@{/cart/remove/{productId}(productId=${item.product.productID})}" class="inline-flex items-center px-3 py-1 text-sm font-medium text-red-600 hover:text-white hover:bg-red-600 rounded-md border border-red-600 transition whitespace-nowrap">
+                        <a href="#" th:onclick="'return confirmDelete(event, ' + ${item.product.productID} + ')'"
+                           class="inline-flex items-center px-3 py-1 text-sm font-medium text-red-600 hover:text-white hover:bg-red-600 rounded-md border border-red-600 transition whitespace-nowrap">
                             <i class="fas fa-trash-alt mr-1"></i> Xóa
                         </a>
+
+
+
+
                     </td>
                 </tr>
                 </tbody>
@@ -93,8 +100,8 @@
 </main>
 
 <div th:replace="/users/layout :: footer"></div>
-<script src="/js/logout-handler.js"></script>
-<script>
+<!--<script src="/js/logout-handler.js"></script>-->
+<script th:inline="javascript">
     document.addEventListener("DOMContentLoaded", function () {
         const selectAllCheckbox = document.getElementById("selectAll");
         const itemCheckboxes = document.querySelectorAll(".item-checkbox");
@@ -121,13 +128,6 @@
             }
         }
 
-        function updateQuantity(input) {
-            const productId = input.dataset.id;
-            const quantity = parseInt(input.value) || 1;
-            const price = parseInt(input.dataset.price) || 0;
-            updateItemTotal(productId, quantity, price);
-            updateTotalAmount();
-        }
 
         function updateTotalAmount() {
             let total = 0;
@@ -192,6 +192,38 @@
 
         updateTotalAmount();
     });
+    function confirmDelete(event, productId) {
+        event.preventDefault();
+
+        Swal.fire({
+            title: 'Bạn có chắc muốn xóa sản phẩm này?',
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonText: 'Có',
+            cancelButtonText: 'Không',
+            reverseButtons: true
+        }).then((result) => {
+            if (result.isConfirmed) {
+                // Chuyển hướng sau khi xác nhận
+                window.location.href = "/cart/remove/" + productId;
+            }
+        });
+        return false;
+    }
+    const deleteSuccess = /*[[${deleteSuccess}]]*/ false;
+
+    if (deleteSuccess) {
+        Swal.fire({
+            toast: true,
+            position: 'top-end',
+            icon: 'success',
+            title: 'Đã xóa sản phẩm khỏi giỏ hàng',
+            showConfirmButton: false,
+            timer: 2000,
+            timerProgressBar: true
+        });
+    }
+
 </script>
 </body>
 </html>

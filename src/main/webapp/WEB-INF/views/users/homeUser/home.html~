@@ -99,7 +99,7 @@
                 />
                 <form th:action="@{/users/favorite/add/{id}(id=${product.productID})}" method="post"
                       class="absolute top-2 left-2 z-10">
-                    <button type="submit" class="text-gray-7 00 hover:text-red-500 transition">
+                    <button type="submit" class="text-gray-700 hover:text-red-500 transition">
                         <i class="far fa-heart text-xl"></i>
                     </button>
                 </form>

@@ -7,6 +7,8 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet"/>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet"/>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
     <style>
         body {
             font-family: 'Inter', sans-serif;
@@ -29,7 +31,7 @@
 
 
 <div th:replace="/admin/layout :: sidebar"></div>
-<div th:replace="/admin/layout :: header"></div>
+<!--<div th:replace="/admin/layout :: header"></div>-->
 
 
 <div id="overlay" class="fixed inset-0 bg-black bg-opacity-30 hidden z-30 md:hidden"></div>
@@ -80,6 +82,20 @@
         sidebar.classList.add('-translate-x-full');
         overlay.classList.add('hidden');
     });
+    function confirmLogout() {
+        Swal.fire({
+            title: 'Bạn có chắc chắn muốn đăng xuất?',
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonText: 'Có',
+            cancelButtonText: 'Không',
+            reverseButtons: true
+        }).then((result) => {
+            if (result.isConfirmed) {
+                window.location.href = "/logout";
+            }
+        });
+    }
 </script>
 
 </body>

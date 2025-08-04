@@ -81,7 +81,7 @@
                 <hr class="border-gray-300 my-6" />
                 <div class="flex justify-between mb-4 text-gray-900 font-bold text-lg">
                     <span>Tổng tiền</span>
-                    <span th:text="${#numbers.formatDecimal(order.discountedPrice / 1000, 0, 'COMMA', 3, 'POINT')} + ' đ'">20.000 đ</span>
+                    <span th:text="${#numbers.formatDecimal(order.totalAmount / 1000, 0, 'COMMA', 3, 'POINT')} + ' đ'">20.000 đ</span>
                 </div>
                 <div class="flex justify-between mb-6 text-gray-900 font-semibold text-lg">
                     <span>Phụ phí</span>
@@ -112,5 +112,27 @@
 </div>
 
 <div th:replace="/users/layout :: footer"></div>
+<script th:inline="javascript">
+    let addToFavoriteSuccess = /*[[${addToFavoriteSuccess}]]*/ false;
+
+    if (addToFavoriteSuccess) {
+        const Toast = Swal.mixin({
+            toast: true,
+            position: 'top-end', // góc phải trên
+            showConfirmButton: false,
+            timer: 2000, // hiển thị 2 giây
+            timerProgressBar: true,
+            didOpen: (toast) => {
+                toast.addEventListener('mouseenter', Swal.stopTimer);
+                toast.addEventListener('mouseleave', Swal.resumeTimer);
+            }
+        });
+
+        Toast.fire({
+            icon: 'success',
+            title: 'Đã thêm vào danh sách yêu thích'
+        });
+    }
+</script>
 </body>
 </html>
