@@ -136,6 +136,29 @@ public class OrderServiceImpl implements OrderService {
         return orderRepository.findAll(pageable);
     }
 
+    @Override
+    public void save(Order order) {
+        orderRepository.save(order);
+    }
+
+    @Override
+    public void updateStatus(Order order, String newStatus) {
+        if (order.getStatus() == OrderStatus.CANCELLED) {
+            return;
+        }
+
+        order.setStatus(OrderStatus.valueOf(newStatus));
+        orderRepository.save(order);
+    }
+
+    @Override
+    public Page<Order> findByStatus(OrderStatus status, Pageable pageable) {
+        return orderRepository.findByStatus(status, pageable);
+    }
+    @Override
+    public Page<Order> findAll(Pageable pageable) {
+        return orderRepository.findAll(pageable);
+    }
 
 
 

@@ -42,7 +42,9 @@ public class AuthController {
             session.setAttribute("currentUser", user);
 
             String role = user.getRole().getRoleName();
-            return role.equals("ADMIN") ? "redirect:/admin/dashboard" : "redirect:/users";
+            return role.equals("ADMIN")
+                    ? "redirect:/admin/dashboard?loginSuccess=true"
+                    : "redirect:/users?loginSuccess=true";
         } else {
             model.addAttribute("error", "Sai tên đăng nhập hoặc mật khẩu!");
             return "auth/login";
@@ -67,7 +69,7 @@ public class AuthController {
         user.setRole(userRole);
 
         userService.save(user);
-        return "redirect:/login";
+        return "redirect:/login?registerSuccess=true";
     }
 
     @GetMapping("/logout")
@@ -76,7 +78,7 @@ public class AuthController {
         session.removeAttribute("cartItemCount");
         session.removeAttribute("cartItems");
         session.invalidate();
-        return "redirect:/login";
+        return "redirect:/login?logoutSuccess=true";
     }
 }
 

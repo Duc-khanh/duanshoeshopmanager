@@ -105,47 +105,38 @@ public class OrderController {
     }
 
 
-    @GetMapping("/order/detail/{orderID}")
-    public String orderDetail(@PathVariable("orderID") Integer id, Model model, HttpSession session) {
+    @GetMapping("/order/details/{orderID}")
+    public String orderDetails(@PathVariable("orderID") Integer id, Model model, HttpSession session) {
         User user = (User) session.getAttribute("currentUser");
         if (user == null) {
             return "redirect:/login";
         }
-        Optional<Order> orderOptional = orderRepository.findOrderWithDetails(id);
 
+        Optional<Order> orderOptional = orderRepository.findOrderWithDetails(id);
         if (!orderOptional.isPresent() || !orderOptional.get().getUser().getUserID().equals(user.getUserID())) {
             return "redirect:/users";
         }
+
+        model.addAttribute("order", orderOptional.get());
+        return "users/cart/order-details";
+    }
+    @GetMapping("/order/detail/{orderID}")
+    public String orderSummary(@PathVariable("orderID") Integer id, Model model, HttpSession session) {
+        User user = (User) session.getAttribute("currentUser");
+        if (user == null) {
+            return "redirect:/login";
+        }
+
+        Optional<Order> orderOptional = orderRepository.findOrderWithDetails(id);
+        if (!orderOptional.isPresent() || !orderOptional.get().getUser().getUserID().equals(user.getUserID())) {
+            return "redirect:/users";
+        }
+
         model.addAttribute("order", orderOptional.get());
         return "users/cart/order-detail";
     }
-    @GetMapping("/orders")
-    public String listOrders(Model model,
-                             @RequestParam(defaultValue = "0") int page,
-                             @RequestParam(defaultValue = "10") int size) {
 
-        Page<Order> orderPage = orderService.findPaginated(PageRequest.of(page, size));
-        int totalPages = orderPage.getTotalPages();
 
-        int maxPagesToShow = 5;
-        int startPage = Math.max(0, page - 2);
-        int endPage = Math.min(startPage + maxPagesToShow - 1, totalPages - 1);
-
-        if (endPage - startPage < maxPagesToShow - 1) {
-            startPage = Math.max(0, endPage - maxPagesToShow + 1);
-        }
-
-        List<Integer> pageNumbers = new ArrayList<>();
-        for (int i = startPage; i <= endPage; i++) {
-            pageNumbers.add(i);
-        }
-
-        model.addAttribute("orderPage", orderPage);
-        model.addAttribute("currentPage", page);
-        model.addAttribute("pageNumbers", pageNumbers);
-        model.addAttribute("totalPages", totalPages);
-        return "admin/manage-order/list_orders";
-    }
 
 
 @GetMapping("/view/{id}")
@@ -160,10 +151,30 @@ public String viewOrder(@PathVariable Integer id, Model model) {
     return "admin/manage-order/view_order";
 }
     @PostMapping("/update-status")
-    public String updateStatus(@RequestParam Integer orderId, @RequestParam String status) {
-        orderService.updateStatus(orderId, status);
-        return "redirect:/orders";
+    public String updateStatus(@RequestParam Integer orderId,
+                               @RequestParam String status,
+                               RedirectAttributes redirectAttributes) {
+
+        Order order = orderService.findOrderWithDetails(orderId);
+        if (order == null) {
+            redirectAttributes.addFlashAttribute("updateError", "Không tìm thấy đơn hàng.");
+            return "redirect:/view/" + orderId;
+        }
+
+        if (order.getStatus() == OrderStatus.CANCELLED) {
+            redirectAttributes.addFlashAttribute("updateError", "Đơn hàng đã bị hủy, không thể cập nhật trạng thái.");
+            return "redirect:/view/" + orderId;
+        }
+
+        orderService.updateStatus(order, status);
+
+        redirectAttributes.addFlashAttribute("updateSuccess", true);
+        return "redirect:/view/" + orderId;
     }
+
+
+
+
     @GetMapping("/my-orders")
     public String viewMyOrders(@RequestParam(value = "status", required = false) String status,
                                @RequestParam(value = "page", defaultValue = "0") int page,
@@ -193,6 +204,34 @@ public String viewOrder(@PathVariable Integer id, Model model) {
         model.addAttribute("statuses", OrderStatus.values());
 
         return "users/cart/my-orders";
+    }
+
+    @PostMapping("/order/cancel/{userID}")
+    public String cancelOrder(@PathVariable("userID") Integer userID, HttpSession session, RedirectAttributes redirectAttributes) {
+        User user = (User) session.getAttribute("currentUser");
+        if (user == null) {
+            redirectAttributes.addFlashAttribute("error", "Bạn cần đăng nhập để thực hiện thao tác này.");
+            return "redirect:/login";
+        }
+
+        Order order = orderService.findById(userID);
+        if (order == null || !order.getUser().getUserID().equals(user.getUserID())) {
+            redirectAttributes.addFlashAttribute("error", "Không tìm thấy đơn hàng hoặc bạn không có quyền.");
+            return "redirect:/my-orders";
+        }
+
+        if (!order.getStatus().equals(OrderStatus.PENDING)) {
+            redirectAttributes.addFlashAttribute("error", "Chỉ có thể huỷ đơn hàng khi đang chờ xác nhận.");
+            return "redirect:/my-orders";
+        }
+
+        order.setStatus(OrderStatus.CANCELLED);
+        orderService.save(order);
+
+//        redirectAttributes.addFlashAttribute("success", "Đơn hàng đã được huỷ thành công.");
+        redirectAttributes.addFlashAttribute("cancelSuccess", true);
+
+        return "redirect:/my-orders";
     }
 
 
@@ -246,6 +285,7 @@ public String viewOrder(@PathVariable Integer id, Model model) {
                          RedirectAttributes redirectAttributes) {
         User user = (User) session.getAttribute("currentUser");
         if (user == null) {
+            redirectAttributes.addFlashAttribute("loginRequired", true);
             return "redirect:/login";
         }
 
@@ -255,8 +295,13 @@ public String viewOrder(@PathVariable Integer id, Model model) {
             return "redirect:/product/" + productID;
         }
 
-        if (product.getStock() < quantity) {
-            redirectAttributes.addFlashAttribute("error", "Sản phẩm chỉ còn " + product.getStock() + " chiếc.");
+        if (quantity <= 0) {
+            redirectAttributes.addFlashAttribute("error", "Số lượng phải lớn hơn 0.");
+            return "redirect:/product/" + productID;
+        }
+
+        if (quantity > product.getStock()) {
+            redirectAttributes.addFlashAttribute("error", "Không thể mua " + quantity + " sản phẩm. Chỉ còn " + product.getStock() + " chiếc trong kho.");
             return "redirect:/product/" + productID;
         }
 
@@ -269,7 +314,6 @@ public String viewOrder(@PathVariable Integer id, Model model) {
 
         try {
             Order newOrder = orderService.placeOrder(user, buyNowItems);
-
             redirectAttributes.addAttribute("orderID", newOrder.getOrderID());
             return "redirect:/order/detail/{orderID}";
         } catch (Exception e) {
@@ -277,6 +321,35 @@ public String viewOrder(@PathVariable Integer id, Model model) {
             return "redirect:/product/" + productID;
         }
     }
+
+    @GetMapping("/orders")
+    public String listOrders(@RequestParam(defaultValue = "0") int page,
+                             @RequestParam(defaultValue = "10") int size,
+                             @RequestParam(required = false) String status,
+                             Model model) {
+        Pageable pageable = PageRequest.of(page, size, Sort.by(Sort.Direction.DESC, "orderID"));
+        Page<Order> orderPage;
+
+        if (status != null && !status.isEmpty()) {
+            try {
+                OrderStatus orderStatus = OrderStatus.valueOf(status);
+                orderPage = orderService.findByStatus(orderStatus, pageable);
+            } catch (IllegalArgumentException e) {
+                orderPage = Page.empty();
+            }
+        } else {
+            orderPage = orderService.findAll(pageable);
+        }
+
+        model.addAttribute("orderPage", orderPage);
+        model.addAttribute("currentPage", page);
+        model.addAttribute("totalPages", orderPage.getTotalPages());
+        model.addAttribute("selectedStatus", status);
+
+        return "admin/manage-order/list_orders";
+    }
+
+
 
 
 

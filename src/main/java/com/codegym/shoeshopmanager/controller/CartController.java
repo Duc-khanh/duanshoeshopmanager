@@ -36,9 +36,25 @@ public class CartController {
             return "redirect:/login";
         }
 
+        Product product = productRepository.findById(productId)
+                .orElseThrow(() -> new RuntimeException("Product not found"));
+
+        int availableStock = product.getStock();
+
         List<CartItem> cart = (List<CartItem>) session.getAttribute("cart");
         if (cart == null) {
             cart = new ArrayList<>();
+        }
+
+        int currentQuantityInCart = cart.stream()
+                .filter(item -> item.getProduct().getProductID().equals(productId))
+                .mapToInt(CartItem::getQuantity)
+                .sum();
+
+        if (currentQuantityInCart + quantity > availableStock) {
+            redirectAttributes.addFlashAttribute("errorMessage",
+                    "Số lượng trong giỏ đã đạt tối đa sản phẩm có trong kho.");
+            return "redirect:/managerUser/view/" + productId;
         }
 
         boolean found = false;
@@ -49,9 +65,8 @@ public class CartController {
                 break;
             }
         }
+
         if (!found) {
-            Product product = productRepository.findById(productId)
-                    .orElseThrow(() -> new RuntimeException("Product not found"));
             CartItem newItem = new CartItem();
             newItem.setProduct(product);
             newItem.setQuantity(quantity);
@@ -62,9 +77,11 @@ public class CartController {
         session.setAttribute("cartItemCount", getTotalQuantity(cart));
         redirectAttributes.addFlashAttribute("addToCartSuccess", true);
 
-        return "redirect:/managerUser/view/{productId}";
-//        return "redirect:/users";
+//        return "redirect:/managerUser/view/" + productId;
+        return "redirect:/users";
+
     }
+
 
 
     @GetMapping("")
@@ -88,7 +105,7 @@ public class CartController {
 
 
     @GetMapping("/remove/{productId}")
-    public String removeItem(@PathVariable Integer productId, HttpSession session ,RedirectAttributes redirectAttributes) {
+    public String removeItem(@PathVariable Integer productId, HttpSession session, RedirectAttributes redirectAttributes) {
         List<CartItem> cart = (List<CartItem>) session.getAttribute("cart");
         if (cart != null) {
             cart.removeIf(item -> item.getProduct().getProductID().equals(productId));

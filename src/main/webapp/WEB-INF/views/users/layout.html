@@ -46,12 +46,13 @@
                         <a class="group flex items-center text-lg hover:text-blue-600 relative" th:href="@{/users/favorites}">
                             <i class="fas fa-heart mr-2 text-xl text-gray-600 group-hover:text-blue-600"></i>
                             <span>Yêu thích</span>
-                            <span th:if="${session.favoriteCount != null}"
+                            <span th:if="${session.favoriteCount != null and session.favoriteCount > 0}"
                                   class="absolute -top-2 -right-3 bg-red-600 text-white rounded-full px-2 text-xs font-bold shadow-lg">
             <span th:text="${session.favoriteCount}">0</span>
         </span>
                         </a>
                     </li>
+
 
 
                     <li>
@@ -137,20 +138,47 @@
     </header>
 </div>
 <div th:fragment="categories">
-    <nav class="bg-black text-white text-sm w-full px-4">
-        <ul class="flex flex-wrap items-center justify-center gap-6 py-3 font-semibold select-none max-w-full mx-auto">
-            <li th:each="category : ${categories}" class="flex items-center space-x-2">
-                <a th:href="@{/managerProduct/category/{id}(id=${category.categoryID})}"
-                   class="flex items-center space-x-2 no-underline hover:no-underline">
-                    <img th:src="${category.image}" alt="Hình danh mục"
-                         class="w-10 h-10 object-cover rounded-full border border-white"/>
-                    <span th:text="${category.categoryName}" class="text-base">Tên danh mục</span>
+    <nav class="bg-black text-white text-sm w-full px-4 py-3"> <!-- increased py from 2 to 3 for slightly taller height -->
+        <ul class="flex flex-wrap items-center justify-between font-semibold select-none max-w-full mx-auto">
+            <li class="flex space-x-6 overflow-x-auto max-w-[50%]">
+                <a th:each="category : ${categories}" th:href="@{/managerProduct/category/{id}(id=${category.categoryID})}" class="flex items-center space-x-2 no-underline hover:no-underline whitespace-nowrap">
+                    <span th:text="${category.categoryName}" class="text-base">
+                        Tên danh mục
+                    </span>
+                </a>
+            </li>
+            <li class="flex items-center flex-shrink-0 mx-4 w-64">
+                <form id="search-form" th:action="@{/managerUser/searchProduct}" method="GET" class="flex w-full mb-0" role="search">
+                    <input
+                            id="search-input"
+                            type="search"
+                            name="keyword"
+                            th:value="${keyword}"
+                            placeholder="Tìm kiếm sản phẩm..."
+                            class="flex-grow border border-gray-600 rounded-l-md px-3 py-2 text-gray-200 placeholder-gray-400 bg-gray-800 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition text-sm"
+                    />
+                    <button
+                            type="submit"
+                            class="bg-blue-700 hover:bg-blue-800 text-white px-3 rounded-r-md font-semibold transition flex items-center justify-center shadow-md"
+                            aria-label="Search"
+                    >
+                        <i class="fas fa-search text-base"></i>
+                    </button>
+                </form>
+            </li>
+            <li class="flex space-x-8 whitespace-nowrap max-w-[30%] justify-end">
+                <a class="flex items-center space-x-2 no-underline hover:text-gray-300" href="/users/blog">
+                    <i class="fas fa-newspaper text-lg"></i>
+                    <span class="text-base">Blog tin tức</span>
+                </a>
+                <a class="flex items-center space-x-2 no-underline hover:text-gray-300" href="/users/contact">
+                    <i class="fas fa-envelope text-lg"></i>
+                    <span class="text-base">Liên hệ</span>
                 </a>
             </li>
         </ul>
     </nav>
 </div>
-
 
 <footer th:fragment="footer" class="bg-gray-100 text-gray-800 mt-5">
     <div class="max-w-[90rem] mx-auto px-4 py-14 grid grid-cols-1 md:grid-cols-3 gap-12">

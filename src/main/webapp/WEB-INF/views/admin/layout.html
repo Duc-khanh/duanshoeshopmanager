@@ -74,7 +74,7 @@
                        class="flex items-center space-x-4 text-gray-700 hover:text-indigo-600 font-semibold px-4 py-3 rounded-lg transition shadow-sm hover:shadow-md"
                        role="menuitem">
                         <i class="fas fa-user fa-lg w-6 text-center text-gray-600"></i>
-                        <span class="text-base">Tài khoản</span>
+                        <span class="text-base">Thông tin tài khoản</span>
                     </a>
                     <a id="logout-link"
                        href="#"
@@ -168,6 +168,26 @@
             }
         });
     }
+    let loginSuccess = /*[[${param.loginSuccess != null}]]*/ false;
+    if (loginSuccess) {
+        const Toast = Swal.mixin({
+            toast: true,
+            position: 'top-end',
+            showConfirmButton: false,
+            timer: 2500,
+            timerProgressBar: true,
+            didOpen: (toast) => {
+                toast.addEventListener('mouseenter', Swal.stopTimer);
+                toast.addEventListener('mouseleave', Swal.resumeTimer);
+            }
+        });
+
+        Toast.fire({
+            icon: 'success',
+            title: 'Đăng nhập thành công!'
+        });
+    }
+
 </script>
 </body>
 </html>

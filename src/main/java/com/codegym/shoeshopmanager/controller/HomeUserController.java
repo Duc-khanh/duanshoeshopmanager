@@ -280,6 +280,13 @@ public String showEditForm(Model model, HttpSession session) {
         userService.update(user);
         return "redirect:/somewhere";
     }
+    @GetMapping("/blog")
+    public String showBlogPage(Model model) {
+        return "users/homeUser/blog";
+    }  @GetMapping("/contact")
+    public String showContactPage(Model model) {
+        return "users/homeUser/contact";
+    }
 
 
 

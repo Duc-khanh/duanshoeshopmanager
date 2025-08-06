@@ -226,32 +226,6 @@
             timerProgressBar: true
         });
     }
-    input.addEventListener("input", () => {
-        let val = parseInt(input.value);
-        const max = parseInt(input.max);  // lấy max từ thuộc tính
-        if (isNaN(val) || val < 1) {
-            input.value = 1;
-            val = 1;
-        } else if (val > max) {
-            input.value = max;
-            val = max;
-
-            // Thông báo bằng Swal nếu vượt quá số lượng trong kho
-            Swal.fire({
-                icon: 'warning',
-                title: 'Vượt quá số lượng trong kho',
-                text: 'Bạn chỉ có thể mua tối đa ' + max + ' sản phẩm này.',
-                timer: 2000,
-                showConfirmButton: false,
-                toast: true,
-                position: 'top-end'
-            });
-        }
-
-        updateItemTotal(productId, val, price);
-        updateTotalAmount();
-    });
-
 
 </script>
 </body>

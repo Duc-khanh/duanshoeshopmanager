@@ -29,9 +29,11 @@
 <body class="bg-gradient-to-tr via-indigo-500 to-purple-600 min-h-screen flex items-center justify-center p-4">
 <div id="logout-toast"
      th:if="${param.logoutSuccess}"
-     class="fixed top-5 right-5 bg-green-500 text-white px-4 py-2 rounded shadow-md z-50 animate-fade-in-out">
-    Đăng xuất thành công!
+     class="fixed top-6 right-6 z-50 flex items-center space-x-3 bg-green-500 text-white px-5 py-3 rounded-xl shadow-lg animate-fade-in-out transition duration-300 ease-in-out">
+    <i class="fas fa-check-circle text-white text-lg"></i>
+    <span class="text-sm font-medium">Đăng xuất thành công!</span>
 </div>
+
 
 <div class="bg-white bg-opacity-90 shadow-2xl rounded-2xl max-w-4xl w-full flex flex-col md:flex-row overflow-hidden">
     <div class="md:w-1/2 hidden md:flex items-center justify-center bg-gradient-to-br from-indigo-600 to-purple-700">
@@ -97,6 +99,26 @@
         text: 'Vui lòng đăng nhập để sử dụng tính năng này!',
         confirmButtonText: 'OK'
     });
+    let registerSuccess = /*[[${param.registerSuccess != null}]]*/ false;
+
+    if (registerSuccess) {
+        const Toast = Swal.mixin({
+            toast: true,
+            position: 'top-end',
+            showConfirmButton: false,
+            timer: 2500,
+            timerProgressBar: true,
+            didOpen: (toast) => {
+                toast.addEventListener('mouseenter', Swal.stopTimer);
+                toast.addEventListener('mouseleave', Swal.resumeTimer);
+            }
+        });
+
+        Toast.fire({
+            icon: 'success',
+            title: 'Đăng ký thành công! Vui lòng đăng nhập.'
+        });
+    }
 </script>
 
 </html>

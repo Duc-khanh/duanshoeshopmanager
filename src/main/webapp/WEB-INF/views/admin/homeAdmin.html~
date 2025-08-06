@@ -100,7 +100,7 @@
             }
         });
     }
-    let loginSuccess = /*[[${param.loginSuccess != null}]]*/ false;
+    let loginSuccess = /*[[${param.loginSuccess}]]*/ false;
     if (loginSuccess) {
         const Toast = Swal.mixin({
             toast: true,
@@ -119,7 +119,6 @@
             title: 'Đăng nhập thành công!'
         });
     }
-
 </script>
 
 

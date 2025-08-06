@@ -8,6 +8,8 @@
     </script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet"/>
     <link href="https://fonts.googleapis.com/css2?family=Roboto&amp;display=swap" rel="stylesheet"/>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
 </head>
 <body class="bg-gray-50 font-['Roboto'] min-h-screen flex flex-col">
 <div th:replace="/admin/layout :: sidebar"></div>
@@ -53,12 +55,32 @@
 <script src="/js/fragment.js"></script>
 
 
-<script>
+
+</body>
+<script th:inline="javascript">
     const menuBtn = document.getElementById('menu-btn');
     const mobileMenu = document.getElementById('mobile-menu');
     menuBtn.addEventListener('click', () => {
         mobileMenu.classList.toggle('hidden');
     });
+    document.addEventListener("DOMContentLoaded", function () {
+    });
+    function confirmLogout() {
+        Swal.fire({
+            title: 'Bạn có chắc chắn muốn đăng xuất?',
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonText: 'Có',
+            cancelButtonText: 'Không',
+            reverseButtons: true
+        }).then((result) => {
+            if (result.isConfirmed) {
+                window.location.href = "/logout";
+            }
+        });
+    }
+
+
+
 </script>
-</body>
 </html>

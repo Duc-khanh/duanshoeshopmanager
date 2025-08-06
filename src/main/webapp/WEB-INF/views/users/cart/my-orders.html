@@ -105,12 +105,31 @@
                 </td>
 
 
-                <td class="px-6 py-4 whitespace-nowrap text-center">
-                    <a th:href="@{/order/detail/{id}(id=${order.orderID})}"
-                       class="text-indigo-600 hover:text-indigo-900 font-semibold flex justify-center items-center space-x-1">
-                        <i class="fas fa-eye"></i><span>Xem</span>
+                <td class="px-6 py-4 whitespace-nowrap text-center space-y-2">
+                    <a th:href="@{/order/details/{id}(id=${order.orderID})}"
+                       class="inline-flex items-center justify-center gap-1 px-3 py-1 text-sm font-medium text-indigo-600 hover:text-indigo-800 border border-indigo-200 hover:border-indigo-400 rounded-full transition">
+                        <i class="fas fa-circle-info"></i>
+                        <span>Xem</span>
                     </a>
+
+                    <th:block th:if="${order.status.name() == 'PENDING'}">
+                        <form th:action="@{/order/cancel/{id}(id=${order.orderID})}"
+                              method="post"
+                              onsubmit="return confirmCancel(event, this)">
+
+                            <button type="submit"
+                                    class="inline-flex items-center justify-center gap-1 px-3 py-1 text-sm font-medium text-red-600 hover:text-white border border-red-300 hover:bg-red-600 rounded-full transition">
+                                <i class="fas fa-ban"></i>
+                                <span>Huỷ</span>
+                            </button>
+                        </form>
+                    </th:block>
+
+
+
                 </td>
+
+
             </tr>
             </tbody>
 
@@ -153,26 +172,58 @@
 </div>
 <div class="w-full" th:replace="/users/layout :: footer"></div>
 <script th:inline="javascript">
-    let addToCartSuccess = /*[[${addToCartSuccess}]]*/ false;
+        let addToCartSuccess = /*[[${addToCartSuccess}]]*/ false;
+        let cancelSuccess = /*[[${cancelSuccess}]]*/ false;
 
-    if (addToCartSuccess) {
         const Toast = Swal.mixin({
-            toast: true,
-            position: 'top-end',
-            showConfirmButton: false,
-            timer: 2500,
-            timerProgressBar: true,
-            didOpen: (toast) => {
-                toast.addEventListener('mouseenter', Swal.stopTimer);
-                toast.addEventListener('mouseleave', Swal.resumeTimer);
-            }
-        });
+        toast: true,
+        position: 'top-end',
+        showConfirmButton: false,
+        timer: 2500,
+        timerProgressBar: true,
+        didOpen: (toast) => {
+        toast.addEventListener('mouseenter', Swal.stopTimer);
+        toast.addEventListener('mouseleave', Swal.resumeTimer);
+    }
+    });
 
+        if (addToCartSuccess) {
         Toast.fire({
             icon: 'success',
             title: 'Đặt hàng thành công!'
         });
     }
+
+        if (cancelSuccess) {
+        Toast.fire({
+            icon: 'success',
+            title: 'Huỷ đơn hàng thành công!'
+        });
+    }
+
+
+function confirmCancel(event, formElement) {
+        event.preventDefault();
+
+        Swal.fire({
+            title: 'Bạn có chắc chắn muốn huỷ đơn hàng này?',
+            text: "Hành động này không thể hoàn tác.",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#d33',
+            cancelButtonColor: '#3085d6',
+            confirmButtonText: 'Huỷ đơn hàng',
+            cancelButtonText: 'Không'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                formElement.submit();
+            }
+        });
+
+        return false;
+    }
+
+
 </script>
 
 </body>

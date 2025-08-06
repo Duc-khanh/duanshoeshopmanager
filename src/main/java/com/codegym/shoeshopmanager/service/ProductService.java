@@ -5,6 +5,7 @@ import com.codegym.shoeshopmanager.repository.ProductRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
@@ -14,6 +15,7 @@ import java.io.File;
 import java.io.IOException;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class ProductService implements IProductService {
@@ -22,6 +24,7 @@ public class ProductService implements IProductService {
     private ProductRepository productRepository;
     @Value("${file-upload}")
     private String uploadPath;
+
 
     @Override
     public List<Product> findAll() {
@@ -83,6 +86,34 @@ public class ProductService implements IProductService {
     public List<Product> findByCategoryId(Integer categoryId) {
         return productRepository.findByCategory_CategoryID(categoryId);
     }
+    @Override
+    public boolean existsByProductName(String productName) {
+        return productRepository.existsByProductName(productName);
+    }
+    public void markAsOutOfStock(Integer productID) {
+        Optional<Product> optionalProduct = productRepository.findById(productID);
+        if (optionalProduct.isPresent()) {
+            Product product = optionalProduct.get();
+            product.setAvailable(false);
+            productRepository.save(product);
+        } else {
+            throw new RuntimeException("Không tìm thấy sản phẩm với ID: " + productID);
+        }
+    }
+
+//    @Override
+//    public Page<Product> searchAvailableByName(String keyword, PageRequest pageRequest) {
+//        return productRepository.findByProductNameContainingIgnoreCaseAndAvailableTrue(keyword, pageRequest);
+//    }
+//
+//    @Override
+//    public Page<Product> findAvailable(PageRequest pageRequest) {
+//        return productRepository.findByAvailableTrue(pageRequest);
+//    }
+
+
+
+
 
 
 }

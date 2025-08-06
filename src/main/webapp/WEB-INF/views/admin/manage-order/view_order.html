@@ -12,6 +12,8 @@
             rel="stylesheet"
             href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css"
     />
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
     <style>
         /* Pagination container styling */
         .pagination-container {
@@ -58,22 +60,35 @@
 
     <h2 class="text-2xl font-bold mb-6 border-b pb-3 text-gray-800">Chi tiết đơn hàng</h2>
 
+
+
     <div class="mb-6 space-y-2 text-gray-700">
         <p><strong class="font-semibold">Khách hàng:</strong> <span th:text="${order.user.username}">Nguyễn Văn A</span></p>
         <!-- <p><strong class="font-semibold">Ngày đặt:</strong> <span th:text="${#dates.format(order.orderDate, 'dd/MM/yyyy HH:mm')}">01/01/2024 10:00</span></p> -->
-        <p><strong class="font-semibold">Trạng thái:</strong> <span th:text="${order.status}">PENDING</span></p>
+        <p>
+            <strong class="font-semibold">Trạng thái:</strong>
+            <span th:text="${order.status.displayName}">Trạng thái</span>
+        </p>
+
     </div>
 
-    <form method="post" th:action="@{/update-status}" class="mb-8 flex items-center space-x-3">
+    <form method="post" th:action="@{/update-status}"
+          th:if="${order.status != 'CANCELLED'}"
+          class="mb-8 flex items-center space-x-3">
         <input type="hidden" name="orderId" th:value="${order.orderID}" />
         <select name="status" class="border border-gray-300 rounded p-2 focus:outline-none focus:ring-2 focus:ring-blue-500">
-            <option value="PENDING" th:selected="${order.status == 'PENDING'}">PENDING</option>
-            <option value="CONFIRMED" th:selected="${order.status == 'CONFIRMED'}">CONFIRMED</option>
-            <option value="SHIPPED" th:selected="${order.status == 'SHIPPED'}">SHIPPED</option>
-            <option value="CANCELLED" th:selected="${order.status == 'CANCELLED'}">CANCELLED</option>
+            <option value="PENDING" th:selected="${order.status == 'PENDING'}">Chờ xác nhận</option>
+            <option value="CONFIRMED" th:selected="${order.status == 'CONFIRMED'}">Đã xác nhận</option>
+            <option value="SHIPPED" th:selected="${order.status == 'SHIPPED'}">Đang giao hàng</option>
+            <option value="CANCELLED" th:selected="${order.status == 'CANCELLED'}">Đã hủy</option>
         </select>
+
         <button type="submit" class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 transition">Cập nhật</button>
     </form>
+
+    <p th:if="${order.status == 'CANCELLED'}"
+       class="text-red-600 font-semibold mb-6">Đơn hàng đã bị hủy. Không thể cập nhật trạng thái.</p>
+
 
     <h3 class="text-xl font-semibold mb-4 text-gray-800">Sản phẩm:</h3>
     <div class="overflow-x-auto" th:with="total=0">
@@ -139,5 +154,46 @@
 <div th:replace="/admin/layout :: footer"></div>
 </body>
 <script src="/js/fragment.js"></script>
+<script th:inline="javascript">
+    let updateSuccess = /*[[${updateSuccess}]]*/ false;
+    let updateError = /*[[${updateError}]]*/ null;
 
+    if (updateSuccess) {
+        Swal.fire({
+            icon: 'success',
+            title: 'Cập nhật trạng thái thành công!',
+            toast: true,
+            position: 'top-end',
+            showConfirmButton: false,
+            timer: 2500,
+            timerProgressBar: true
+        });
+    }
+
+    if (updateError) {
+        Swal.fire({
+            icon: 'error',
+            title: updateError,
+            toast: true,
+            position: 'top-end',
+            showConfirmButton: false,
+            timer: 3000,
+            timerProgressBar: true
+        });
+    }
+    function confirmLogout() {
+        Swal.fire({
+            title: 'Bạn có chắc chắn muốn đăng xuất?',
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonText: 'Có',
+            cancelButtonText: 'Không',
+            reverseButtons: true
+        }).then((result) => {
+            if (result.isConfirmed) {
+                window.location.href = "/logout";
+            }
+        });
+    }
+</script>
 </html>

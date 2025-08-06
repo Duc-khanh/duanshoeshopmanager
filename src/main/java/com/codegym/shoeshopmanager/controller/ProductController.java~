@@ -97,17 +97,11 @@ public class ProductController {
     }
 
 
-//    @GetMapping("/delete/{productID}")
-//    public String deleteProduct(@PathVariable Integer productID) {
-//        productService.delete(productID);
-//        return "redirect:/admin/products";
-//    }
     @GetMapping("/delete/{productID}")
-    public String markOutOfStock(@PathVariable Integer productID) {
-        productService.markAsOutOfStock(productID);
+    public String deleteProduct(@PathVariable Integer productID) {
+        productService.delete(productID);
         return "redirect:/admin/products";
     }
-
 
     @GetMapping("/view/{productID}")
     public String showViewForm(@PathVariable Integer productID, Model model) {

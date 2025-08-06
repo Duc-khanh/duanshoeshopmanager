@@ -17,6 +17,7 @@ public class Product {
     private Double price;
     private String image;
     private Integer stock;
+    private boolean available;
 
     private Integer discountPercent;
     @Transient
@@ -65,6 +66,27 @@ public class Product {
         this.image = image;
         this.stock = stock;
         this.category = category;
+    }
+
+    public Product(Integer productID, String productName, String description, Double price, String image, Integer stock, boolean available, Integer discountPercent, MultipartFile imageFile, Category category) {
+        this.productID = productID;
+        this.productName = productName;
+        this.description = description;
+        this.price = price;
+        this.image = image;
+        this.stock = stock;
+        this.available = available;
+        this.discountPercent = discountPercent;
+        this.imageFile = imageFile;
+        this.category = category;
+    }
+
+    public boolean isAvailable() {
+        return available;
+    }
+
+    public void setAvailable(boolean available) {
+        this.available = available;
     }
 
     public MultipartFile getImageFile() {

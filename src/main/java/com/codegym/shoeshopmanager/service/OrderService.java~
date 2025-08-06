@@ -45,6 +45,5 @@ public interface OrderService {
     void save(Order order);
     void updateStatus(Order order, String newStatus);
     Page<Order> findByStatus(OrderStatus status, Pageable pageable);
-    Page<Order> findAll(Pageable pageable);
 
 }
