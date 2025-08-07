@@ -111,7 +111,7 @@ public class HomeUserController {
         User userWithSameUsername = userService.findByUsername(user.getUsername());
         if (userWithSameUsername != null && !userWithSameUsername.getUserID().equals(user.getUserID())) {
             redirectAttributes.addFlashAttribute("errorMessage", "Tên đăng nhập đã tồn tại.");
-            return "redirect:/users/edit/" + user.getUserID();
+            return "redirect:/user/edit/" + user.getUserID();
         }
 
         if (user.getPassword() == null || user.getPassword().trim().isEmpty()) {

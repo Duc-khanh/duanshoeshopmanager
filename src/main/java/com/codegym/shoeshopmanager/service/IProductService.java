@@ -26,4 +26,5 @@ public interface IProductService {
     boolean existsByProductName(String productName);
 
     void markAsOutOfStock(Integer productID);
+
 }

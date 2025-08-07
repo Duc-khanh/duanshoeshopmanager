@@ -260,7 +260,7 @@
             button.addEventListener('click', function () {
                 const productID = this.getAttribute('data-id');
                 Swal.fire({
-                    title: 'Bạn có muốn?',
+                    // title: 'Bạn có muốn?',
                     text: 'Bạn muốn chuyển trạng thái sản phẩm này là hết hàng?',
                     icon: 'warning',
                     showCancelButton: true,

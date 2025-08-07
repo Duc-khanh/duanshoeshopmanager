@@ -13,6 +13,9 @@
             rel="stylesheet"
             href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css"
     />
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+
     <style>
         body {
             font-family: 'Inter', sans-serif;
@@ -127,7 +130,7 @@
                             type="submit"
                             class="inline-flex items-center px-6 py-3 bg-green-600 text-white rounded-md hover:bg-green-700 transition"
                     >
-                        <i class="fas fa-user-edit mr-2"></i> Cập nhật người dùng
+                        <i class="fas fa-user-edit mr-2"></i> Cập nhật
                     </button>
                 </div>
             </form>
@@ -154,5 +157,28 @@
         }
     }
 </script>
+<script th:inline="javascript" th:if="${successMessage != null}">
+    Swal.fire({
+        toast: true,
+        position: 'top-end',
+        icon: 'success',
+        title: [[${successMessage}]],
+        showConfirmButton: false,
+        timer: 2000,
+        timerProgressBar: true
+    });
+</script>
+<script th:inline="javascript" th:if="${errorMessage != null}">
+    Swal.fire({
+        toast: true,
+        position: 'top-end',
+        icon: 'error',
+        title: [[${errorMessage}]],
+        showConfirmButton: false,
+        timer: 3000,
+        timerProgressBar: true
+    });
+</script>
+
 </body>
 </html>

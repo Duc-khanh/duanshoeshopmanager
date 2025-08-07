@@ -95,16 +95,11 @@ public class ProductController {
         redirectAttributes.addFlashAttribute("successMessage", isNew ? "Thêm sản phẩm thành công!" : "Cập nhật sản phẩm thành công!");
         return "redirect:/admin/products";
     }
-
-
-//    @GetMapping("/delete/{productID}")
-//    public String deleteProduct(@PathVariable Integer productID) {
-//        productService.delete(productID);
-//        return "redirect:/admin/products";
-//    }
     @GetMapping("/delete/{productID}")
-    public String markOutOfStock(@PathVariable Integer productID) {
+    public String markOutOfStock(@PathVariable Integer productID , RedirectAttributes redirectAttributes) {
         productService.markAsOutOfStock(productID);
+        redirectAttributes.addFlashAttribute("successMessage", "Đã chuyển trạng thái sản phẩm là hết hàng.");
+
         return "redirect:/admin/products";
     }
 

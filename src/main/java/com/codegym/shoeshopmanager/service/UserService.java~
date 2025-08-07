@@ -116,10 +116,17 @@ public class UserService implements IUserService {
         return null;
     }
 
-    @Override
-    public void update(User user) {
-        userRepository.save(user);
+    public void update(User updatedUser) {
+        User existingUser = userRepository.findById(updatedUser.getUserID()).orElse(null);
+        if (existingUser != null) {
+            existingUser.setUsername(updatedUser.getUsername());
+            existingUser.setEmail(updatedUser.getEmail());
+            existingUser.setAddress(updatedUser.getAddress());
+            userRepository.save(existingUser);
+        }
     }
+
+
 
 }
 

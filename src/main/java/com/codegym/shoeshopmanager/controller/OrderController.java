@@ -94,6 +94,13 @@ public class OrderController {
         try {
             Order newOrder = orderService.placeOrder(user, selectedItems);
 
+            for (CartItem item : selectedItems) {
+                Product product = item.getProduct();
+                int newStock = product.getStock() - item.getQuantity();
+                product.setStock(newStock);
+                productService.save(product);
+            }
+
             session.removeAttribute("pendingCheckoutItems");
             redirectAttributes.addAttribute("orderID", newOrder.getOrderID());
 
@@ -103,6 +110,7 @@ public class OrderController {
             return "redirect:/cart";
         }
     }
+
 
 
     @GetMapping("/order/details/{orderID}")
@@ -120,6 +128,7 @@ public class OrderController {
         model.addAttribute("order", orderOptional.get());
         return "users/cart/order-details";
     }
+
     @GetMapping("/order/detail/{orderID}")
     public String orderSummary(@PathVariable("orderID") Integer id, Model model, HttpSession session) {
         User user = (User) session.getAttribute("currentUser");
@@ -137,19 +146,18 @@ public class OrderController {
     }
 
 
+    @GetMapping("/view/{id}")
+    public String viewOrder(@PathVariable Integer id, Model model) {
+        Order order = orderService.findOrderWithDetails(id);
+        if (order == null) return "redirect:/admin/orders";
+        double totalAmount = order.getOrderDetails().stream()
+                .mapToDouble(d -> d.getPrice() * d.getQuantity())
+                .sum();
+        model.addAttribute("order", order);
+        model.addAttribute("totalAmount", totalAmount);
+        return "admin/manage-order/view_order";
+    }
 
-
-@GetMapping("/view/{id}")
-public String viewOrder(@PathVariable Integer id, Model model) {
-    Order order = orderService.findOrderWithDetails(id);
-    if (order == null) return "redirect:/admin/orders";
-    double totalAmount = order.getOrderDetails().stream()
-            .mapToDouble(d -> d.getPrice() * d.getQuantity())
-            .sum();
-    model.addAttribute("order", order);
-    model.addAttribute("totalAmount", totalAmount);
-    return "admin/manage-order/view_order";
-}
     @PostMapping("/update-status")
     public String updateStatus(@RequestParam Integer orderId,
                                @RequestParam String status,
@@ -171,8 +179,6 @@ public String viewOrder(@PathVariable Integer id, Model model) {
         redirectAttributes.addFlashAttribute("updateSuccess", true);
         return "redirect:/view/" + orderId;
     }
-
-
 
 
     @GetMapping("/my-orders")
@@ -233,7 +239,6 @@ public String viewOrder(@PathVariable Integer id, Model model) {
 
         return "redirect:/my-orders";
     }
-
 
 
     private int getTotalQuantity(List<CartItem> cart) {
@@ -314,6 +319,10 @@ public String viewOrder(@PathVariable Integer id, Model model) {
 
         try {
             Order newOrder = orderService.placeOrder(user, buyNowItems);
+
+            product.setStock(product.getStock() - quantity);
+            productService.save(product);
+
             redirectAttributes.addAttribute("orderID", newOrder.getOrderID());
             return "redirect:/order/detail/{orderID}";
         } catch (Exception e) {
@@ -321,6 +330,7 @@ public String viewOrder(@PathVariable Integer id, Model model) {
             return "redirect:/product/" + productID;
         }
     }
+
 
     @GetMapping("/orders")
     public String listOrders(@RequestParam(defaultValue = "0") int page,
@@ -348,9 +358,6 @@ public String viewOrder(@PathVariable Integer id, Model model) {
 
         return "admin/manage-order/list_orders";
     }
-
-
-
 
 
 }

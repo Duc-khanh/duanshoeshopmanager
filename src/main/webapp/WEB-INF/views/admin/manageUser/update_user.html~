@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Thêm người dùng</title>
+    <title>Cập nhật người dùng</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link
             href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap"
@@ -13,8 +13,6 @@
             rel="stylesheet"
             href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css"
     />
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-
     <style>
         body {
             font-family: 'Inter', sans-serif;
@@ -33,14 +31,13 @@
 <body class="bg-gray-100 min-h-screen p-6">
 
 <div th:replace="/admin/layout :: sidebar"></div>
+<!--<div class="flex justify-center mt-20">-->
 <div class="flex justify-center mt-8 ml-72">
     <div class="form-container w-full max-w-xl">
+            <h1 class="text-3xl font-semibold text-gray-800 mb-8 text-center">Cập nhật người dùng</h1>
 
-
-            <h1 class="text-3xl font-semibold text-gray-800 mb-8 text-center">Thêm người dùng mới</h1>
-            <form th:action="@{/users/add}" method="post" enctype="multipart/form-data" th:object="${user}">
-
-                <input type="hidden" name="userID" th:value="${user.userID}" />
+            <form th:action="@{/users/save}" method="post" class="space-y-6" novalidate enctype="multipart/form-data">
+                <input type="hidden" id="userID" name="userID" th:value="${user.userID}" />
 
                 <div>
                     <label for="username" class="block text-gray-700 font-semibold mb-2">Tên đăng nhập <span class="text-red-600">*</span></label>
@@ -48,26 +45,23 @@
                             type="text"
                             id="username"
                             name="username"
-                            th:field="*{username}"
                             required
                             minlength="3"
                             maxlength="50"
                             placeholder="Nhập tên đăng nhập"
+                            th:value="${user.username}"
                             class="w-full px-4 py-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500"
                     />
                 </div>
-
                 <div>
-                    <label for="password" class="block text-gray-700 font-semibold mb-2">Mật khẩu <span class="text-red-600">*</span></label>
+                    <label for="password" class="block text-gray-700 font-semibold mb-2">Mật khẩu </label>
                     <input
                             type="password"
                             id="password"
-                            th:field="*{password}"
                             name="password"
                             minlength="6"
                             maxlength="50"
-                            required
-                            placeholder="Nhập mật khẩu"
+                            placeholder="Nhập mật khẩu mới"
                             class="w-full px-4 py-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500"
                     />
                 </div>
@@ -76,18 +70,18 @@
                     <label for="email" class="block text-gray-700 font-semibold mb-2">Email</label>
                     <input
                             type="email"
-                            th:field="*{email}"
                             id="email"
                             name="email"
                             placeholder="Nhập email"
+                            th:value="${user.email}"
                             class="w-full px-4 py-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500"
                     />
                 </div>
+
                 <div>
                     <label for="address" class="block text-gray-700 font-semibold mb-2">Địa chỉ</label>
                     <input
                             type="text"
-                            th:field="*{address}"
                             id="address"
                             name="address"
                             placeholder="Nhập địa chỉ"
@@ -96,41 +90,34 @@
                     />
                 </div>
 
+
+
                 <div>
                     <label for="role" class="block text-gray-700 font-semibold mb-2">Vai trò <span class="text-red-600">*</span></label>
                     <select
                             id="role"
                             name="role.roleID"
-                            th:field="*{role.roleID}"
                             required
                             class="w-full px-4 py-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500"
                     >
-                        <option value="" disabled selected>Chọn vai trò</option>
+                        <option value="" disabled>Chọn vai trò</option>
                         <option th:each="role : ${roles}"
                                 th:value="${role.roleID}"
-                                th:text="${role.roleName}">
+                                th:text="${role.roleName}"
+                                th:selected="${role.roleID == user.role.roleID}">
                         </option>
                     </select>
                 </div>
-                <div>
-                    <label  class="block text-gray-700 font-medium mb-1">Ảnh sản phẩm:</label>
-                    <input
-                            type="file"
-                            id="imageFile"
-                            th:field="*{imageFile}"
-                            accept="image/*"
-                            class="w-full text-gray-700"
-                            onchange="previewImage(event)"
-                    />
-                    <div class="mt-4 flex justify-center">
-                        <img
-                                id="imagePreview"
-                                alt="Preview ảnh sản phẩm"
-                                class="max-h-48 rounded-md hidden border border-gray-300 shadow"
-                        />
-                    </div>
+                <label for="image" class="block text-gray-700 font-medium mt-4 mb-1">Ảnh sản phẩm:</label>
+                <input type="file" id="image" name="imageFile" accept="image/*"
+                       class="w-full text-gray-700" onchange="previewImage(event)"/>
+                <div class="mt-4 flex justify-center">
+                    <input type="hidden" name="oldImagePath" th:value="${user.image}"/>
+                    <img th:src="@{${user.image}}" id="imagePreview"
+                         alt="Preview ảnh sản phẩm"
+                         class="max-h-48 rounded-md border border-gray-300"
+                         th:classappend="${user.image} == null ? 'hidden' : ''"/>
                 </div>
-
 
                 <div class="flex justify-between items-center">
                     <a href="#" th:href="@{/admin/user}" class="inline-flex items-center px-6 py-3 bg-gray-200 text-gray-700 rounded-md hover:bg-gray-300 transition">
@@ -140,7 +127,7 @@
                             type="submit"
                             class="inline-flex items-center px-6 py-3 bg-green-600 text-white rounded-md hover:bg-green-700 transition"
                     >
-                        <i class="fas fa-user-plus mr-2"></i> Thêm người dùng
+                        <i class="fas fa-user-edit mr-2"></i> Cập nhật
                     </button>
                 </div>
             </form>
@@ -150,8 +137,8 @@
 <div th:replace="/admin/layout :: footer"></div>
 <script src="/js/fragment.js"></script>
 
-<script th:inline="javascript">
-    function previewImage(event) {
+<script>
+    function previewImage(event){
         const input = event.target;
         const preview = document.getElementById('imagePreview');
         if (input.files && input.files[0]) {
@@ -167,17 +154,17 @@
         }
     }
 </script>
-<!--<script th:inline="javascript" th:if="${successMessage != null}">-->
-<!--    Swal.fire({-->
-<!--        toast: true,-->
-<!--        position: 'top-end',-->
-<!--        icon: 'success',-->
-<!--        title: [[${successMessage}]],-->
-<!--        showConfirmButton: false,-->
-<!--        timer: 2000,-->
-<!--        timerProgressBar: true-->
-<!--    });-->
-<!--</script>-->
+<script th:inline="javascript" th:if="${successMessage != null}">
+    Swal.fire({
+        toast: true,
+        position: 'top-end',
+        icon: 'success',
+        title: [[${successMessage}]],
+        showConfirmButton: false,
+        timer: 2000,
+        timerProgressBar: true
+    });
+</script>
 <script th:inline="javascript" th:if="${errorMessage != null}">
     Swal.fire({
         toast: true,
@@ -185,7 +172,7 @@
         icon: 'error',
         title: [[${errorMessage}]],
         showConfirmButton: false,
-        timer: 2000,
+        timer: 3000,
         timerProgressBar: true
     });
 </script>

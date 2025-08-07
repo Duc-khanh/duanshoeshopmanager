@@ -27,12 +27,7 @@
     </style>
 </head>
 <body class="bg-gradient-to-tr via-indigo-500 to-purple-600 min-h-screen flex items-center justify-center p-4">
-<div id="logout-toast"
-     th:if="${param.logoutSuccess}"
-     class="fixed top-6 right-6 z-50 flex items-center space-x-3 bg-green-500 text-white px-5 py-3 rounded-xl shadow-lg animate-fade-in-out transition duration-300 ease-in-out">
-    <i class="fas fa-check-circle text-white text-lg"></i>
-    <span class="text-sm font-medium">Đăng xuất thành công!</span>
-</div>
+
 
 
 <div class="bg-white bg-opacity-90 shadow-2xl rounded-2xl max-w-4xl w-full flex flex-col md:flex-row overflow-hidden">
@@ -120,5 +115,28 @@
         });
     }
 </script>
+<script th:inline="javascript">
+    let logoutSuccess = [[${param.logoutSuccess}]]; // KHÔNG có dấu /* */
+    if (logoutSuccess) {
+        const Toast = Swal.mixin({
+            toast: true,
+            position: 'top-end',
+            showConfirmButton: false,
+            timer: 2500,
+            timerProgressBar: true,
+            didOpen: (toast) => {
+                toast.addEventListener('mouseenter', Swal.stopTimer);
+                toast.addEventListener('mouseleave', Swal.resumeTimer);
+            }
+        });
+
+        Toast.fire({
+            icon: 'success',
+            title: 'Đăng xuất thành công!'
+        });
+    }
+</script>
+
+
 
 </html>

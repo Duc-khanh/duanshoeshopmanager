@@ -167,28 +167,16 @@
         }
     }
 </script>
-<!--<script th:inline="javascript" th:if="${successMessage != null}">-->
-<!--    Swal.fire({-->
-<!--        toast: true,-->
-<!--        position: 'top-end',-->
-<!--        icon: 'success',-->
-<!--        title: [[${successMessage}]],-->
-<!--        showConfirmButton: false,-->
-<!--        timer: 2000,-->
-<!--        timerProgressBar: true-->
-<!--    });-->
-<!--</script>-->
-<script th:inline="javascript" th:if="${errorMessage != null}">
+<script th:inline="javascript" th:if="${successMessage != null}">
     Swal.fire({
         toast: true,
         position: 'top-end',
-        icon: 'error',
-        title: [[${errorMessage}]],
+        icon: 'success',
+        title: [[${successMessage}]],
         showConfirmButton: false,
         timer: 2000,
         timerProgressBar: true
     });
 </script>
-
 </body>
 </html>

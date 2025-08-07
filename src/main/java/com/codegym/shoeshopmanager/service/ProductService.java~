@@ -91,13 +91,15 @@ public class ProductService implements IProductService {
         return productRepository.existsByProductName(productName);
     }
     public void markAsOutOfStock(Integer productID) {
-        Product product = productRepository.findById(productID).orElse(null);
-        if (product != null) {
-            product.setStock(0); // chỉ đánh dấu hết hàng
+        Optional<Product> optionalProduct = productRepository.findById(productID);
+        if (optionalProduct.isPresent()) {
+            Product product = optionalProduct.get();
+            product.setAvailable(false);
             productRepository.save(product);
+        } else {
+            throw new RuntimeException("Không tìm thấy sản phẩm với ID: " + productID);
         }
     }
-
 
 //    @Override
 //    public Page<Product> searchAvailableByName(String keyword, PageRequest pageRequest) {
