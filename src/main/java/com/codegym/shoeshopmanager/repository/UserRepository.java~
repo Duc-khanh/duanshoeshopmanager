@@ -12,9 +12,10 @@ import java.util.Optional;
 @Repository
 public interface UserRepository extends JpaRepository<User, Integer> {
     @Query("SELECT u FROM User u WHERE LOWER(u.username) LIKE LOWER(CONCAT('%', :username, '%'))")
+    List<User> searchByName(@Param("username") String username);
+
     Optional<User> findByUsername(String username);
     boolean existsByUsername(String username);
 
-    List<User> searchByName(@Param("username") String username);
 }
 

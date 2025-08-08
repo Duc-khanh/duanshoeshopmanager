@@ -16,15 +16,9 @@
         body {
             font-family: 'Inter', sans-serif;
         }
-
         @keyframes fadeOut {
-            from {
-                opacity: 1;
-            }
-            to {
-                opacity: 0;
-                visibility: hidden;
-            }
+            from { opacity: 1; }
+            to { opacity: 0; visibility: hidden; }
         }
 
         .animate-fade-in-out {
@@ -35,11 +29,10 @@
 <body class="bg-gradient-to-tr via-indigo-500 to-purple-600 min-h-screen flex items-center justify-center p-4">
 
 
+
 <div class="bg-white bg-opacity-90 shadow-2xl rounded-2xl max-w-4xl w-full flex flex-col md:flex-row overflow-hidden">
     <div class="md:w-1/2 hidden md:flex items-center justify-center bg-gradient-to-br from-indigo-600 to-purple-700">
-        <img alt="Illustration of people using devices with security icons representing login and protection"
-             class="object-cover h-full w-full" height="500"
-             src="https://storage.googleapis.com/a1aa/image/87e3fa51-f86f-465d-a4de-9c2158252302.jpg" width="400"/>
+        <img alt="Illustration of people using devices with security icons representing login and protection" class="object-cover h-full w-full" height="500" src="https://storage.googleapis.com/a1aa/image/87e3fa51-f86f-465d-a4de-9c2158252302.jpg" width="400"/>
     </div>
     <div class="md:w-1/2 p-10 sm:p-12 flex flex-col justify-center">
         <h2 class="text-4xl font-extrabold text-gray-900 mb-10 text-center">
@@ -51,8 +44,7 @@
                     Tên đăng nhập:
                 </label>
                 <div class="relative">
-                    <input class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 pr-12"
-                           id="username" name="username" placeholder="Nhập tên đăng nhập" required="" type="text"/>
+                    <input class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 pr-12" id="username" name="username" placeholder="Nhập tên đăng nhập" required="" type="text"/>
                     <span class="absolute inset-y-0 right-3 flex items-center text-indigo-500">
         <i class="fas fa-user fa-lg">
         </i>
@@ -64,16 +56,14 @@
                     Mật khẩu:
                 </label>
                 <div class="relative">
-                    <input class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 pr-12"
-                           id="password" name="password" placeholder="Nhập mật khẩu" required="" type="password"/>
+                    <input class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 pr-12" id="password" name="password" placeholder="Nhập mật khẩu" required="" type="password"/>
                     <span class="absolute inset-y-0 right-3 flex items-center text-indigo-500">
         <i class="fas fa-lock fa-lg">
         </i>
        </span>
                 </div>
             </div>
-            <button class="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-3 rounded-lg transition-colors duration-300 shadow-md"
-                    type="submit">
+            <button class="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-3 rounded-lg transition-colors duration-300 shadow-md" type="submit">
                 Đăng nhập
             </button>
         </form>
@@ -159,4 +149,9 @@
         text: 'Vui lòng liên hệ quản trị viên để biết thêm chi tiết.'
     }) : null;
 </script>
+
+
+
+
+
 </html>

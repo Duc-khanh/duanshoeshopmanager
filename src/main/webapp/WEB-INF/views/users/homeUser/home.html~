@@ -23,7 +23,7 @@
     <div class="w-full max-w-full px-4 py-3 border-t border-gray-300 bg-white">
 <!--        <form id="search-form" th:action="@{/managerUser/searchProduct}" method="GET" class="flex max-w-2xl mx-auto" role="search">-->
 <!--            <input-->
-<!--                    id="search-input"-->    
+<!--                    id="search-input"-->
 <!--                    type="search"-->
 <!--                    name="keyword"-->
 <!--                    th:value="${keyword}"-->
@@ -372,26 +372,35 @@
             }
         }, 600);
     });
+
+    const Toast = Swal.mixin({
+        toast: true,
+        position: 'top-end',
+        showConfirmButton: false,
+        timer: 2000,
+        timerProgressBar: true,
+        didOpen: (toast) => {
+            toast.addEventListener('mouseenter', Swal.stopTimer);
+            toast.addEventListener('mouseleave', Swal.resumeTimer);
+        }
+    });
+
     let addToFavoriteSuccess = /*[[${addToFavoriteSuccess}]]*/ false;
-
     if (addToFavoriteSuccess) {
-        const Toast = Swal.mixin({
-            toast: true,
-            position: 'top-end',
-            showConfirmButton: false,
-            timer: 2000,
-            timerProgressBar: true,
-            didOpen: (toast) => {
-                toast.addEventListener('mouseenter', Swal.stopTimer);
-                toast.addEventListener('mouseleave', Swal.resumeTimer);
-            }
-        });
-
         Toast.fire({
             icon: 'success',
             title: 'Đã thêm vào danh sách yêu thích'
         });
     }
+
+    let alreadyInFavorite = /*[[${alreadyInFavorite}]]*/ false;
+    if (alreadyInFavorite) {
+        Toast.fire({
+            icon: 'warning',
+            title: 'Sản phẩm đã có trong yêu thích'
+        });
+    }
+
     document.addEventListener("DOMContentLoaded", function () {
         window.confirmLogout = function () {
             Swal.fire({
@@ -409,65 +418,22 @@
             });
         };
     });
+
     let loginSuccess = /*[[${param.loginSuccess}]]*/ false;
     if (loginSuccess) {
-        const Toast = Swal.mixin({
-            toast: true,
-            position: 'top-end',
-            showConfirmButton: false,
-            timer: 2500,
-            timerProgressBar: true,
-            didOpen: (toast) => {
-                toast.addEventListener('mouseenter', Swal.stopTimer);
-                toast.addEventListener('mouseleave', Swal.resumeTimer);
-            }
-        });
-
         Toast.fire({
             icon: 'success',
             title: 'Đăng nhập thành công!'
         });
     }
+
     let addToCartSuccess = /*[[${addToCartSuccess}]]*/ false;
-
     if (addToCartSuccess) {
-        const Toast = Swal.mixin({
-            toast: true,
-            position: 'top-end',
-            showConfirmButton: false,
-            timer: 3000,
-            timerProgressBar: true,
-            didOpen: (toast) => {
-                toast.addEventListener('mouseenter', Swal.stopTimer)
-                toast.addEventListener('mouseleave', Swal.resumeTimer)
-            }
-        });
-
         Toast.fire({
             icon: 'success',
             title: 'Đã thêm vào giỏ hàng'
         });
     }
-    //     let addToCartSuccess = /*[[${addToFavoriteSuccess}]]*/ false;
-    //
-    //     if (addToCartSuccess) {
-    //     const Toast = Swal.mixin({
-    //     toast: true,
-    //     position: 'top-end',
-    //     showConfirmButton: false,
-    //     timer: 2000,
-    //     timerProgressBar: true,
-    //     didOpen: (toast) => {
-    //     toast.addEventListener('mouseenter', Swal.stopTimer);
-    //     toast.addEventListener('mouseleave', Swal.resumeTimer);
-    // }
-    // });
-    //
-    //     Toast.fire({
-    //     icon: 'success',
-    //     title: 'Đã thanh toán thành công'
-    // });
-    // }
 </script>
 
 </body>

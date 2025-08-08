@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.servlet.http.HttpSession;
 import java.util.List;
@@ -36,9 +37,14 @@ public class AuthController {
     public String login(@RequestParam String username,
                         @RequestParam String password,
                         HttpSession session,
+                        RedirectAttributes redirectAttributes,
                         Model model) {
         User user = userService.login(username, password);
         if (user != null) {
+            if (!user.isEnabled()) {
+                redirectAttributes.addFlashAttribute("blocked", true);
+                return "auth/login";
+            }
             session.setAttribute("currentUser", user);
 
             String role = user.getRole().getRoleName();
@@ -46,7 +52,7 @@ public class AuthController {
                     ? "redirect:/admin/dashboard?loginSuccess=true"
                     : "redirect:/users?loginSuccess=true";
         } else {
-            model.addAttribute("error", "Sai tên đăng nhập hoặc mật khẩu!");
+            redirectAttributes.addFlashAttribute("loginError", true);
             return "auth/login";
         }
     }
@@ -69,7 +75,7 @@ public class AuthController {
         user.setRole(userRole);
 
         userService.save(user);
-        return "redirect:/login?registerSuccess=true";
+        return "redirect:/login";
     }
 
     @GetMapping("/logout")

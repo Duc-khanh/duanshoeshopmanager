@@ -92,6 +92,7 @@ public class HomeUserController {
         model.addAttribute("roles", roleService.findAll());
         return "admin/manageUser/add_user";
     }
+
     @GetMapping("edit/{id}")
     public String showEditFormUser(@PathVariable Integer id, Model model) {
         User user = userService.findById(id);
@@ -138,7 +139,7 @@ public class HomeUserController {
     }
 
     @PostMapping("/add")
-    public String createUser(@ModelAttribute("user" ) User user , RedirectAttributes redirectAttributes) {
+    public String createUser(@ModelAttribute("user") User user, RedirectAttributes redirectAttributes) {
         if (userService.existsByUsername(user.getUsername())) {
             redirectAttributes.addFlashAttribute("errorMessage", "Tên đăng nhập đã tồn tại!");
             return "redirect:/users/create";
@@ -174,10 +175,9 @@ public class HomeUserController {
     }
 
     @GetMapping("/delete/{id}")
-    public String deleteUser(@PathVariable("id") Integer id , RedirectAttributes redirectAttributes) {
-        userService.delete(id);
-        redirectAttributes.addFlashAttribute("successMessage", "Đã xóa người dùng thành công.");
-
+    public String deleteUser(@PathVariable("id") Integer id, RedirectAttributes redirectAttributes) {
+        userService.blockUser(id);
+        redirectAttributes.addFlashAttribute("successMessage", "Đã chặn người dùng thành công.");
         return "redirect:/admin/user";
     }
 
@@ -188,38 +188,48 @@ public class HomeUserController {
         model.addAttribute("keyword", keyword);
         return "admin/manageUser/user_list";
     }
+
     @GetMapping("/home")
     public String showHomePage(Model model) {
         List<Category> categories = categoryService.findAll();
         model.addAttribute("categories", categories);
         return "users/layout";
     }
+
     @ModelAttribute("categories")
     public List<Category> getCategories() {
         return categoryService.findAll();
     }
-@PostMapping("/favorite/add/{productId}")
-public String addFavorite(@PathVariable("productId") Integer productId,
-                          HttpSession session,
-                          RedirectAttributes redirectAttributes) {
-    User currentUser = (User) session.getAttribute("currentUser");
 
-    if (currentUser == null) {
-        redirectAttributes.addFlashAttribute("loginRequired", true);
-        return "redirect:/login";
+    @PostMapping("/favorite/add/{productId}")
+    public String addFavorite(@PathVariable("productId") Integer productId,
+                              HttpSession session,
+                              RedirectAttributes redirectAttributes) {
+        User currentUser = (User) session.getAttribute("currentUser");
+
+        if (currentUser == null) {
+            redirectAttributes.addFlashAttribute("loginRequired", true);
+            return "redirect:/login";
+        }
+
+        Product product = productService.findById(productId);
+        if (product != null) {
+            boolean exists = favoriteService.existsByUserAndProduct(currentUser, product);
+            if (exists) {
+                redirectAttributes.addFlashAttribute("alreadyInFavorite", true);
+            } else {
+                favoriteService.addFavorite(currentUser, product);
+                int favoriteCount = favoriteService.countFavoritesByUser(currentUser);
+                session.setAttribute("favoriteCount", favoriteCount);
+                redirectAttributes.addFlashAttribute("addToFavoriteSuccess", true);
+            }
+        }
+        return "redirect:/users";
     }
 
-    Product product = productService.findById(productId);
-    if (product != null) {
-        favoriteService.addFavorite(currentUser, product);
-        int favoriteCount = favoriteService.countFavoritesByUser(currentUser);
-        session.setAttribute("favoriteCount", favoriteCount);
-        redirectAttributes.addFlashAttribute("addToFavoriteSuccess", true);
-    }
-    return "redirect:/users";
-}
+
     @PostMapping("/favorite/remove/{productId}")
-    public String removeFavorite(@PathVariable("productId") Integer productId, HttpSession session , RedirectAttributes redirectAttributes) {
+    public String removeFavorite(@PathVariable("productId") Integer productId, HttpSession session, RedirectAttributes redirectAttributes) {
         User currentUser = (User) session.getAttribute("currentUser");
         if (currentUser != null) {
             Product product = productService.findById(productId);
@@ -231,6 +241,7 @@ public String addFavorite(@PathVariable("productId") Integer productId,
         }
         return "redirect:/users/favorites";
     }
+
     @GetMapping("/favorites")
     public String viewFavorites(Model model, HttpSession session) {
         User currentUser = (User) session.getAttribute("currentUser");
@@ -240,6 +251,7 @@ public String addFavorite(@PathVariable("productId") Integer productId,
         }
         return "users/cart/favorite-list";
     }
+
     @ModelAttribute
     public void populateFavoriteCount(HttpSession session) {
         User currentUser = (User) session.getAttribute("currentUser");
@@ -248,6 +260,7 @@ public String addFavorite(@PathVariable("productId") Integer productId,
             session.setAttribute("favoriteCount", favorites.size());
         }
     }
+
     @GetMapping("/account")
     public String viewAccount(HttpSession session, Model model) {
         User currentUser = (User) session.getAttribute("currentUser");
@@ -258,15 +271,16 @@ public String addFavorite(@PathVariable("productId") Integer productId,
         model.addAttribute("user", currentUser);
         return "users/homeUser/account";
     }
-@GetMapping("/user/edit")
-public String showEditForm(Model model, HttpSession session) {
-    User currentUser = (User) session.getAttribute("currentUser");
-    if (currentUser == null) {
-        return "redirect:/login";
+
+    @GetMapping("/user/edit")
+    public String showEditForm(Model model, HttpSession session) {
+        User currentUser = (User) session.getAttribute("currentUser");
+        if (currentUser == null) {
+            return "redirect:/login";
+        }
+        model.addAttribute("user", currentUser);
+        return "users/user/edit-user";
     }
-    model.addAttribute("user", currentUser);
-    return "users/user/edit-user";
-}
 
     @PostMapping("/user/update")
     public String updateUser(@ModelAttribute("user") User user, HttpSession session) {
@@ -274,6 +288,7 @@ public String showEditForm(Model model, HttpSession session) {
         session.setAttribute("currentUser", userService.findById(user.getUserID()));
         return "redirect:/users/account";
     }
+
     @GetMapping("/user/add")
     public String showAddUserForm(Model model) {
         model.addAttribute("user", new User());
@@ -298,16 +313,16 @@ public String showEditForm(Model model, HttpSession session) {
         userService.update(user);
         return "redirect:/somewhere";
     }
+
     @GetMapping("/blog")
     public String showBlogPage(Model model) {
         return "users/homeUser/blog";
-    }  @GetMapping("/contact")
+    }
+
+    @GetMapping("/contact")
     public String showContactPage(Model model) {
         return "users/homeUser/contact";
     }
-
-
-
 
 
 }
