@@ -12,5 +12,7 @@ public interface IFavoriteService {
     boolean isFavorite(User user, Product product);
 
     int countFavoritesByUser(User user);
+
+    boolean existsByUserAndProduct(User currentUser, Product product);
 }
 

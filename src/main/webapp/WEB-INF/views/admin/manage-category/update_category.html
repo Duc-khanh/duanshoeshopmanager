@@ -12,10 +12,18 @@
             rel="stylesheet"
             href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css"
     />
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
     <style>
         body {
             font-family: 'Inter', sans-serif;
-            margin: 55px;
+        }
+
+        .form-container {
+            background: white;
+            padding: 2rem 2.5rem;
+            border-radius: 0.75rem;
+            box-shadow: 0 4px 12px rgb(0 0 0 / 0.1);
         }
     </style>
 </head>
@@ -23,12 +31,10 @@
 <div class="flex min-h-screen" style="padding:55px">
 
     <div th:replace="/admin/layout :: sidebar"></div>
-    <div th:replace="/admin/layout :: header"></div>
 
-    <div class="flex-1 p-6">
 
-        <div class="max-w-md mx-auto bg-white p-8 rounded-xl shadow-md mt-8">
-
+    <div class="flex flex-1 justify-center items-center p-6 ml-72">
+        <div class="form-container w-full max-w-xl">
         <h2 class="text-2xl font-semibold text-gray-800 mb-6 text-center">Cập nhật danh mục</h2>
 
             <form action="#" th:action="@{/categories/save}" th:object="${category}" method="post" class="space-y-5" enctype="multipart/form-data">
@@ -66,7 +72,8 @@
             </form>
 
             <div class="mt-6 text-center">
-                <a href="/admin/categories" class="text-blue-600 hover:underline font-medium">← Quay lại danh sách</a>
+                <a href="/admin/categories" class="text-blue-600 hover:text-blue-800 font-medium no-underline">← Quay lại danh sách</a>
+
             </div>
         </div>
     </div>
@@ -74,7 +81,7 @@
 <div th:replace="/admin/layout :: footer"></div>
 <script src="/js/fragment.js"></script>
 
-<script>
+<script th:inline="javascript">
     function previewImage(event){
         const input = event.target;
         const preview = document.getElementById('imagePreview');
@@ -89,6 +96,20 @@
             preview.src = '';
             preview.classList.add('hidden');
         }
+    }
+    function confirmLogout() {
+        Swal.fire({
+            title: 'Bạn có chắc chắn muốn đăng xuất?',
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonText: 'Có',
+            cancelButtonText: 'Không',
+            reverseButtons: true
+        }).then((result) => {
+            if (result.isConfirmed) {
+                window.location.href = "/logout";
+            }
+        });
     }
 </script>
 </body>

@@ -23,4 +23,8 @@ public interface IProductService {
     Object getDiscountedProducts();
 
     List<Product> findByCategoryId(Integer id);
+    boolean existsByProductName(String productName);
+
+    void markAsOutOfStock(Integer productID);
+
 }

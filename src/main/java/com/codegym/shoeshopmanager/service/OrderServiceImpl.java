@@ -5,6 +5,8 @@ import com.codegym.shoeshopmanager.repository.CartItemRepository;
 import com.codegym.shoeshopmanager.repository.OrderDetailRepository;
 import com.codegym.shoeshopmanager.repository.OrderRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -48,16 +50,19 @@ public class OrderServiceImpl implements OrderService {
                 throw new IllegalArgumentException("Sản phẩm không hợp lệ: " + product);
             }
 
+            int quantity = item.getQuantity();
+            int discountPercent = (product.getDiscountPercent() != null) ? product.getDiscountPercent() : 0;
+            double discountedPrice = product.getPrice() * (100 - discountPercent) / 100.0;
+
             OrderDetail detail = new OrderDetail();
             detail.setOrder(order);
             detail.setProduct(product);
-            detail.setQuantity(item.getQuantity());
-            detail.setPrice(product.getPrice());
+            detail.setQuantity(quantity);
+            detail.setPrice(discountedPrice);
 
             orderDetailRepository.save(detail);
-            totalAmount += item.getQuantity() * product.getPrice();
+            totalAmount += quantity * discountedPrice;
         }
-
 
         order.setTotalAmount(totalAmount);
         orderRepository.save(order);
@@ -108,6 +113,53 @@ public class OrderServiceImpl implements OrderService {
     public List<Order> getOrdersByUserAndStatus(User user, String status) {
         return orderRepository.findByUserAndStatus(user, OrderStatus.valueOf(status));
     }
+
+    @Override
+    public Page<Order> findByUser(User user, Pageable pageable) {
+        return null;
+    }
+
+    @Override
+    public Page<Order> getOrdersByUserAndStatus(User user, String status, Pageable pageable) {
+        OrderStatus orderStatus = OrderStatus.valueOf(status);
+        return orderRepository.findByUserAndStatus(user, orderStatus, pageable);
+    }
+
+    @Override
+    public Page<Order> getOrdersByUser(User user, Pageable pageable) {
+        return orderRepository.findByUser(user, pageable);
+    }
+
+
+    @Override
+    public Page<Order> findPaginated(Pageable pageable) {
+        return orderRepository.findAll(pageable);
+    }
+
+    @Override
+    public void save(Order order) {
+        orderRepository.save(order);
+    }
+
+    @Override
+    public void updateStatus(Order order, String newStatus) {
+        if (order.getStatus() == OrderStatus.CANCELLED) {
+            return;
+        }
+
+        order.setStatus(OrderStatus.valueOf(newStatus));
+        orderRepository.save(order);
+    }
+
+    @Override
+    public Page<Order> findByStatus(OrderStatus status, Pageable pageable) {
+        return orderRepository.findByStatus(status, pageable);
+    }
+    @Override
+    public Page<Order> findAll(Pageable pageable) {
+        return orderRepository.findAll(pageable);
+    }
+
 
 
 }

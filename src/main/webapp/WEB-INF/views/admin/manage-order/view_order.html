@@ -12,31 +12,83 @@
             rel="stylesheet"
             href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css"
     />
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+    <style>
+        /* Pagination container styling */
+        .pagination-container {
+            overflow-y: visible;
+            padding-top: 1rem;
+            padding-bottom: 1rem;
+        }
+        .pagination-list {
+            display: inline-flex;
+            font-size: 0.875rem; /* text-sm */
+        }
+        .pagination-list li a {
+            padding: 0.5rem 0.75rem;
+            border: 1px solid #d1d5db; /* border-gray-300 */
+            background-color: white;
+            color: #6b7280; /* text-gray-500 */
+            cursor: pointer;
+            transition: background-color 0.2s ease, color 0.2s ease;
+            user-select: none;
+        }
+        .pagination-list li a:hover {
+            background-color: #f3f4f6; /* bg-gray-100 */
+            color: #374151; /* text-gray-700 */
+        }
+        .pagination-list li:first-child a {
+            border-top-left-radius: 0.375rem; /* rounded-l-lg */
+            border-bottom-left-radius: 0.375rem;
+        }
+        .pagination-list li:last-child a {
+            border-top-right-radius: 0.375rem; /* rounded-r-lg */
+            border-bottom-right-radius: 0.375rem;
+        }
+        .pagination-list li.active a {
+            background-color: #3b82f6; /* bg-blue-500 */
+            color: white;
+            cursor: default;
+        }
+    </style>
 </head>
 <body class="bg-gray-50 min-h-screen flex justify-center p-6">
-<div th:replace="/admin/layout :: header"></div>
 <div th:replace="/admin/layout :: sidebar"></div>
 
 <div class="w-full max-w-4xl bg-white rounded-lg shadow-lg p-8 my-[10px] mt-[4rem] ml-72 mb-[48px]">
 
     <h2 class="text-2xl font-bold mb-6 border-b pb-3 text-gray-800">Chi tiết đơn hàng</h2>
 
+
+
     <div class="mb-6 space-y-2 text-gray-700">
         <p><strong class="font-semibold">Khách hàng:</strong> <span th:text="${order.user.username}">Nguyễn Văn A</span></p>
-<!--        <p><strong class="font-semibold">Ngày đặt:</strong> <span th:text="${#dates.format(order.orderDate, 'dd/MM/yyyy HH:mm')}">01/01/2024 10:00</span></p>-->
-        <p><strong class="font-semibold">Trạng thái:</strong> <span th:text="${order.status}">PENDING</span></p>
+        <!-- <p><strong class="font-semibold">Ngày đặt:</strong> <span th:text="${#dates.format(order.orderDate, 'dd/MM/yyyy HH:mm')}">01/01/2024 10:00</span></p> -->
+        <p>
+            <strong class="font-semibold">Trạng thái:</strong>
+            <span th:text="${order.status.displayName}">Trạng thái</span>
+        </p>
+
     </div>
 
-    <form method="post" th:action="@{/update-status}" class="mb-8 flex items-center space-x-3">
+    <form method="post" th:action="@{/update-status}"
+          th:if="${order.status != 'CANCELLED'}"
+          class="mb-8 flex items-center space-x-3">
         <input type="hidden" name="orderId" th:value="${order.orderID}" />
         <select name="status" class="border border-gray-300 rounded p-2 focus:outline-none focus:ring-2 focus:ring-blue-500">
-            <option value="PENDING" th:selected="${order.status == 'PENDING'}">PENDING</option>
-            <option value="CONFIRMED" th:selected="${order.status == 'CONFIRMED'}">CONFIRMED</option>
-            <option value="SHIPPED" th:selected="${order.status == 'SHIPPED'}">SHIPPED</option>
-            <option value="CANCELLED" th:selected="${order.status == 'CANCELLED'}">CANCELLED</option>
+            <option value="PENDING" th:selected="${order.status == 'PENDING'}">Chờ xác nhận</option>
+            <option value="CONFIRMED" th:selected="${order.status == 'CONFIRMED'}">Đã xác nhận</option>
+            <option value="SHIPPED" th:selected="${order.status == 'SHIPPED'}">Đang giao hàng</option>
+            <option value="CANCELLED" th:selected="${order.status == 'CANCELLED'}">Đã hủy</option>
         </select>
+
         <button type="submit" class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 transition">Cập nhật</button>
     </form>
+
+    <p th:if="${order.status == 'CANCELLED'}"
+       class="text-red-600 font-semibold mb-6">Đơn hàng đã bị hủy. Không thể cập nhật trạng thái.</p>
+
 
     <h3 class="text-xl font-semibold mb-4 text-gray-800">Sản phẩm:</h3>
     <div class="overflow-x-auto" th:with="total=0">
@@ -71,9 +123,77 @@
         </table>
     </div>
 
+    <div class="pagination-container">
+        <div th:if="${totalPages > 1}" class="flex justify-center mt-6 space-x-2">
+            <ul class="inline-flex -space-x-px text-sm">
+                <li th:if="${currentPage > 0}">
+                    <a th:href="@{/admin/orders/detail(page=${currentPage - 1}, size=5, orderId=${order.orderID})}"
+                       class="px-3 py-2 ml-0 leading-tight text-gray-500 bg-white border border-gray-300 rounded-l-lg hover:bg-gray-100 hover:text-gray-700"
+                       aria-label="Previous page">
+                        Trước
+                    </a>
+                </li>
+                <li th:each="i : ${#numbers.sequence(0, totalPages - 1)}"
+                    th:classappend="${i == currentPage} ? 'bg-blue-500 text-white' : 'text-gray-500 bg-white'">
+                    <a th:href="@{/admin/orders/detail(page=${i}, size=5, orderId=${order.orderID})}"
+                       class="px-3 py-2 border border-gray-300 hover:bg-gray-100 hover:text-gray-700"
+                       th:text="${i + 1}">1</a>
+                </li>
+                <li th:if="${currentPage < totalPages - 1}">
+                    <a th:href="@{/admin/orders/detail(page=${currentPage + 1}, size=5, orderId=${order.orderID})}"
+                       class="px-3 py-2 leading-tight text-gray-500 bg-white border border-gray-300 rounded-r-lg hover:bg-gray-100 hover:text-gray-700"
+                       aria-label="Next page">
+                        Sau
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </div>
+
 </div>
 <div th:replace="/admin/layout :: footer"></div>
 </body>
 <script src="/js/fragment.js"></script>
+<script th:inline="javascript">
+    let updateSuccess = /*[[${updateSuccess}]]*/ false;
+    let updateError = /*[[${updateError}]]*/ null;
 
+    if (updateSuccess) {
+        Swal.fire({
+            icon: 'success',
+            title: 'Cập nhật trạng thái thành công!',
+            toast: true,
+            position: 'top-end',
+            showConfirmButton: false,
+            timer: 2500,
+            timerProgressBar: true
+        });
+    }
+
+    if (updateError) {
+        Swal.fire({
+            icon: 'error',
+            title: updateError,
+            toast: true,
+            position: 'top-end',
+            showConfirmButton: false,
+            timer: 3000,
+            timerProgressBar: true
+        });
+    }
+    function confirmLogout() {
+        Swal.fire({
+            title: 'Bạn có chắc chắn muốn đăng xuất?',
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonText: 'Có',
+            cancelButtonText: 'Không',
+            reverseButtons: true
+        }).then((result) => {
+            if (result.isConfirmed) {
+                window.location.href = "/logout";
+            }
+        });
+    }
+</script>
 </html>

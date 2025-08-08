@@ -21,6 +21,7 @@ public class User {
 
 
     private String email;
+    private String phone;
     private String address;
     private String image;
     @Transient
@@ -81,6 +82,39 @@ public class User {
         this.password = password;
         this.email = email;
         this.role = role;
+    }
+
+    public User(Integer userID, String username, String password, String email, String phone, String address, String image, MultipartFile imageFile, Role role, boolean enabled) {
+        this.userID = userID;
+        this.username = username;
+        this.password = password;
+        this.email = email;
+        this.phone = phone;
+        this.address = address;
+        this.image = image;
+        this.imageFile = imageFile;
+        this.role = role;
+        this.enabled = enabled;
+    }
+
+    public User(String username, String password, String email, String phone, String address, String image, MultipartFile imageFile, Role role, boolean enabled) {
+        this.username = username;
+        this.password = password;
+        this.email = email;
+        this.phone = phone;
+        this.address = address;
+        this.image = image;
+        this.imageFile = imageFile;
+        this.role = role;
+        this.enabled = enabled;
+    }
+
+    public String getPhone() {
+        return phone;
+    }
+
+    public void setPhone(String phone) {
+        this.phone = phone;
     }
 
     public boolean isEnabled() {

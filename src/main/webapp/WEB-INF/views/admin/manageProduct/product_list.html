@@ -12,12 +12,16 @@
             rel="stylesheet"
             href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css"
     />
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
     <style>
         body {
             font-family: 'Inter', sans-serif;
         }
+
         .pagination-container {
-            overflow-y: hidden;
+            overflow-y: visible; /* Changed from hidden to visible to prevent clipping */
+            padding-bottom: 1rem; /* Add some bottom padding to avoid cutting off */
         }
 
         /* For table scroll on small screens */
@@ -72,13 +76,13 @@
 </head>
 <body class="bg-gray-100 min-h-screen pt-24 pb-24">
 <div th:replace="/admin/layout :: sidebar"></div>
-<div th:replace="/admin/layout :: header"></div>
 <div class="max-w-[93rem] mx-auto bg-white rounded-lg shadow p-6 flex-1 ml-[22rem]">
     <h1 class="text-3xl font-semibold text-gray-800 mb-6 text-center">Danh sách sản phẩm</h1>
 
     <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-6 space-y-4 sm:space-y-0">
-        <form th:action="@{/admin/products}" method="get" class="flex w-full sm:w-auto">
+        <form id="search-form" th:action="@{/admin/products}" method="get" class="flex w-full sm:w-auto">
             <input
+                    id="search-input"
                     type="text"
                     name="keyword"
                     th:value="${keyword}"
@@ -89,7 +93,7 @@
                     type="submit"
                     class="bg-blue-600 hover:bg-blue-700 text-white px-5 py-2 rounded-r-md font-semibold transition-colors duration-300"
             >
-                Tìm
+                Tìm kiếm
             </button>
         </form>
         <a th:href="@{/managerProduct/create}">
@@ -106,22 +110,24 @@
         <table class="min-w-full border border-gray-300 rounded-md overflow-hidden text-center">
             <thead class="bg-transparent">
             <tr class="hover:bg-gray-100 transition-colors duration-200">
-            <th class="px-5 py-4 border-b border-gray-300 text-gray-700 font-semibold select-none">#</th>
+                <th class="px-5 py-4 border-b border-gray-300 text-gray-700 font-semibold select-none">#</th>
                 <th class="px-5 py-4 border-b border-gray-300 text-gray-700 font-semibold select-none">Ảnh</th>
                 <th class="px-5 py-4 border-b border-gray-300 text-gray-700 font-semibold select-none">Tên sản phẩm</th>
-                <th class="px-5 py-4 border-b border-gray-300 text-gray-700 font-semibold select-none w-[12rem]">Giá</th>
+                <th class="px-5 py-4 border-b border-gray-300 text-gray-700 font-semibold select-none w-[12rem]">Giá
+                </th>
                 <th class="px-5 py-4 border-b border-gray-300 text-gray-700 font-semibold select-none">Số lượng</th>
                 <th class="px-5 py-4 border-b border-gray-300 text-gray-700 font-semibold select-none">Danh mục</th>
+                <th class="px-5 py-4 border-b border-gray-300 text-gray-700 font-semibold select-none">Trạng thái</th>
                 <th class="px-5 py-4 border-b border-gray-300 text-gray-700 font-semibold select-none">Hành động</th>
             </tr>
-
             </thead>
             <tbody>
             <tr
                     th:each="product, stat : ${products}"
                     class=" hover:bg-gray-100 transition-colors duration-200"
             >
-                <td class="px-5 py-3 border-b border-gray-300" th:text="${stat.count}"></td>
+                <td class="px-5 py-3 border-b border-gray-300"
+                    th:text="${currentPage * size + stat.index + 1}"></td>
                 <td class="px-5 py-3 border-b border-gray-300">
                     <img
                             th:src="${product.image}"
@@ -135,6 +141,11 @@
                     th:text="${#numbers.formatDecimal(product.price / 1000, 0, 'COMMA', 3, 'POINT')} + ' đ'"></td>
                 <td class="px-5 py-3 border-b border-gray-300" th:text="${product.stock}"></td>
                 <td class="px-5 py-3 border-b border-gray-300" th:text="${product.category.categoryName}"></td>
+                <td class="px-5 py-3 border-b border-gray-300 font-semibold"
+                    th:text="${product.stock > 0 ? 'Còn hàng' : 'Hết hàng'}"
+                    th:classappend="${product.stock > 0 ? 'text-green-600' : 'text-red-600'}">
+                </td>
+
                 <td class="px-5 py-3 border-b border-gray-300 space-x-2 whitespace-nowrap">
                     <a
                             th:href="@{/managerProduct/view/{productID}(productID = ${product.productID})}"
@@ -151,13 +162,15 @@
                         <i class="fas fa-edit"></i>
                     </a>
                     <a
-                            th:href="@{/managerProduct/delete/{productID}(productID = ${product.productID})}"
-                            title="Xóa"
-                            class="icon-btn bg-red-600 hover:bg-red-700"
-                            onclick="return confirm('Bạn có chắc muốn xóa sản phẩm này?')"
+                            href="javascript:void(0);"
+                            th:attr="data-id=${product.productID}"
+                            title="Hết hàng"
+                            class="icon-btn bg-yellow-600 hover:bg-yellow-700 mark-out-of-stock-btn"
                     >
-                        <i class="fas fa-trash-alt"></i>
+                        <i class="fas fa-box-open"></i>
                     </a>
+
+
                 </td>
             </tr>
             </tbody>
@@ -195,4 +208,91 @@
 <div th:replace="/admin/layout :: footer"></div>
 </body>
 <script src="/js/fragment.js"></script>
+<script th:inline="javascript">
+    const searchInput = document.getElementById('search-input');
+    const searchForm = document.getElementById('search-form');
+    let timeout = null;
+
+    searchInput.addEventListener('input', function () {
+        clearTimeout(timeout);
+        timeout = setTimeout(() => {
+            const query = searchInput.value.trim();
+            if (query.length > 0) {
+                searchForm.submit();
+            }
+        }, 500);
+    });
+    /*<![CDATA[*/
+    let successMessage = /*[[${successMessage}]]*/ null;
+    if (successMessage) {
+        Swal.fire({
+            icon: 'success',
+            title: 'Thành công!',
+            text: successMessage,
+            timer: 2000,
+            timerProgressBar: true,
+            showConfirmButton: false,
+            toast: true,
+            position: 'top-end'
+        });
+    }
+
+    /*]]>*/
+    function confirmLogout() {
+        Swal.fire({
+            title: 'Bạn có chắc chắn muốn đăng xuất?',
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonText: 'Có',
+            cancelButtonText: 'Không',
+            reverseButtons: true
+        }).then((result) => {
+            if (result.isConfirmed) {
+                window.location.href = "/logout";
+            }
+        });
+    }
+
+    document.addEventListener('DOMContentLoaded', function () {
+        const buttons = document.querySelectorAll('.mark-out-of-stock-btn');
+
+        buttons.forEach(button => {
+            button.addEventListener('click', function () {
+                const productID = this.getAttribute('data-id');
+                Swal.fire({
+                    title: 'Bạn có muốn?',
+                    text: 'Bạn muốn chuyển trạng thái sản phẩm này là hết hàng?',
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#d33',
+                    cancelButtonColor: '#3085d6',
+                    confirmButtonText: 'Có',
+                    cancelButtonText: 'Không'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        window.location.href = `/managerProduct/delete/${productID}`;
+                    }
+                });
+            });
+        });
+    });
+
+</script>
+<script th:inline="javascript" th:if="${successMessage != null}">
+    Swal.fire({
+        toast: true,
+        position: 'top-end',
+        icon: 'success',
+        title: [[${successMessage}]],
+        showConfirmButton: false,
+        timer: 2000,
+        timerProgressBar: true,
+        didOpen: (toast) => {
+            toast.addEventListener('mouseenter', Swal.stopTimer)
+            toast.addEventListener('mouseleave', Swal.resumeTimer)
+        }
+    });
+</script>
+
+
 </html>

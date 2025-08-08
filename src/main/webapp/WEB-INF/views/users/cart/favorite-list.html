@@ -11,6 +11,8 @@
             href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap"
             rel="stylesheet"
     />
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
     <style>
         body {
             font-family: "Roboto", sans-serif;
@@ -24,10 +26,10 @@
         Sản phẩm yêu thích của bạn
     </h1>
 
-    <div th:if="${#lists.isEmpty(favoriteProducts)}" class="text-center text-gray-500 py-20">
+    <div th:if="${#lists.isEmpty(favoriteProducts)}" class="text-center text-red-600  py-20">
         <i class="fas fa-heart-broken text-6xl mb-6 text-gray-400"></i>
         <p class="text-xl font-semibold">Bạn chưa có sản phẩm yêu thích nào.</p>
-        <p class="mt-2 text-gray-400">Hãy thêm sản phẩm vào danh sách yêu thích để xem tại đây.</p>
+        <p class="mt-2 text-red-600 ">Hãy thêm sản phẩm vào danh sách yêu thích để xem tại đây.</p>
     </div>
 
     <div th:if="${!#lists.isEmpty(favoriteProducts)}"
@@ -49,13 +51,14 @@
                         class="font-semibold text-lg text-gray-800 mb-1"
                 ></h3>
                 <p class="text-[#3b82f6] font-semibold text-lg mb-6"
-                   th:text="${#numbers.formatDecimal(product.price, 0, 'COMMA', 3, 'POINT')} + ' đ'">₫0</p>
+                   th:text="${#numbers.formatDecimal(product.price / 1000  , 0, 'COMMA', 3, 'POINT')} + ' đ'">₫0</p>
 
                 <div class="flex gap-3 mt-auto justify-center">
                     <form
                             th:action="@{/users/favorite/remove/{id}(id=${product.productID})}"
                             method="post"
                             class="flex-grow"
+                            onsubmit="return confirmRemoveFavorite(event)"
                     >
                         <button
                                 type="submit"
@@ -67,6 +70,7 @@
                             <span>Xóa</span>
                         </button>
                     </form>
+
 
                     <form th:action="@{/cart/add/{productID}(productID=${product.productID})}" method="post"
                           class="flex-grow">
@@ -89,5 +93,58 @@
 </div>
 
 <div th:replace="/users/layout :: footer"></div>
+<script th:inline="javascript">
+    function confirmRemoveFavorite(event) {
+        event.preventDefault(); // Ngăn form submit ngay lập tức
+
+        Swal.fire({
+            title: 'Bạn có chắc muốn xóa sản phẩm khỏi danh sách yêu thích?',
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonText: 'Có',
+            cancelButtonText: 'Không',
+            reverseButtons: true
+        }).then((result) => {
+            if (result.isConfirmed) {
+                event.target.submit();
+            }
+        });
+
+        return false;
+    }
+    const deleteSuccess = /*[[${deleteSuccess}]]*/ false;
+
+    if (deleteSuccess) {
+        Swal.fire({
+            toast: true,
+            position: 'top-end',
+            icon: 'success',
+            title: 'Đã xóa sản phẩm khỏi danh sách yêu thích',
+            showConfirmButton: false,
+            timer: 2000,
+            timerProgressBar: true
+        });
+    }
+</script>
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        window.confirmLogout = function () {
+            Swal.fire({
+                title: 'Bạn có chắc chắn muốn đăng xuất?',
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonText: 'Đăng xuất',
+                cancelButtonText: 'Hủy',
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    window.location.href = '/logout';
+                }
+            });
+        };
+    });
+</script>
+
 </body>
 </html>

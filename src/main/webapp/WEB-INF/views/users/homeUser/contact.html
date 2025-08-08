@@ -1,0 +1,136 @@
+<html lang="en">
+<head>
+    <meta charset="utf-8"/>
+    <meta content="width=device-width, initial-scale=1" name="viewport"/>
+    <title>
+        Liên Hệ - Giày Đẹp
+    </title>
+    <script src="https://cdn.tailwindcss.com">
+    </script>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&amp;display=swap" rel="stylesheet"/>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet"/>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+    <style>
+        body {
+            font-family: 'Montserrat', sans-serif;
+        }
+    </style>
+</head>
+<body class="bg-gray-50 text-gray-800">
+<div class="w-full fixed top-0 left-0 right-0 z-50" th:replace="/users/layout :: header"></div>
+<div th:replace="/users/layout :: categories"></div>
+
+
+<main class="container mx-auto px-4 py-12">
+    <h1 class="text-4xl font-extrabold text-indigo-600 mb-10 text-center">
+        Liên Hệ Với Chúng Tôi
+    </h1>
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-12">
+        <div>
+            <h2 class="text-2xl font-semibold text-gray-900 mb-6">
+                Thông Tin Liên Hệ
+            </h2>
+            <div class="space-y-6 text-gray-700">
+                <div class="flex items-center space-x-4">
+                    <i class="fas fa-map-marker-alt text-indigo-600 text-xl w-6">
+                    </i>
+                    <p>
+                         123 Đường Hồ Tùng Mậu, Quận Nam Từ Liêm, TP. Hà Nội                    </p>
+                </div>
+                <div class="flex items-center space-x-4">
+                    <i class="fas fa-phone-alt text-indigo-600 text-xl w-6">
+                    </i>
+                    <p>
+                        +84 912 345 678
+                    </p>
+                </div>
+                <div class="flex items-center space-x-4">
+                    <i class="fas fa-envelope text-indigo-600 text-xl w-6">
+                    </i>
+                    <p>
+                       duckhanh@gmail.com
+                    </p>
+                </div>
+                <div class="flex items-center space-x-4">
+                    <i class="fas fa-clock text-indigo-600 text-xl w-6">
+                    </i>
+                    <p>
+                        Thứ 2 - Thứ 7: 8:00 - 20:00
+                    </p>
+                </div>
+            </div>
+<!--            <div class="mt-10">-->
+<!--                <img alt="Bản đồ vị trí cửa hàng giày đẹp tại thành phố Hồ Chí Minh với các đường phố xung quanh"-->
+<!--                     class="rounded-lg shadow-md w-72 md:w-96 mx-auto"-->
+<!--                     src="https://storage.googleapis.com/a1aa/image/87e3fa51-f86f-465d-a4de-9c2158252302.jpg"/>-->
+<!--            </div>-->
+        </div>
+        <div>
+            <h2 class="text-2xl font-semibold text-gray-900 mb-6">
+                Gửi Tin Nhắn Cho Chúng Tôi
+            </h2>
+            <form action="#" class="bg-white p-6 rounded-lg shadow-md" method="POST">
+                <div class="mb-5">
+                    <label class="block mb-2 font-semibold text-gray-700" for="name">
+                        Họ và Tên
+                    </label>
+                    <input class="w-full border border-gray-300 rounded-md px-4 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-500" id="name" name="name" placeholder="Nhập họ và tên" required="" type="text"/>
+                </div>
+                <div class="mb-5">
+                    <label class="block mb-2 font-semibold text-gray-700" for="email">
+                        Email
+                    </label>
+                    <input class="w-full border border-gray-300 rounded-md px-4 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-500" id="email" name="email" placeholder="Nhập email của bạn" required="" type="email"/>
+                </div>
+                <div class="mb-5">
+                    <label class="block mb-2 font-semibold text-gray-700" for="phone">
+                        Số Điện Thoại
+                    </label>
+                    <input class="w-full border border-gray-300 rounded-md px-4 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-500" id="phone" name="phone" placeholder="Nhập số điện thoại" type="tel"/>
+                </div>
+                <div class="mb-5">
+                    <label class="block mb-2 font-semibold text-gray-700" for="message">
+                        Nội Dung Tin Nhắn
+                    </label>
+                    <textarea class="w-full border border-gray-300 rounded-md px-4 py-2 h-32 resize-none focus:outline-none focus:ring-2 focus:ring-indigo-500" id="message" name="message" placeholder="Nhập nội dung tin nhắn" required="">
+       </textarea>
+                </div>
+                <button class="bg-indigo-600 text-white font-semibold px-6 py-3 rounded-md hover:bg-indigo-700 transition w-full" type="submit">
+                    Gửi Tin Nhắn
+                </button>
+            </form>
+        </div>
+    </div>
+</main>
+<div th:replace="/users/layout :: footer"></div>
+
+<script>
+    const menuBtn = document.getElementById('menu-btn');
+    const mobileMenu = document.getElementById('mobile-menu');
+
+    menuBtn.addEventListener('click', () => {
+        mobileMenu.classList.toggle('hidden');
+    });
+</script>
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        window.confirmLogout = function () {
+            Swal.fire({
+                title: 'Bạn có chắc chắn muốn đăng xuất?',
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonText: 'Đăng xuất',
+                cancelButtonText: 'Hủy',
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    window.location.href = '/logout';
+                }
+            });
+        };
+    });
+</script>
+</body>
+</html>

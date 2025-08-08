@@ -48,5 +48,9 @@ public class FavoriteServiceImpl implements IFavoriteService {
     public int countFavoritesByUser(User user) {
         return 0;
     }
+    public boolean existsByUserAndProduct(User user, Product product) {
+        return favoriteRepository.existsByUserAndProduct(user, product);
+    }
+
 }
 

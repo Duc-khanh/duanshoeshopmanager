@@ -11,6 +11,7 @@ import org.springframework.ui.Model;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.io.File;
 import java.io.IOException;
@@ -50,9 +51,33 @@ public class ProductController {
     @PostMapping("/products/save")
     public String saveProduct(
             @ModelAttribute Product product,
+            RedirectAttributes redirectAttributes,
             @RequestParam("imageFile") MultipartFile imageFile,
-            @RequestParam(value = "oldImagePath", required = false) String oldImagePath
+            @RequestParam(value = "oldImagePath", required = false) String oldImagePath,
+            Model model
     ) throws IOException {
+
+        boolean isNew = (product.getProductID() == null);
+
+        if (isNew && productService.existsByProductName(product.getProductName())) {
+            model.addAttribute("product", product);
+            model.addAttribute("categories", categoryService.findAll());
+            model.addAttribute("errorNameExists", true);
+            return "admin/manageProduct/add_product";
+        }
+
+        if (!isNew) {
+            Product existing = productService.findById(product.getProductID());
+            if (!existing.getProductName().equals(product.getProductName()) &&
+                    productService.existsByProductName(product.getProductName())) {
+                product.setImage(existing.getImage());
+                model.addAttribute("product", product);
+                model.addAttribute("categories", categoryService.findAll());
+                model.addAttribute("errorNameExists", true);
+                return "admin/manageProduct/update_product";
+            }
+        }
+
         if (imageFile != null && !imageFile.isEmpty()) {
             String fileName = StringUtils.cleanPath(imageFile.getOriginalFilename());
             File uploadPath = new File(uploadDir);
@@ -63,18 +88,21 @@ public class ProductController {
             Files.copy(imageFile.getInputStream(), filePath, StandardCopyOption.REPLACE_EXISTING);
             product.setImage("/image/" + fileName);
         } else {
-
             product.setImage(oldImagePath);
         }
+
         productService.save(product);
+        redirectAttributes.addFlashAttribute("successMessage", isNew ? "Thêm sản phẩm thành công!" : "Cập nhật sản phẩm thành công!");
+        return "redirect:/admin/products";
+    }
+    @GetMapping("/delete/{productID}")
+    public String markOutOfStock(@PathVariable Integer productID , RedirectAttributes redirectAttributes) {
+        productService.markAsOutOfStock(productID);
+        redirectAttributes.addFlashAttribute("successMessage", "Đã chuyển trạng thái sản phẩm là hết hàng.");
+
         return "redirect:/admin/products";
     }
 
-    @GetMapping("/delete/{productID}")
-    public String deleteProduct(@PathVariable Integer productID) {
-        productService.delete(productID);
-        return "redirect:/admin/products";
-    }
 
     @GetMapping("/view/{productID}")
     public String showViewForm(@PathVariable Integer productID, Model model) {

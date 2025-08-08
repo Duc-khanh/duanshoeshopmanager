@@ -16,6 +16,13 @@ public class CartItem {
     private Product product;
 
     private Integer quantity;
+    @Transient
+    public Double getDiscountedPrice() {
+        if (product.getDiscountPercent() != null && product.getDiscountPercent() > 0) {
+            return product.getPrice() * (1 - product.getDiscountPercent() / 100.0);
+        }
+        return product.getPrice();
+    }
 
     public CartItem() {
     }

@@ -11,4 +11,5 @@ public interface FavoriteRepository extends JpaRepository<Favorite, Integer> {
     List<Favorite> findByUser(User user);
     boolean existsByUserAndProduct(User user, Product product);
     void deleteByUserAndProduct(User user, Product product);
+
 }

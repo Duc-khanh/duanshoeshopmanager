@@ -8,7 +8,7 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet"/>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet"/>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto&amp;display=swap" rel="stylesheet"/>
     <style>
         body {
             font-family: 'Inter', sans-serif;
@@ -30,141 +30,60 @@
 <body class="bg-gray-100 min-h-screen flex flex-col">
 
 <div class="flex flex-1 overflow-hidden">
-    <div th:fragment="header">
-        <header class="fixed top-0 left-0 right-0 bg-white shadow-md z-50 h-16 flex items-center px-6 md:pl-80">
-            <div class="flex-1 flex items-center">
-                <button class="md:hidden text-gray-600 hover:text-blue-600 focus:outline-none mr-4"
-                        id="mobile-menu-button" aria-label="Toggle sidebar menu">
-                    <i class="fas fa-bars fa-lg"></i>
-                </button>
-            </div>
-            <div class="flex items-center space-x-4">
-                <button class="text-gray-600 hover:text-blue-600 focus:outline-none" aria-label="Notifications">
-                    <i class="fas fa-bell fa-lg"></i>
-                </button>
-                <button class="text-gray-600 hover:text-blue-600 focus:outline-none" aria-label="Settings">
-                    <i class="fas fa-cog fa-lg"></i>
-                </button>
-                <div class="flex items-center space-x-2 cursor-pointer" tabindex="0" aria-label="User menu">
-                    <img alt="User avatar, a young Vietnamese admin with short hair and glasses"
-                         class="w-8 h-8 rounded-full" height="32"
-                         src="https://storage.googleapis.com/a1aa/image/e19001d9-317a-4eb2-1450-2219756ede27.jpg"
-                         width="32"/>
-<!--                    <a th:href="@{/admin/profile}" class="text-gray-700 font-medium hover:text-blue-600">-->
-<!--                        <span th:text="${admin.username}">Admin</span>-->
-<!--                    </a>-->
 
-                </div>
-            </div>
-        </header>
-    </div>
     <div th:fragment="sidebar">
         <aside class="fixed inset-y-0 left-0 w-72 bg-white shadow-lg transform -translate-x-full md:translate-x-0 transition-transform duration-300 ease-in-out overflow-y-auto z-40"
                id="sidebar" aria-label="Sidebar navigation">
-            <div class="flex flex-col items-center pt-10 pb-6 border-b border-gray-200 mb-6 mt-8">
+            <div class="flex flex-col items-center pt-4 pb-6 border-b border-gray-200 mb-6 mt-4">
                 <a href="/admin/dashboard" class="flex flex-col items-center">
-                    <img alt="Admin Dashboard Logo" class="w-20 h-20 rounded-md"
+                    <img alt="Admin Dashboard Logo, a modern fashion store emblem with stylish typography" class="w-20 h-20 rounded-md"
                          src="https://storage.googleapis.com/a1aa/image/87e3fa51-f86f-465d-a4de-9c2158252302.jpg"
                          width="80" height="80"/>
                     <span class="mt-3 text-lg font-bold tracking-tight select-none text-gray-900 text-center">
-            YOUNG FASHION STYLE
-        </span>
+                    YOUNG FASHION STYLE
+                </span>
                 </a>
             </div>
             <div class="flex-1 p-4">
                 <nav class="space-y-3" role="menu" aria-label="Main navigation">
-                    <div>
-                        <button aria-expanded="false" aria-controls="productDropdown"
-                                class="flex items-center w-full space-x-4 text-gray-700 hover:text-blue-600 font-semibold px-4 py-3 rounded-lg transition shadow-sm hover:shadow-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                                onclick="toggleDropdown('productDropdown')">
-                            <i class="fas fa-box-open fa-lg w-6 text-center"></i>
-                            <span class="text-base flex-1 text-left">Quản lý sản phẩm</span>
-                            <i class="fas fa-chevron-down w-4"></i>
-                        </button>
-                        <div id="productDropdown" class="hidden pl-10 mt-2 space-y-2" role="menu"
-                             aria-label="Quản lý sản phẩm submenu">
-                            <a class="flex items-center space-x-2 text-gray-700 hover:text-blue-600"
-                               href="/admin/products" data-parent="productDropdown" role="menuitem" tabindex="-1">
-                                <i class="fas fa-list-ul w-5"></i>
-                                <span>Danh sách sản phẩm</span>
-                            </a>
-                            <a class="flex items-center space-x-2 text-gray-700 hover:text-blue-600"
-                               href="/managerProduct/create" data-parent="productDropdown" role="menuitem"
-                               tabindex="-1">
-                                <i class="fas fa-plus-circle w-5"></i>
-                                <span>Thêm sản phẩm</span>
-                            </a>
-                        </div>
-                    </div>
-                    <div>
-                        <button aria-expanded="false" aria-controls="userDropdown"
-                                class="flex items-center w-full space-x-4 text-gray-700 hover:text-blue-600 font-semibold px-4 py-3 rounded-lg transition shadow-sm hover:shadow-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                                onclick="toggleDropdown('userDropdown')">
-                            <i class="fas fa-users fa-lg w-6 text-center"></i>
-                            <span class="text-base flex-1 text-left">Quản lý người dùng</span>
-                            <i class="fas fa-chevron-down w-4"></i>
-                        </button>
-                        <div id="userDropdown" class="hidden pl-10 mt-2 space-y-2" role="menu"
-                             aria-label="Quản lý người dùng submenu">
-                            <a class="flex items-center space-x-2 text-gray-700 hover:text-blue-600" href="/admin/user"
-                               data-parent="userDropdown" role="menuitem" tabindex="-1">
-                                <i class="fas fa-list-ul w-5"></i>
-                                <span>Danh sách người dùng</span>
-                            </a>
-                            <a class="flex items-center space-x-2 text-gray-700 hover:text-blue-600"
-                               href="/users/create" data-parent="userDropdown" role="menuitem" tabindex="-1">
-                                <i class="fas fa-user-plus w-5"></i>
-                                <span>Thêm người dùng</span>
-                            </a>
-                        </div>
-                    </div>
-                    <div>
-                        <button aria-expanded="false" aria-controls="categoryDropdown"
-                                class="flex items-center w-full space-x-4 text-gray-700 hover:text-blue-600 font-semibold px-4 py-3 rounded-lg transition shadow-sm hover:shadow-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                                onclick="toggleDropdown('categoryDropdown')">
-                            <i class="fas fa-tags fa-lg w-6 text-center"></i>
-                            <span class="text-base flex-1 text-left">Quản lý danh mục</span>
-                            <i class="fas fa-chevron-down w-4"></i>
-                        </button>
-                        <div id="categoryDropdown" class="hidden pl-10 mt-2 space-y-2" role="menu"
-                             aria-label="Quản lý danh mục submenu">
-                            <a class="flex items-center space-x-2 text-gray-700 hover:text-blue-600"
-                               href="/admin/categories" data-parent="categoryDropdown" role="menuitem" tabindex="-1">
-                                <i class="fas fa-list-ul w-5"></i>
-                                <span>Danh sách danh mục</span>
-                            </a>
-                            <a class="flex items-center space-x-2 text-gray-700 hover:text-blue-600"
-                               href="/categories/create" data-parent="categoryDropdown" role="menuitem" tabindex="-1">
-                                <i class="fas fa-plus-circle w-5"></i>
-                                <span>Thêm danh mục</span>
-                            </a>
-                        </div>
-                    </div>
-                    <div>
-                        <button aria-expanded="false" aria-controls="orderDropdown"
-                                class="flex items-center w-full space-x-4 text-gray-700 hover:text-blue-600 font-semibold px-4 py-3 rounded-lg transition shadow-sm hover:shadow-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                                onclick="toggleDropdown('orderDropdown')">
-                            <i class="fas fa-shopping-cart fa-lg w-6 text-center"></i>
-                            <span class="text-base flex-1 text-left">Quản lý đơn hàng</span>
-                            <i class="fas fa-chevron-down w-4"></i>
-                        </button>
-                        <div id="orderDropdown" class="hidden pl-10 mt-2 space-y-2" role="menu"
-                             aria-label="Quản lý đơn hàng submenu">
-                            <a class="flex items-center space-x-2 text-gray-700 hover:text-blue-600" href="/orders"
-                               data-parent="orderDropdown" role="menuitem" tabindex="-1">
-                                <i class="fas fa-list-ul w-5"></i>
-                                <span>Danh sách đơn hàng</span>
-                            </a>
-                        </div>
-                    </div>
+                    <a href="/admin/products"
+                       class="flex items-center space-x-4 text-gray-700 hover:text-blue-600 font-semibold px-4 py-3 rounded-lg transition shadow-sm hover:shadow-md"
+                       role="menuitem">
+                        <i class="fas fa-box-open fa-lg w-6 text-center"></i>
+                        <span class="text-base">Quản lý sản phẩm</span>
+                    </a>
+                    <a href="/admin/user"
+                       class="flex items-center space-x-4 text-gray-700 hover:text-blue-600 font-semibold px-4 py-3 rounded-lg transition shadow-sm hover:shadow-md"
+                       role="menuitem">
+                        <i class="fas fa-users fa-lg w-6 text-center"></i>
+                        <span class="text-base">Quản lý người dùng</span>
+                    </a>
+                    <a href="/admin/categories"
+                       class="flex items-center space-x-4 text-gray-700 hover:text-blue-600 font-semibold px-4 py-3 rounded-lg transition shadow-sm hover:shadow-md"
+                       role="menuitem">
+                        <i class="fas fa-tags fa-lg w-6 text-center"></i>
+                        <span class="text-base">Quản lý danh mục</span>
+                    </a>
+                    <a href="/orders"
+                       class="flex items-center space-x-4 text-gray-700 hover:text-blue-600 font-semibold px-4 py-3 rounded-lg transition shadow-sm hover:shadow-md"
+                       role="menuitem">
+                        <i class="fas fa-shopping-cart fa-lg w-6 text-center"></i>
+                        <span class="text-base">Quản lý đơn hàng</span>
+                    </a>
+                    <a href="/admin/account/info"
+                       class="flex items-center space-x-4 text-gray-700 hover:text-indigo-600 font-semibold px-4 py-3 rounded-lg transition shadow-sm hover:shadow-md"
+                       role="menuitem">
+                        <i class="fas fa-user fa-lg w-6 text-center text-gray-600"></i>
+                        <span class="text-base">Thông tin tài khoản</span>
+                    </a>
                     <a id="logout-link"
-                       href="/logout"
+                       href="#"
+                       onclick="confirmLogout(); return false;"
                        class="flex items-center space-x-4 text-red-600 hover:text-red-800 font-semibold px-4 py-3 rounded-lg transition border border-red-600 hover:border-red-800 mt-8 shadow-sm hover:shadow-md"
                        role="menuitem" aria-label="Logout">
                         <i class="fas fa-sign-out-alt fa-lg w-6 text-center"></i>
                         <span class="text-base">Đăng xuất</span>
                     </a>
-
                 </nav>
             </div>
         </aside>
@@ -172,12 +91,12 @@
 
     <div class="fixed inset-0 bg-black bg-opacity-30 hidden z-30 md:hidden" id="overlay" tabindex="-1"
          aria-hidden="true"></div>
-    <main class="flex-1 ml-0 md:ml-[20rem] p-6 overflow-auto pt-16">
+    <main class="flex-1 ml-0 md:ml-[20rem] p-6 overflow-auto pt-16 max-w-7xl mx-auto">
 
         <h2 class="text-3xl font-semibold text-gray-800 mb-6">
             Trang quản trị
         </h2>
-        <section class="mt-2 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 max-w-7xl">
+        <section class="mt-2 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
             <div class="bg-white rounded-lg shadow p-6 flex flex-col items-center hover:shadow-lg transition-shadow duration-300">
                 <img alt="Icon representing product management, a box with a gear" class="mb-4" height="100"
                      src="https://storage.googleapis.com/a1aa/image/d67d3db2-9cdc-43d7-77fa-00179b74b301.jpg"
@@ -214,6 +133,7 @@
                 </h3>
             </div>
         </section>
+
     </main>
 </div>
 <footer class="fixed bottom-0 left-0 right-0 bg-blue-900 text-gray-300 border-t border-blue-800 z-50">
@@ -222,5 +142,52 @@
     </div>
 </footer>
 <script src="/js/fragment.js"></script>
+<script>
+    function confirmLogout() {
+        Swal.fire({
+            title: 'Bạn có chắc chắn muốn đăng xuất?',
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonText: 'Có',
+            cancelButtonText: 'Không',
+            reverseButtons: true
+        }).then((result) => {
+            if (result.isConfirmed) {
+                Swal.fire({
+                    toast: true,
+                    position: 'top-end',
+                    icon: 'success',
+                    title: 'Đăng xuất thành công',
+                    showConfirmButton: false,
+                    timer: 1500,
+                    timerProgressBar: true,
+                    didClose: () => {
+                        window.location.href = "/logout";
+                    }
+                });
+            }
+        });
+    }
+    let loginSuccess = /*[[${param.loginSuccess != null}]]*/ false;
+    if (loginSuccess) {
+        const Toast = Swal.mixin({
+            toast: true,
+            position: 'top-end',
+            showConfirmButton: false,
+            timer: 2500,
+            timerProgressBar: true,
+            didOpen: (toast) => {
+                toast.addEventListener('mouseenter', Swal.stopTimer);
+                toast.addEventListener('mouseleave', Swal.resumeTimer);
+            }
+        });
+
+        Toast.fire({
+            icon: 'success',
+            title: 'Đăng nhập thành công!'
+        });
+    }
+
+</script>
 </body>
 </html>

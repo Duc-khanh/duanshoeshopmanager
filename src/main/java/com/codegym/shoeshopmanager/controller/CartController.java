@@ -7,13 +7,16 @@ import com.codegym.shoeshopmanager.model.User;
 import com.codegym.shoeshopmanager.repository.ProductRepository;
 import com.codegym.shoeshopmanager.service.CartService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.servlet.http.HttpSession;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 @Controller
 @RequestMapping("/cart")
@@ -25,11 +28,33 @@ public class CartController {
     @PostMapping("/add/{productId}")
     public String addToCart(@PathVariable Integer productId,
                             @RequestParam("quantity") Integer quantity,
-                            HttpSession session) {
+                            HttpSession session,
+                            RedirectAttributes redirectAttributes) {
+        User currentUser = (User) session.getAttribute("currentUser");
+        if (currentUser == null) {
+            redirectAttributes.addFlashAttribute("loginRequired", true);
+            return "redirect:/login";
+        }
+
+        Product product = productRepository.findById(productId)
+                .orElseThrow(() -> new RuntimeException("Product not found"));
+
+        int availableStock = product.getStock();
 
         List<CartItem> cart = (List<CartItem>) session.getAttribute("cart");
         if (cart == null) {
             cart = new ArrayList<>();
+        }
+
+        int currentQuantityInCart = cart.stream()
+                .filter(item -> item.getProduct().getProductID().equals(productId))
+                .mapToInt(CartItem::getQuantity)
+                .sum();
+
+        if (currentQuantityInCart + quantity > availableStock) {
+            redirectAttributes.addFlashAttribute("errorMessage",
+                    "Số lượng trong giỏ đã đạt tối đa sản phẩm có trong kho.");
+            return "redirect:/managerUser/view/" + productId;
         }
 
         boolean found = false;
@@ -42,8 +67,6 @@ public class CartController {
         }
 
         if (!found) {
-            Product product = productRepository.findById(productId)
-                    .orElseThrow(() -> new RuntimeException("Product not found"));
             CartItem newItem = new CartItem();
             newItem.setProduct(product);
             newItem.setQuantity(quantity);
@@ -52,15 +75,18 @@ public class CartController {
 
         session.setAttribute("cart", cart);
         session.setAttribute("cartItemCount", getTotalQuantity(cart));
+        redirectAttributes.addFlashAttribute("addToCartSuccess", true);
+
+//        return "redirect:/managerUser/view/" + productId;
         return "redirect:/users";
+
     }
+
 
 
     @GetMapping("")
     public String viewCart(HttpSession session, Model model) {
         List<CartItem> cart = (List<CartItem>) session.getAttribute("cart");
-//        List<Category> categories = (List<Category>) session.getAttribute("categories");
-//        model.addAttribute("categories", categories);
         if (cart == null) {
             cart = new ArrayList<>();
             session.removeAttribute("cartItemCount");
@@ -79,7 +105,7 @@ public class CartController {
 
 
     @GetMapping("/remove/{productId}")
-    public String removeItem(@PathVariable Integer productId, HttpSession session) {
+    public String removeItem(@PathVariable Integer productId, HttpSession session, RedirectAttributes redirectAttributes) {
         List<CartItem> cart = (List<CartItem>) session.getAttribute("cart");
         if (cart != null) {
             cart.removeIf(item -> item.getProduct().getProductID().equals(productId));
@@ -92,6 +118,7 @@ public class CartController {
                 session.removeAttribute("cartItemCount");
             }
         }
+        redirectAttributes.addFlashAttribute("deleteSuccess", true);
         return "redirect:/cart";
     }
 

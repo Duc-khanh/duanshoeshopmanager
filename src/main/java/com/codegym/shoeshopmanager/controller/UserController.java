@@ -26,6 +26,31 @@ public class UserController {
     private IProductService productService;
 
 
+//    @GetMapping("/searchProduct")
+//    public String searchProducts(@RequestParam("keyword") String keyword, Model model) {
+//        List<Product> products = productService.searchByName(keyword)
+//                .stream()
+//                .filter(p -> p.getStock() > 0)
+//                .collect(Collectors.toList());
+//
+//        List<Product> featuredProducts = new ArrayList<>(products);
+//        Collections.shuffle(featuredProducts);
+//        featuredProducts = featuredProducts.stream()
+//                .limit(10)
+//                .collect(Collectors.toList());
+//
+//        List<Product> discountedProducts = products.stream()
+//                .sorted(Comparator.comparingDouble(Product::getPrice))
+//                .limit(10)
+//                .collect(Collectors.toList());
+//
+//        model.addAttribute("featuredProducts", featuredProducts);
+//        model.addAttribute("discountedProducts", discountedProducts);
+//        model.addAttribute("keyword", keyword);
+//
+//        return "users/homeUser/home";
+//    }
+
     @GetMapping("/searchProduct")
     public String searchProducts(@RequestParam("keyword") String keyword, Model model) {
         List<Product> products = productService.searchByName(keyword)
@@ -33,23 +58,12 @@ public class UserController {
                 .filter(p -> p.getStock() > 0)
                 .collect(Collectors.toList());
 
-        List<Product> featuredProducts = new ArrayList<>(products);
-        Collections.shuffle(featuredProducts);
-        featuredProducts = featuredProducts.stream()
-                .limit(10)
-                .collect(Collectors.toList());
-
-        List<Product> discountedProducts = products.stream()
-                .sorted(Comparator.comparingDouble(Product::getPrice))
-                .limit(10)
-                .collect(Collectors.toList());
-
-        model.addAttribute("featuredProducts", featuredProducts);
-        model.addAttribute("discountedProducts", discountedProducts);
+        model.addAttribute("searchResults", products);
         model.addAttribute("keyword", keyword);
 
-        return "users/homeUser/home";
+        return "users/homeUser/search_result";
     }
+
 
     @GetMapping("/view/{productID}")
     public String showViewForm(@PathVariable Integer productID, Model model) {
@@ -57,6 +71,7 @@ public class UserController {
         model.addAttribute("product", product);
         return "users/homeUser/view_product";
     }
+
 
 
 }

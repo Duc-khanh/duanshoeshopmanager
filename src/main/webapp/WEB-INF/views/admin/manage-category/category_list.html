@@ -12,6 +12,8 @@
             rel="stylesheet"
             href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css"
     />
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
     <style>
         body {
             font-family: 'Inter', sans-serif;
@@ -54,7 +56,6 @@
 <body class="bg-gray-100 min-h-screen pt-24 pb-24">
 
 <div th:replace="/admin/layout :: sidebar"></div>
-<div th:replace="/admin/layout :: header"></div>
 <div class="max-w-[93rem] mx-auto bg-white rounded-lg shadow p-6 flex-1 ml-[22rem]">
     <h2 class="text-2xl font-semibold text-gray-800 mb-6 text-center">Danh sách danh mục</h2>
     <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-6 space-y-4 sm:space-y-0">
@@ -120,4 +121,21 @@
 <div th:replace="/admin/layout :: footer"></div>
 </body>
 <script src="/js/fragment.js"></script>
+<script th:inline="javascript">
+    function confirmLogout() {
+        Swal.fire({
+            title: 'Bạn có chắc chắn muốn đăng xuất?',
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonText: 'Có',
+            cancelButtonText: 'Không',
+            reverseButtons: true
+        }).then((result) => {
+            if (result.isConfirmed) {
+                window.location.href = "/logout";
+            }
+        });
+    }
+
+</script>
 </html>
